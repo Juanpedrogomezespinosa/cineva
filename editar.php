@@ -42,20 +42,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $archivo = $_FILES['portada'];
             $permitidos = ['jpg', 'jpeg', 'png', 'gif'];
             $extension = strtolower(pathinfo($archivo['name'], PATHINFO_EXTENSION));
-            if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
-                $nuevoNombre = uniqid('portada_') . '.' . $extension;
-                $rutaDestino = 'img/portadas/' . $nuevoNombre;
-                if (move_uploaded_file($archivo['tmp_name'], $rutaDestino)) {
-                    // Borrar imagen vieja si existe
-                    if ($portada && file_exists('img/portadas/' . $portada)) {
-                        unlink('img/portadas/' . $portada);
+            if ($archivo['error'] === UPLOAD_ERR_OK) {
+                if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
+                    $nuevoNombre = uniqid('portada_') . '.' . $extension;
+
+                    $directorioPortadas = __DIR__ . '/img/portadas';
+
+                    // Crear carpeta si no existe
+                    if (!is_dir($directorioPortadas)) {
+                        mkdir($directorioPortadas, 0755, true);
                     }
-                    $portada = $nuevoNombre;
+
+                    if (!is_writable($directorioPortadas)) {
+                        $mensaje = 'La carpeta de destino no tiene permisos de escritura.';
+                    } else {
+                        $rutaAbsoluta = $directorioPortadas . '/' . $nuevoNombre;
+
+                        if (move_uploaded_file($archivo['tmp_name'], $rutaAbsoluta)) {
+                            // Borrar imagen anterior si existe
+                            $portadaAnterior = $pelicula['portada'];
+                            $rutaAnterior = $directorioPortadas . '/' . $portadaAnterior;
+                            if ($portadaAnterior && file_exists($rutaAnterior)) {
+                                unlink($rutaAnterior);
+                            }
+                            $portada = $nuevoNombre;
+                        } else {
+                            $mensaje = 'Error al mover el archivo subido.';
+                        }
+                    }
                 } else {
-                    $mensaje = 'Error al subir la imagen.';
+                    $mensaje = 'Formato o tamaño de imagen no válido.';
                 }
             } else {
-                $mensaje = 'Formato o tamaño de imagen no válido.';
+                $mensaje = 'Error al subir la imagen (código: ' . $archivo['error'] . ')';
             }
         }
 
@@ -85,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
