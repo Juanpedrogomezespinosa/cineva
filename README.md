@@ -2,7 +2,7 @@
 
 #### Arquitectura:
 
-next-film/
+cineva/
 │
 ├── css/
 │ └── styles.css
