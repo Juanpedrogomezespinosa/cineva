@@ -123,3 +123,20 @@ Para los más experimentados del grupo o quien quiera asumir un reto.
 | 🟢 **Básicas**     | 8          | Maquetación, formularios, frontend simple             |
 | 🟡 **Intermedias** | 8          | Backend básico: sesiones, conexión BD, login/registro |
 | 🔴 **Avanzadas**   | 8          | Lógica compleja, seguridad, filtros, valoración       |
+
+🚨Próximas implementaciones:🚨
+
+- Nueva sección con filtros.
+- Barra de búsqueda.
+- Hacer scrapping para saber en qué plataforma está disponible cada película o serie
+- Hacer un diseño más realista.
+
+- Hacer que todas las películas añadidas por los usuarios aparezcan en el dashboard, añadir una página de cada usuario en la que salgan tus películas o series. ❓❓❓❓❓
+
+- La página de usuario tendrá sección de filtros también.
+
+- Cuando en la página de película, aparezca, "agregada por" y un nombre, que ese nombre sea un enlace hacia el perfil de usuario.
+
+- agregar peticiones de amistad.
+
+- en el perfil de usuario debe aparecer el número de publicaciones, las personas que sigue y las que lo siguen.
