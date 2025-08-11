@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$titulo || !$genero || !$plataforma) {
         $mensaje = 'Título, género y plataforma son obligatorios.';
     } else {
-        // Actualizar portada si hay nueva subida
         $portada = $pelicula['portada'];
         if (!empty($_FILES['portada']['name'])) {
             $archivo = $_FILES['portada'];
@@ -46,9 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
                     $nuevoNombre = uniqid('portada_') . '.' . $extension;
 
-                    $directorioPortadas = __DIR__ . '/img/portadas';
+                    $directorioPortadas = '/Applications/XAMPP/xamppfiles/htdocs/proyectos/cineva/img/portadas';
 
-                    // Crear carpeta si no existe
                     if (!is_dir($directorioPortadas)) {
                         mkdir($directorioPortadas, 0755, true);
                     }
@@ -79,7 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$mensaje) {
-            // Actualizar BD
             $sql = "UPDATE peliculas SET titulo=?, genero=?, plataforma=?, visto=?, favorito=?, portada=?, valoracion=?, resena=? WHERE id=? AND usuario_id=?";
             $stmt = $pdo->prepare($sql);
             $resultado = $stmt->execute([
@@ -105,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

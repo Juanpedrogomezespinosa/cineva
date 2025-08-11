@@ -31,9 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
                     $nuevoNombre = uniqid('portada_') . '.' . $extension;
 
-                    $carpetaPortadas = __DIR__ . '/img/portadas';
+                    $carpetaPortadas = '/Applications/XAMPP/xamppfiles/htdocs/proyectos/cineva/img/portadas';
 
-                    // Crear carpeta si no existe
                     if (!is_dir($carpetaPortadas)) {
                         mkdir($carpetaPortadas, 0755, true);
                     }
@@ -42,9 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $mensaje = 'La carpeta de destino no tiene permisos de escritura.';
                     } else {
                         $rutaFinal = $carpetaPortadas . '/' . $nuevoNombre;
-
-                        // DEBUG: para probar la ruta
-                        // echo "Ruta final: $rutaFinal<br>";
 
                         if (move_uploaded_file($archivo['tmp_name'], $rutaFinal)) {
                             $portada = $nuevoNombre;
