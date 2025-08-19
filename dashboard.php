@@ -1,84 +1,64 @@
 <?php
-require_once 'includes/auth.php';
-require_once 'includes/db.php';
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/db.php';
+require_once __DIR__ . '/includes/peliculas.php';
 
 $db = new Database();
 $pdo = $db->getConnection();
 
-// Obtener id del usuario logueado
-$usuario_id = $_SESSION['usuario_id'];
-
-// Contadores de películas vistas y no vistas
-$stmtVistas = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ? AND visto = 1");
-$stmtVistas->execute([$usuario_id]);
-$totalVistas = $stmtVistas->fetchColumn();
-
-$stmtNoVistas = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ? AND visto = 0");
-$stmtNoVistas->execute([$usuario_id]);
-$totalNoVistas = $stmtNoVistas->fetchColumn();
-
-// Obtener listado de películas del usuario
-$stmtPeliculas = $pdo->prepare("SELECT id, titulo, genero, plataforma, visto, favorito FROM peliculas WHERE usuario_id = ? ORDER BY fecha_agregado DESC");
-$stmtPeliculas->execute([$usuario_id]);
-$peliculas = $stmtPeliculas->fetchAll();
-
+// Obtener timeline: todas las películas de todos los usuarios ordenadas por fecha descendente
+$stmtTimeline = $pdo->prepare("
+    SELECT p.*, u.nombre AS usuario_nombre, u.id AS usuario_id
+    FROM peliculas p
+    JOIN usuarios u ON p.usuario_id = u.id
+    ORDER BY p.fecha_agregado DESC
+");
+$stmtTimeline->execute();
+$peliculasTimeline = $stmtTimeline->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dashboard | Cineva</title>
-<link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-    <header style="background:#090d10; padding:1rem; color:#f4bf2c;">
-        <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>!</h1>
-        <a href="logout.php" style="color:#f4bf2c; text-decoration:none;">Cerrar sesión</a>
-    </header>
+<?php include __DIR__ . '/templates/header.php'; ?>
 
-    <section style="padding:1rem;">
-        <h2>Resumen de tus películas</h2>
-        <p>Películas vistas: <strong><?php echo $totalVistas; ?></strong></p>
-        <p>Películas por ver: <strong><?php echo $totalNoVistas; ?></strong></p>
+<section class="dashboard">
 
-        <a href="agregar.php" style="display:inline-block; margin:1rem 0; padding:0.5rem 1rem; background:#f4bf2c; color:#06080e; text-decoration:none;">Agregar nueva película</a>
+    <?php if (count($peliculasTimeline) === 0): ?>
+        <p>No hay publicaciones aún.</p>
+    <?php else: ?>
+        <div class="cards-container">
+            <?php foreach ($peliculasTimeline as $pelicula): ?>
+                <div class="card-pelicula">
+                    <?php if (!empty($pelicula['portada'])): ?>
+                        <a href="<?php echo APP_URL; ?>peliculas/ver.php?id=<?php echo $pelicula['id']; ?>">
+                            <img src="<?php echo APP_URL . 'img/portadas/' . htmlspecialchars($pelicula['portada'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($pelicula['titulo'], ENT_QUOTES, 'UTF-8'); ?> portada">
+                        </a>
+                    <?php else: ?>
+                        <div class="sin-portada">
+                            <a href="<?php echo APP_URL; ?>peliculas/ver.php?id=<?php echo $pelicula['id']; ?>" style="color: inherit; text-decoration: none;">Sin portada</a>
+                        </div>
+                    <?php endif; ?>
 
-        <h2>Listado de tus películas</h2>
+                    <div class="card-contenido">
+                        <h3>
+                            <a href="<?php echo APP_URL; ?>peliculas/ver.php?id=<?php echo $pelicula['id']; ?>" style="color: inherit; text-decoration: none;">
+                                <?php echo htmlspecialchars($pelicula['titulo'], ENT_QUOTES, 'UTF-8'); ?>
+                            </a>
+                        </h3>
+                        <div class="valoracion">
+                            <?php echo str_repeat('⭐', $pelicula['valoracion']); ?>
+                            <?php echo str_repeat('☆', 5 - $pelicula['valoracion']); ?>
+                        </div>
+                        <div class="usuario-publico">
+                            Agregada por: 
+                            <a href="<?php echo APP_URL; ?>usuarios/perfil.php?id=<?php echo $pelicula['usuario_id']; ?>" style="color: #f4bf2c; font-weight: bold; text-decoration: none;">
+                                <?php echo htmlspecialchars($pelicula['usuario_nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
 
-        <?php if (count($peliculas) === 0): ?>
-            <p>No tienes películas añadidas todavía.</p>
-        <?php else: ?>
-            <table border="1" cellpadding="8" cellspacing="0" style="border-collapse:collapse; width:100%;">
-                <thead style="background:#f4bf2c; color:#06080e;">
-                    <tr>
-                        <th>Título</th>
-                        <th>Género</th>
-                        <th>Plataforma</th>
-                        <th>Visto</th>
-                        <th>Favorito</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($peliculas as $pelicula): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($pelicula['titulo']); ?></td>
-                            <td><?php echo htmlspecialchars($pelicula['genero']); ?></td>
-                            <td><?php echo htmlspecialchars($pelicula['plataforma']); ?></td>
-                            <td><?php echo $pelicula['visto'] ? '✔️' : '❌'; ?></td>
-                            <td><?php echo $pelicula['favorito'] ? '⭐' : '☆'; ?></td>
-                            <td>
-                                <a href="ver.php?id=<?php echo $pelicula['id']; ?>">Ver</a> |
-                                <a href="editar.php?id=<?php echo $pelicula['id']; ?>">Editar</a> |
-                                <a href="eliminar.php?id=<?php echo $pelicula['id']; ?>" onclick="return confirm('¿Seguro que quieres eliminar esta película?');">Eliminar</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </section>
-</body>
-</html>
+<?php include __DIR__ . '/templates/footer.php'; ?>

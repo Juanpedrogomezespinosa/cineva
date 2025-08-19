@@ -1,6 +1,7 @@
 <?php
-require_once 'includes/auth.php';
-require_once 'includes/db.php';
+require_once '../includes/config.php';
+require_once '../includes/auth.php';
+require_once '../includes/db.php';
 
 $db = new Database();
 $pdo = $db->getConnection();
@@ -10,7 +11,7 @@ $mensaje = '';
 // Obtener id de la película a editar
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) {
-    header('Location: dashboard.php');
+    header('Location: ' . APP_URL . 'dashboard.php');
     exit;
 }
 
@@ -19,7 +20,7 @@ $stmt = $pdo->prepare("SELECT * FROM peliculas WHERE id = ? AND usuario_id = ?")
 $stmt->execute([$id, $usuario_id]);
 $pelicula = $stmt->fetch();
 if (!$pelicula) {
-    header('Location: dashboard.php');
+    header('Location: ' . APP_URL . 'dashboard.php');
     exit;
 }
 
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
                     $nuevoNombre = uniqid('portada_') . '.' . $extension;
 
-                    $directorioPortadas = '/Applications/XAMPP/xamppfiles/htdocs/proyectos/cineva/img/portadas';
+                    $directorioPortadas = __DIR__ . '/../img/portadas';
 
                     if (!is_dir($directorioPortadas)) {
                         mkdir($directorioPortadas, 0755, true);
@@ -93,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             if ($resultado) {
-                header('Location: dashboard.php');
+                header('Location: ' . APP_URL . 'dashboard.php');
                 exit;
             } else {
                 $mensaje = 'Error al actualizar la película.';
@@ -107,51 +108,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8" />
 <title>Editar película | Cineva</title>
-<link rel="stylesheet" href="css/styles.css" />
+<link rel="stylesheet" href="<?= APP_URL ?>css/styles.css" />
 </head>
 <body>
 <h1>Editar película</h1>
 
 <?php if ($mensaje): ?>
-    <p style="color:red;"><?php echo htmlspecialchars($mensaje); ?></p>
+    <p style="color:red;"><?= htmlspecialchars($mensaje); ?></p>
 <?php endif; ?>
 
-<form method="POST" enctype="multipart/form-data" action="editar.php?id=<?php echo $id; ?>">
+<form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/editar.php?id=<?= $id; ?>">
     <label for="titulo">Título:</label><br />
-    <input type="text" id="titulo" name="titulo" value="<?php echo htmlspecialchars($pelicula['titulo']); ?>" required /><br /><br />
+    <input type="text" id="titulo" name="titulo" value="<?= htmlspecialchars($pelicula['titulo']); ?>" required /><br /><br />
 
     <label for="genero">Género:</label><br />
-    <input type="text" id="genero" name="genero" value="<?php echo htmlspecialchars($pelicula['genero']); ?>" required /><br /><br />
+    <input type="text" id="genero" name="genero" value="<?= htmlspecialchars($pelicula['genero']); ?>" required /><br /><br />
 
     <label for="plataforma">Plataforma:</label><br />
-    <input type="text" id="plataforma" name="plataforma" value="<?php echo htmlspecialchars($pelicula['plataforma']); ?>" required /><br /><br />
+    <input type="text" id="plataforma" name="plataforma" value="<?= htmlspecialchars($pelicula['plataforma']); ?>" required /><br /><br />
 
     <label>
-        <input type="checkbox" name="visto" <?php if ($pelicula['visto']) echo 'checked'; ?> />
+        <input type="checkbox" name="visto" <?= $pelicula['visto'] ? 'checked' : ''; ?> />
         Visto
     </label><br />
 
     <label>
-        <input type="checkbox" name="favorito" <?php if ($pelicula['favorito']) echo 'checked'; ?> />
+        <input type="checkbox" name="favorito" <?= $pelicula['favorito'] ? 'checked' : ''; ?> />
         Favorito
     </label><br /><br />
 
     <?php if ($pelicula['portada']): ?>
-        <img src="img/portadas/<?php echo htmlspecialchars($pelicula['portada']); ?>" alt="Portada" style="max-width:150px;" /><br />
+        <img src="<?= APP_URL ?>img/portadas/<?= htmlspecialchars($pelicula['portada']); ?>" alt="Portada" style="max-width:150px;" /><br />
     <?php endif; ?>
 
     <label for="portada">Cambiar portada (imagen jpg/png/gif, máx 2MB):</label><br />
     <input type="file" id="portada" name="portada" accept=".jpg,.jpeg,.png,.gif" /><br /><br />
 
     <label for="valoracion">Valoración (1-5):</label><br />
-    <input type="number" id="valoracion" name="valoracion" min="1" max="5" value="<?php echo (int)$pelicula['valoracion']; ?>" /><br /><br />
+    <input type="number" id="valoracion" name="valoracion" min="1" max="5" value="<?= (int)$pelicula['valoracion']; ?>" /><br /><br />
 
     <label for="resena">Reseña:</label><br />
-    <textarea id="resena" name="resena" rows="4" cols="50"><?php echo htmlspecialchars($pelicula['resena']); ?></textarea><br /><br />
+    <textarea id="resena" name="resena" rows="4" cols="50"><?= htmlspecialchars($pelicula['resena']); ?></textarea><br /><br />
 
     <button type="submit">Actualizar película</button>
 </form>
 
-<a href="dashboard.php">Volver al dashboard</a>
+<a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
 </body>
 </html>

@@ -1,0 +1,170 @@
+/* perfil.css */
+
+/* Contenedor principal del perfil */
+.perfil {
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fcfceb;
+  padding: 20px;
+}
+
+/* Títulos */
+.perfil h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #f4bf2c;
+  text-align: center;
+}
+
+.perfil h2 {
+  font-size: 1.5rem;
+  margin: 15px 0;
+  color: #f4bf2c;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
+/* Botón de agregar película */
+.btn-agregar {
+  display: inline-block;
+  margin: 15px 0 25px;
+  padding: 10px 16px;
+  background-color: #f4bf2c;
+  color: #121518;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-agregar:hover {
+  background-color: #e0a900;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  display: grid;
+  gap: 20px;
+  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Tarjeta individual */
+.card-pelicula {
+  background-color: #1d2125;
+  border: 1px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-pelicula:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Portada de la película */
+.card-pelicula img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.sin-portada {
+  width: 100%;
+  height: 180px;
+  background-color: #333;
+  color: #f4bf2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Contenido de la tarjeta */
+.card-contenido {
+  padding: 10px;
+  color: #fcfceb;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-contenido h3 {
+  margin: 0;
+  color: #f4bf2c;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.valoracion {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #f4bf2c;
+}
+
+.acciones-card {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.acciones-card a {
+  text-decoration: none;
+  color: #f4bf2c;
+  background-color: #090d10;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.acciones-card a:hover {
+  background-color: #f4bf2c;
+  color: #121518;
+}
+
+/* Estadísticas de películas */
+.perfil p {
+  font-size: 1rem;
+  margin: 5px 0;
+  text-align: center;
+  color: #fcfceb;
+}
+
+/* Responsive máximo 5 columnas */
+@media (min-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1199px) {
+  .cards-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+}

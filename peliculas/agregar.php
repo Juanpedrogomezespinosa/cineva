@@ -1,6 +1,7 @@
 <?php
-require_once 'includes/auth.php';
-require_once 'includes/db.php';
+require_once '../includes/config.php';
+require_once '../includes/auth.php';
+require_once '../includes/db.php';
 
 $mensaje = '';
 $db = new Database();
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (in_array($extension, $permitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
                     $nuevoNombre = uniqid('portada_') . '.' . $extension;
 
-                    $carpetaPortadas = '/Applications/XAMPP/xamppfiles/htdocs/proyectos/cineva/img/portadas';
+                    $carpetaPortadas = __DIR__ . '/../img/portadas';
 
                     if (!is_dir($carpetaPortadas)) {
                         mkdir($carpetaPortadas, 0755, true);
@@ -75,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             if ($resultado) {
-                header('Location: dashboard.php');
+                header('Location: ' . APP_URL . 'dashboard.php');
                 exit;
             } else {
                 $mensaje = 'Error al guardar la película.';
@@ -89,16 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <title>Agregar película | Cineva</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="<?= APP_URL ?>css/styles.css" />
 </head>
 <body>
     <h1>Agregar nueva película</h1>
 
     <?php if ($mensaje): ?>
-        <p style="color:red;"><?php echo htmlspecialchars($mensaje); ?></p>
+        <p style="color:red;"><?= htmlspecialchars($mensaje); ?></p>
     <?php endif; ?>
 
-    <form method="POST" enctype="multipart/form-data" action="agregar.php">
+    <form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/agregar.php">
         <label for="titulo">Título:</label><br />
         <input type="text" id="titulo" name="titulo" required /><br /><br />
 
@@ -130,6 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit">Guardar película</button>
     </form>
 
-    <a href="dashboard.php">Volver al dashboard</a>
+    <a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
 </body>
 </html>

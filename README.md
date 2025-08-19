@@ -4,30 +4,58 @@
 
 cineva/
 │
+├── scripts/
+│ └── procesar_portada.py
+|
 ├── css/
-│ └── styles.css
+│ └── main.css # Estilos generales: reset, body, headers, footer, layout
+│ └── forms.css # Estilos de login, register, agregar/editar películas
+│ └── navbar.css # Solo estilos del navbar
+│ └── pelicula.css
+│ └── perfil.css
+│ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
+│ └── styles.css # importación de todos los anteriores
 │
 ├── img/
-│ └── portadas/ # Aquí se guardarán las portadas subidas por los usuarios
+│ ├── portadas/ # Portadas de películas/series
+│ └── avatars/ # Fotos de perfil de usuarios
 │
 ├── includes/
+│ ├── config.php # Configuración general (paths, constantes, etc.)
 │ ├── db.php # Conexión a la base de datos
 │ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
-│ └── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
+│ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
+│ ├── peliculas.php # Funciones específicas para CRUD de películas
+│ ├── usuarios.php # Funciones específicas para CRUD de usuarios
+│ ├── amistad.php # Funciones para peticiones de amistad
+│ └── scraper.php # (opcional) scraping de plataformas de streaming
 │
 ├── templates/
 │ ├── header.php
-│ └── footer.php
+│ ├── footer.php
+│ └── navbar.php # Menú superior con búsqueda, login/logout, etc.
 │
-├── index.php # Página de inicio con opción de login o registro
-├── register.php # Registro de nuevos usuarios
-├── logout.php # Cierre de sesión
-├── dashboard.php # Panel principal del usuario
-├── agregar.php # Formulario para añadir película
-├── editar.php # Editar película existente
-├── eliminar.php # Confirmación y acción de eliminar película
-├── ver.php # Detalles individuales de una película
-└── .htaccess # Opcional para seguridad básica (evitar acceso a includes)
+├── peliculas/
+│ ├── agregar.php # Formulario para añadir película/serie
+│ ├── editar.php # Editar película/serie existente
+│ ├── eliminar.php # Eliminar película/serie
+│ └── ver.php # Detalle de película/serie
+│
+├── usuarios/
+│ ├── perfil.php # Página de usuario con sus películas, filtros, stats
+│ ├── register.php # Registro de nuevos usuarios
+│ ├── login.php # Login de usuario
+│ └── logout.php # Logout de usuario
+│
+├── amigos/
+│ └── index.php # Página para gestionar peticiones y amigos
+│
+├── buscar.php # Resultados de búsqueda
+├── dashboard.php # Feed general con todas las películas/series añadidas
+├── index.php # Página de inicio (landing o feed público si no logueado)
+│
+├── README.md # Documentación del proyecto
+├── .htaccess # Opcional para seguridad
 └── .gitignore
 
 #### Paleta de colores:
@@ -126,17 +154,94 @@ Para los más experimentados del grupo o quien quiera asumir un reto.
 
 🚨Próximas implementaciones:🚨
 
-- Nueva sección con filtros.
-- Barra de búsqueda.
-- Hacer scrapping para saber en qué plataforma está disponible cada película o serie
-- Hacer un diseño más realista.
+- Nueva sección con filtros: género, plataforma, visto (si o no) favoritos, etc.
+- Barra de búsqueda. añadir una búsqueda
 
-- Hacer que todas las películas añadidas por los usuarios aparezcan en el dashboard, añadir una página de cada usuario en la que salgan tus películas o series. ❓❓❓❓❓
+- Hacer un diseño más profesional, en vez de ser un listado, quiero que sea una lista de cartas.
 
-- La página de usuario tendrá sección de filtros también.
+- Hacer que todas las películas añadidas por los usuarios aparezcan en el dashboard,
+- En el perfil de cada usuario deben salir sus películas y series
+
+- La página de usuario tendrá sección de filtros también para filtrar tus propias películas.
 
 - Cuando en la página de película, aparezca, "agregada por" y un nombre, que ese nombre sea un enlace hacia el perfil de usuario.
 
-- agregar peticiones de amistad.
+- añadir sistema de seguir usuarios
 
 - en el perfil de usuario debe aparecer el número de publicaciones, las personas que sigue y las que lo siguen.
+
+## Próximas implementaciones 🚀
+
+### 1️⃣ Dashboard (dashboard.php)
+
+- Mostrar **todas las películas de todos los usuarios**.
+- Añadir **sección de filtros** por:
+  - Género
+  - Plataforma
+  - Visto (Sí/No)
+  - Favorito (Sí/No)
+- Implementar **barra de búsqueda** por título de película.
+- Cambiar diseño de listado a **cartas (cards)**.
+- Cada card debe mostrar:
+  - Título
+  - Género
+  - Plataforma
+  - Visto
+  - Favorito
+  - “Agregada por” con enlace al perfil del usuario.
+
+### 2️⃣ Perfil de usuario (usuarios/perfil.php)
+
+- Mostrar **todas las películas del usuario** en formato cards.
+- Añadir **filtros** para sus propias películas.
+- Mostrar **estadísticas del usuario**:
+  - Número de publicaciones
+  - Personas que sigue
+  - Personas que lo siguen
+- Implementar **botón seguir / dejar de seguir** usuarios.
+- Mantener enlace “Agregada por” en cada card.
+
+### 3️⃣ Películas (peliculas/)
+
+- Modificar `ver.php` para mostrar:
+  - “Agregada por” con enlace al perfil del usuario.
+- Mantener funcionalidad CRUD (agregar, editar, eliminar) asociada al `usuario_id`.
+
+### 4️⃣ Sistema de seguidores (includes/usuarios.php o nuevo includes/seguidores.php)
+
+- Funciones para:
+  - Seguir a un usuario
+  - Dejar de seguir a un usuario
+  - Consultar lista de seguidores
+  - Consultar lista de seguidos
+- Integrar con perfil y dashboard.
+
+### 5️⃣ Filtros y búsqueda (includes/funciones.php o includes/peliculas.php)
+
+- Crear funciones reutilizables para:
+  - Aplicar filtros dinámicos (género, plataforma, visto, favorito)
+  - Aplicar búsqueda por título
+  - Combinar filtros y búsqueda
+- Integrar en:
+  - Dashboard
+  - Perfil de usuario
+  - Página de búsqueda general (`buscar.php`)
+
+### 6️⃣ Frontend / CSS
+
+- Crear **cards CSS** para películas en `dashboard.css`.
+- Estilos de **barra de filtros** (inputs, selects, checkboxes).
+- Estilos para **botón seguir / dejar de seguir**.
+- Ajustes **responsive** para desktop y móvil.
+
+### 7️⃣ Integración general
+
+- Añadir enlaces de “perfil” en dashboard y página de película.
+- Revisar seguridad:
+  - Evitar mostrar botones de editar/eliminar a otros usuarios.
+  - Sanitizar variables de URL.
+- Probar todas las consultas con filtros combinados.
+
+nueva idea: que te aparezca una notificación cada vez que alguien comente tu publicación y cada vez que te siga alguien.
+
+cuando entres en el perfil de alguien que te sigue, debe poner "te sigue"
