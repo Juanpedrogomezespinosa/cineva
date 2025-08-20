@@ -23,6 +23,7 @@ cineva/
 ├── includes/
 │ ├── config.php # Configuración general (paths, constantes, etc.)
 │ ├── db.php # Conexión a la base de datos
+│ ├── follows.php
 │ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
 │ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
 │ ├── peliculas.php # Funciones específicas para CRUD de películas
@@ -46,6 +47,8 @@ cineva/
 │ ├── register.php # Registro de nuevos usuarios
 │ ├── login.php # Login de usuario
 │ └── logout.php # Logout de usuario
+│ └── seguidores.php
+│ └── seguidos.php
 │
 ├── amigos/
 │ └── index.php # Página para gestionar peticiones y amigos

@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/db.php';
@@ -7,7 +8,7 @@ require_once __DIR__ . '/includes/peliculas.php';
 $db = new Database();
 $pdo = $db->getConnection();
 
-// Obtener timeline: todas las películas de todos los usuarios ordenadas por fecha descendente
+// Obtener timeline: todas las películas de todos los usuarios
 $stmtTimeline = $pdo->prepare("
     SELECT p.*, u.nombre AS usuario_nombre, u.id AS usuario_id
     FROM peliculas p
@@ -16,12 +17,11 @@ $stmtTimeline = $pdo->prepare("
 ");
 $stmtTimeline->execute();
 $peliculasTimeline = $stmtTimeline->fetchAll(PDO::FETCH_ASSOC);
+
+include __DIR__ . '/templates/header.php';
 ?>
 
-<?php include __DIR__ . '/templates/header.php'; ?>
-
 <section class="dashboard">
-
     <?php if (count($peliculasTimeline) === 0): ?>
         <p>No hay publicaciones aún.</p>
     <?php else: ?>
@@ -30,7 +30,8 @@ $peliculasTimeline = $stmtTimeline->fetchAll(PDO::FETCH_ASSOC);
                 <div class="card-pelicula">
                     <?php if (!empty($pelicula['portada'])): ?>
                         <a href="<?php echo APP_URL; ?>peliculas/ver.php?id=<?php echo $pelicula['id']; ?>">
-                            <img src="<?php echo APP_URL . 'img/portadas/' . htmlspecialchars($pelicula['portada'], ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($pelicula['titulo'], ENT_QUOTES, 'UTF-8'); ?> portada">
+                            <img src="<?php echo APP_URL . 'img/portadas/' . htmlspecialchars($pelicula['portada'], ENT_QUOTES, 'UTF-8'); ?>" 
+                                 alt="<?php echo htmlspecialchars($pelicula['titulo'], ENT_QUOTES, 'UTF-8'); ?> portada">
                         </a>
                     <?php else: ?>
                         <div class="sin-portada">
@@ -45,8 +46,8 @@ $peliculasTimeline = $stmtTimeline->fetchAll(PDO::FETCH_ASSOC);
                             </a>
                         </h3>
                         <div class="valoracion">
-                            <?php echo str_repeat('⭐', $pelicula['valoracion']); ?>
-                            <?php echo str_repeat('☆', 5 - $pelicula['valoracion']); ?>
+                            <?php echo str_repeat('⭐', (int)$pelicula['valoracion']); ?>
+                            <?php echo str_repeat('☆', 5 - (int)$pelicula['valoracion']); ?>
                         </div>
                         <div class="usuario-publico">
                             Agregada por: 

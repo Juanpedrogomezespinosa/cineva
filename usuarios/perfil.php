@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/follows.php';
 
 $id = isset($_GET['id']) ? $_GET['id'] : (isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null);
 
@@ -24,18 +25,34 @@ if (!$usuario) {
 }
 
 $esPerfilPropio = isset($_SESSION['usuario_id']) && ($_SESSION['usuario_id'] == $id);
+$usuarioLogueado = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
 
-if ($esPerfilPropio) {
-    $stmtVistas = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ? AND visto = 1");
-    $stmtVistas->execute([$id]);
-    $totalVistas = $stmtVistas->fetchColumn();
+$follows = new Follows();
 
-    $stmtNoVistas = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ? AND visto = 0");
-    $stmtNoVistas->execute([$id]);
-    $totalNoVistas = $stmtNoVistas->fetchColumn();
+// Procesar seguir/dejar de seguir
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuarioLogueado && !$esPerfilPropio) {
+    if (isset($_POST['seguir'])) {
+        $follows->seguirUsuario($usuarioLogueado, $id);
+    } elseif (isset($_POST['dejar_seguir'])) {
+        $follows->dejarDeSeguirUsuario($usuarioLogueado, $id);
+    }
+    header("Location: perfil.php?id=$id");
+    exit;
 }
 
-// Películas del usuario
+// Contadores
+$seguidoresCount = $follows->contarSeguidores($id);
+$seguidosCount = $follows->contarSeguidos($id);
+
+// Número de publicaciones del usuario
+$stmtPublicaciones = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ?");
+$stmtPublicaciones->execute([$id]);
+$totalPublicaciones = $stmtPublicaciones->fetchColumn();
+
+// Comprobar si el usuario logueado ya sigue a este perfil
+$yaSigue = $usuarioLogueado ? $follows->esSeguidor($usuarioLogueado, $id) : false;
+
+// Obtener películas del usuario
 $stmtPeliculas = $pdo->prepare("
     SELECT p.*, u.nombre AS usuario_nombre
     FROM peliculas p
@@ -63,11 +80,27 @@ include __DIR__ . '/../templates/header.php';
              width="150" style="border-radius:50%; border:2px solid #f4bf2c;">
     </div>
 
+    <!-- Seguidores, Seguidos y Publicaciones -->
+    <div class="perfil-social">
+        <p>
+            Seguidores: <strong><?php echo $seguidoresCount; ?></strong> | 
+            Seguidos: <strong><?php echo $seguidosCount; ?></strong> | 
+            Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
+        </p>
+
+        <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
+            <form method="post" action="">
+                <?php if ($yaSigue): ?>
+                    <button type="submit" name="dejar_seguir">Dejar de seguir</button>
+                <?php else: ?>
+                    <button type="submit" name="seguir">Seguir</button>
+                <?php endif; ?>
+            </form>
+        <?php endif; ?>
+    </div>
+
     <?php if ($esPerfilPropio): ?>
         <p><a href="editar-perfil.php" class="btn-editar">Editar perfil</a></p>
-        <h2>Resumen de tus películas</h2>
-        <p>Películas vistas: <strong><?php echo $totalVistas; ?></strong></p>
-        <p>Películas por ver: <strong><?php echo $totalNoVistas; ?></strong></p>
         <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn-agregar">Agregar nueva película</a>
     <?php endif; ?>
 
