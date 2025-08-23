@@ -81,12 +81,12 @@ include __DIR__ . '/../templates/header.php';
     </div>
 
     <!-- Seguidores, Seguidos y Publicaciones -->
-    <div class="perfil-social">
-        <p>
-            Seguidores: <strong><?php echo $seguidoresCount; ?></strong> | 
-            Seguidos: <strong><?php echo $seguidosCount; ?></strong> | 
-            Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
-        </p>
+<div class="perfil-social">
+    <p>
+        <a href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
+        <a href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
+        Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
+    </p>
 
         <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
             <form method="post" action="">
@@ -99,10 +99,10 @@ include __DIR__ . '/../templates/header.php';
         <?php endif; ?>
     </div>
 
-    <?php if ($esPerfilPropio): ?>
+    <!-- <?php if ($esPerfilPropio): ?>
         <p><a href="editar-perfil.php" class="btn-editar">Editar perfil</a></p>
         <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn-agregar">Agregar nueva película</a>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <h2><?php echo $esPerfilPropio ? 'Tus publicaciones' : 'Publicaciones de ' . htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?></h2>
 

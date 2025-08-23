@@ -13,6 +13,7 @@ cineva/
 │ └── navbar.css # Solo estilos del navbar
 │ └── pelicula.css
 │ └── perfil.css
+│ └── followers.css
 │ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
 │ └── styles.css # importación de todos los anteriores
 │
@@ -43,6 +44,7 @@ cineva/
 │ └── ver.php # Detalle de película/serie
 │
 ├── usuarios/
+│ ├── accion_follow.php
 │ ├── perfil.php # Página de usuario con sus películas, filtros, stats
 │ ├── register.php # Registro de nuevos usuarios
 │ ├── login.php # Login de usuario

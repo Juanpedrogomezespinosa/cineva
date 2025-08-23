@@ -1,79 +1,82 @@
 <?php
-require_once __DIR__ . '/db.php';
+session_start();
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/follows.php';
 
-class Follows {
-    private $pdo;
+$id = isset($_GET['id']) ? $_GET['id'] : (isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null);
 
-    public function __construct() {
-        $db = new Database();
-        $this->pdo = $db->getConnection();
-    }
-
-    // Seguir un usuario
-    public function seguirUsuario($followerId, $followedId) {
-        if ($followerId == $followedId) {
-            return false; // No puede seguirse a sí mismo
-        }
-
-        if ($this->esSeguidor($followerId, $followedId)) {
-            return false; // Ya lo sigue
-        }
-
-        $stmt = $this->pdo->prepare("INSERT INTO seguidores (seguidor_id, seguido_id) VALUES (?, ?)");
-        return $stmt->execute([$followerId, $followedId]);
-    }
-
-    // Dejar de seguir un usuario
-    public function dejarDeSeguirUsuario($followerId, $followedId) {
-        $stmt = $this->pdo->prepare("DELETE FROM seguidores WHERE seguidor_id = ? AND seguido_id = ?");
-        return $stmt->execute([$followerId, $followedId]);
-    }
-
-    // Comprobar si un usuario sigue a otro
-    public function esSeguidor($followerId, $followedId) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM seguidores WHERE seguidor_id = ? AND seguido_id = ?");
-        $stmt->execute([$followerId, $followedId]);
-        return $stmt->fetchColumn() > 0;
-    }
-
-    // Contar seguidores de un usuario
-    public function contarSeguidores($usuarioId) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM seguidores WHERE seguido_id = ?");
-        $stmt->execute([$usuarioId]);
-        return $stmt->fetchColumn();
-    }
-
-    // Contar usuarios seguidos por un usuario
-    public function contarSeguidos($usuarioId) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM seguidores WHERE seguidor_id = ?");
-        $stmt->execute([$usuarioId]);
-        return $stmt->fetchColumn();
-    }
-
-    // Obtener lista de seguidores
-    public function obtenerSeguidores($usuarioId) {
-        $stmt = $this->pdo->prepare("
-            SELECT u.id, u.nombre, u.avatar
-            FROM seguidores s
-            JOIN usuarios u ON s.seguidor_id = u.id
-            WHERE s.seguido_id = ?
-            ORDER BY u.nombre ASC
-        ");
-        $stmt->execute([$usuarioId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Obtener lista de seguidos
-    public function obtenerSeguidos($usuarioId) {
-        $stmt = $this->pdo->prepare("
-            SELECT u.id, u.nombre, u.avatar
-            FROM seguidores s
-            JOIN usuarios u ON s.seguido_id = u.id
-            WHERE s.seguidor_id = ?
-            ORDER BY u.nombre ASC
-        ");
-        $stmt->execute([$usuarioId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+if (!$id) {
+    header('Location: ../index.php');
+    exit;
 }
+
+$follows = new Follows();
+$listaSeguidores = $follows->obtenerSeguidores($id);
+
+include __DIR__ . '/../templates/header.php';
 ?>
+
+<section class="seguidores">
+    <h1>Seguidores</h1>
+    <?php if (count($listaSeguidores) === 0): ?>
+        <p>Este usuario no tiene seguidores todavía.</p>
+    <?php else: ?>
+        <ul>
+            <?php foreach ($listaSeguidores as $seguidor): ?>
+                <li data-usuario="<?php echo $seguidor['id']; ?>">
+                    <a href="<?php echo APP_URL; ?>usuarios/perfil.php?id=<?php echo $seguidor['id']; ?>">
+                        <img src="<?php echo APP_URL . 'img/avatars/' . htmlspecialchars($seguidor['avatar'], ENT_QUOTES, 'UTF-8'); ?>" 
+                             alt="Avatar de <?php echo htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
+                             width="40" style="border-radius:50%;">
+                        <?php echo htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                    </a>
+
+                    <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_id'] !== $seguidor['id']): ?>
+                        <button class="<?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'btn-unfollow' : 'btn-follow'; ?>" 
+                                data-accion="<?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'dejar' : 'seguir'; ?>">
+                            <?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'Dejar de seguir' : 'Seguir'; ?>
+                        </button>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    <?php endif; ?>
+</section>
+
+<script>
+document.querySelectorAll('.seguidores button').forEach(button => {
+    button.addEventListener('click', () => {
+        const li = button.closest('li');
+        const usuario_id = li.dataset.usuario;
+        const accion = button.dataset.accion;
+
+        fetch('<?php echo APP_URL; ?>usuarios/accion_follow.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: `usuario_id=${usuario_id}&accion=${accion}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                if(accion === 'seguir'){
+                    button.textContent = 'Dejar de seguir';
+                    button.classList.remove('btn-follow');
+                    button.classList.add('btn-unfollow');
+                    button.dataset.accion = 'dejar';
+                } else {
+                    button.textContent = 'Seguir';
+                    button.classList.remove('btn-unfollow');
+                    button.classList.add('btn-follow');
+                    button.dataset.accion = 'seguir';
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(err => alert('Error en la solicitud AJAX'));
+    });
+});
+</script>
+
+<?php include __DIR__ . '/../templates/footer.php'; ?>

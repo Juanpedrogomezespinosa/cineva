@@ -18,6 +18,7 @@ require_once __DIR__ . '/../includes/config.php';
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/dashboard.css" />
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/perfil.css" />
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/pelicula.css" />
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>css/followers.css" />
 </head>
 <body>
   <header class="main-header">
