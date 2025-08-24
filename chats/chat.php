@@ -1,31 +1,24 @@
 <?php
-// Mostrar errores en desarrollo
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+declare(strict_types=1);
 
-// Incluir configuración y dependencias usando rutas absolutas
-require_once __DIR__ . '/../includes/config.php';
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/mensajes.php';
+require_once '../includes/config.php';
+require_once '../includes/db.php';
+require_once '../includes/auth.php';       // aquí sí, porque esta vista es privada
+require_once '../includes/mensajes.php';
 
-// Usuario logueado
-$currentUser = $_SESSION['usuario_id'] ?? null;
-$chatUser = isset($_GET['usuario']) ? (int)$_GET['usuario'] : null;
+$usuarioActual = $_SESSION['usuario_id'] ?? null;
+$usuarioChat   = isset($_GET['usuario']) ? (int)$_GET['usuario'] : 0;
 
-// Redirigir si falta información
-if (!$currentUser || !$chatUser) {
-    header('Location: ' . APP_URL);
+if (!$usuarioActual || $usuarioChat <= 0) {
+    header('Location: ' . APP_URL . 'chats/index.php');
     exit;
 }
 
-// Inicializar conexión
 $db = (new Database())->getConnection();
 
-// Verificar que el usuario receptor exista
-$stmt = $db->prepare("SELECT id, nombre FROM usuarios WHERE id = ?");
-$stmt->execute([$chatUser]);
+// Verificar que el usuario con el que se quiere chatear exista
+$stmt = $db->prepare("SELECT id, nombre, avatar FROM usuarios WHERE id = ?");
+$stmt->execute([$usuarioChat]);
 $usuarioReceptor = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$usuarioReceptor) {
@@ -33,32 +26,42 @@ if (!$usuarioReceptor) {
     exit;
 }
 
-// Incluir templates
-include __DIR__ . '/../templates/header.php';
-// include __DIR__ . '/../templates/navbar.php';
+// Marcar como leídos los mensajes que ya existan
+marcarMensajesComoLeidos($db, $usuarioChat, (int)$usuarioActual);
+
+include '../templates/header.php';
 ?>
+<main class="contenedor-chat">
+    <h2>Chat con <?php echo htmlspecialchars($usuarioReceptor['nombre']); ?></h2>
 
-<h2>Chat con <?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES, 'UTF-8'); ?></h2>
+    <div id="chat-box" class="chat-box">
+        <!-- Los mensajes se cargarán automáticamente con AJAX -->
+    </div>
 
-<div id="chat-box" style="border:1px solid #ccc; padding:10px; max-height:400px; overflow-y:auto;">
-    <!-- Los mensajes se cargarán mediante AJAX -->
-</div>
-
-<form id="chat-form">
-    <input type="hidden" 
-           name="receptor_id" 
-           value="<?php echo htmlspecialchars($usuarioReceptor['id'], ENT_QUOTES, 'UTF-8'); ?>" 
-           data-current-user-id="<?php echo htmlspecialchars($currentUser, ENT_QUOTES, 'UTF-8'); ?>">
-    <input type="text" name="mensaje" placeholder="Escribe tu mensaje..." required>
-    <button type="submit">Enviar</button>
-</form>
+    <form id="chat-form" class="formulario-chat">
+        <input
+            type="hidden"
+            name="receptor_id"
+            value="<?php echo (int)$usuarioReceptor['id']; ?>"
+            data-current-user-id="<?php echo (int)$usuarioActual; ?>"
+        >
+        <input
+            type="text"
+            name="mensaje"
+            placeholder="Escribe tu mensaje..."
+            required
+            autocomplete="off"
+        >
+        <button type="submit">Enviar</button>
+    </form>
+</main>
 
 <link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css">
 
 <script>
-    const chatUser = <?php echo json_encode($usuarioReceptor['id']); ?>;
-    const currentUser = <?php echo json_encode($currentUser); ?>;
+// Endpoint absoluto para evitar problemas de rutas
+window.MENSAJES_ENDPOINT = "<?php echo APP_URL; ?>includes/mensajes_ajax.php";
 </script>
 <script src="<?php echo APP_URL; ?>scripts/chat.js"></script>
 
-<?php include __DIR__ . '/../templates/footer.php'; ?>
+<?php include '../templates/footer.php'; ?>

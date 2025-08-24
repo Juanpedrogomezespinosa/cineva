@@ -1,36 +1,34 @@
 <?php
-require_once 'auth.php';
+require_once '../includes/db.php';
+require_once '../includes/auth.php';
+require_once '../includes/mensajes.php';
 
-/**
- * Devuelve todos los mensajes entre dos usuarios.
- */
-function obtenerMensajes(PDO $db, int $usuario1, int $usuario2): array {
-    $stmt = $db->prepare("
-        SELECT m.*, u.nombre, u.avatar 
-        FROM mensajes m
-        JOIN usuarios u ON m.emisor_id = u.id
-        WHERE (emisor_id = :u1 AND receptor_id = :u2) 
-           OR (emisor_id = :u2 AND receptor_id = :u1)
-        ORDER BY creado_en ASC
-    ");
-    $stmt->execute([
-        ':u1' => $usuario1,
-        ':u2' => $usuario2
-    ]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $emisor = $_SESSION['usuario_id'] ?? null;
+    $receptor = isset($_POST['receptor_id']) ? (int)$_POST['receptor_id'] : null;
+    $mensaje = trim($_POST['mensaje'] ?? '');
 
-/**
- * Inserta un nuevo mensaje en la base de datos.
- */
-function enviarMensaje(PDO $db, int $emisor, int $receptor, string $mensaje): bool {
-    $stmt = $db->prepare("
-        INSERT INTO mensajes (emisor_id, receptor_id, mensaje) 
-        VALUES (:emisor, :receptor, :mensaje)
-    ");
-    return $stmt->execute([
-        ':emisor'   => $emisor,
-        ':receptor' => $receptor,
-        ':mensaje'  => $mensaje
-    ]);
+    if (!$emisor || !$receptor || $mensaje === '') {
+        echo json_encode(['success' => false, 'error' => 'Datos incompletos']);
+        exit;
+    }
+
+    $db = (new Database())->getConnection();
+    $resultado = enviarMensaje($db, $emisor, $receptor, $mensaje);
+
+    if ($resultado) {
+        $stmt = $db->prepare("SELECT * FROM mensajes WHERE id = :id");
+        $stmt->execute([':id' => $db->lastInsertId()]);
+        $mensajeInsertado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success'   => true,
+            'mensaje'   => $mensajeInsertado['mensaje'],
+            'nombre'    => 'Tú',
+            'creado_en' => $mensajeInsertado['creado_en'],
+            'id'        => (int)$mensajeInsertado['id']
+        ]);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Error al enviar mensaje']);
+    }
 }
