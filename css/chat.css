@@ -1,0 +1,67 @@
+/* Contenedor del chat */
+#chat-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+}
+
+/* Cada mensaje */
+#chat-box div {
+  padding: 5px 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  background-color: #e1f5fe;
+  word-wrap: break-word;
+}
+
+/* Mensajes del usuario actual */
+#chat-box div.usuario {
+  background-color: #c8e6c9;
+  text-align: right;
+}
+
+/* Nombre del remitente */
+#chat-box strong {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+/* Fecha y hora del mensaje */
+#chat-box small {
+  color: gray;
+  font-size: 0.8em;
+}
+
+/* Formulario del chat */
+#chat-form {
+  display: flex;
+  gap: 5px;
+}
+
+#chat-form input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+}
+
+#chat-form button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2196f3;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#chat-form button:hover {
+  background-color: #1976d2;
+}

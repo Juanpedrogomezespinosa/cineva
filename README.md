@@ -5,13 +5,21 @@
 cineva/
 │
 ├── scripts/
-│ └── procesar_portada.py
+│ └── chat.js
+|
+├── chats/
+│ └── index.php
+│ └── chat.php
+│ └── enviar_mensaje.php
+│ └── cargar_mensajes.php
+|
 |
 ├── css/
 │ └── main.css # Estilos generales: reset, body, headers, footer, layout
 │ └── forms.css # Estilos de login, register, agregar/editar películas
 │ └── navbar.css # Solo estilos del navbar
 │ └── pelicula.css
+│ └── chat.css
 │ └── perfil.css
 │ └── followers.css
 │ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
@@ -27,6 +35,8 @@ cineva/
 │ ├── follows.php
 │ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
 │ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
+│ ├── mensajes.php
+│ ├── mensajes_ajax.php
 │ ├── peliculas.php # Funciones específicas para CRUD de películas
 │ ├── usuarios.php # Funciones específicas para CRUD de usuarios
 │ ├── amistad.php # Funciones para peticiones de amistad

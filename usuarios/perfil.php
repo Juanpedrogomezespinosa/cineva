@@ -1,10 +1,16 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
+
 session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/follows.php';
 
-$id = isset($_GET['id']) ? $_GET['id'] : (isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null);
+$id = isset($_GET['id']) ? (int)$_GET['id'] : (isset($_SESSION['usuario_id']) ? (int)$_SESSION['usuario_id'] : null);
 
 if (!$id) {
     header('Location: ../index.php');
@@ -25,7 +31,7 @@ if (!$usuario) {
 }
 
 $esPerfilPropio = isset($_SESSION['usuario_id']) && ($_SESSION['usuario_id'] == $id);
-$usuarioLogueado = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : null;
+$usuarioLogueado = $_SESSION['usuario_id'] ?? null;
 
 $follows = new Follows();
 
@@ -44,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuarioLogueado && !$esPerfilPropi
 $seguidoresCount = $follows->contarSeguidores($id);
 $seguidosCount = $follows->contarSeguidos($id);
 
-// Número de publicaciones del usuario
+// Número de publicaciones
 $stmtPublicaciones = $pdo->prepare("SELECT COUNT(*) FROM peliculas WHERE usuario_id = ?");
 $stmtPublicaciones->execute([$id]);
 $totalPublicaciones = $stmtPublicaciones->fetchColumn();
@@ -72,21 +78,19 @@ include __DIR__ . '/../templates/header.php';
     </h1>
 
     <div class="avatar-perfil">
-        <?php
-        $avatar = !empty($usuario['avatar']) ? $usuario['avatar'] : 'default.png';
-        ?>
+        <?php $avatar = !empty($usuario['avatar']) ? $usuario['avatar'] : 'default.png'; ?>
         <img src="<?php echo APP_URL . 'img/avatars/' . htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8'); ?>" 
              alt="Avatar de <?php echo htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
              width="150" style="border-radius:50%; border:2px solid #f4bf2c;">
     </div>
 
     <!-- Seguidores, Seguidos y Publicaciones -->
-<div class="perfil-social">
-    <p>
-        <a href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
-        <a href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
-        Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
-    </p>
+    <div class="perfil-social">
+        <p>
+            <a href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
+            <a href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
+            Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
+        </p>
 
         <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
             <form method="post" action="">
@@ -96,13 +100,17 @@ include __DIR__ . '/../templates/header.php';
                     <button type="submit" name="seguir">Seguir</button>
                 <?php endif; ?>
             </form>
+
+            <!-- Botón para mensaje directo -->
+            <p>
+                <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
+                   class="btn-mensaje-directo" 
+                   style="padding:8px 12px; background-color:#f4bf2c; color:#000; text-decoration:none; border-radius:4px;">
+                    Enviar mensaje
+                </a>
+            </p>
         <?php endif; ?>
     </div>
-
-    <!-- <?php if ($esPerfilPropio): ?>
-        <p><a href="editar-perfil.php" class="btn-editar">Editar perfil</a></p>
-        <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn-agregar">Agregar nueva película</a>
-    <?php endif; ?> -->
 
     <h2><?php echo $esPerfilPropio ? 'Tus publicaciones' : 'Publicaciones de ' . htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?></h2>
 
