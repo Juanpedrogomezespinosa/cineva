@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require_once '../includes/config.php';
 require_once '../includes/db.php';
-require_once '../includes/auth.php';       // aquí sí, porque esta vista es privada
+require_once '../includes/auth.php';
 require_once '../includes/mensajes.php';
 
 $usuarioActual = $_SESSION['usuario_id'] ?? null;
@@ -26,16 +26,17 @@ if (!$usuarioReceptor) {
     exit;
 }
 
-// Marcar como leídos los mensajes que ya existan
-marcarMensajesComoLeidos($db, $usuarioChat, (int)$usuarioActual);
+// Marcar como leídos los mensajes que existan
+marcarMensajesComoLeidos($db, $usuarioReceptor['id'], $usuarioActual);
 
 include '../templates/header.php';
 ?>
+
 <main class="contenedor-chat">
-    <h2>Chat con <?php echo htmlspecialchars($usuarioReceptor['nombre']); ?></h2>
+    <h2>Chat con <?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES); ?></h2>
 
     <div id="chat-box" class="chat-box">
-        <!-- Los mensajes se cargarán automáticamente con AJAX -->
+        <!-- Mensajes se cargarán vía AJAX -->
     </div>
 
     <form id="chat-form" class="formulario-chat">
@@ -59,7 +60,7 @@ include '../templates/header.php';
 <link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css">
 
 <script>
-// Endpoint absoluto para evitar problemas de rutas
+// Endpoint absoluto para AJAX
 window.MENSAJES_ENDPOINT = "<?php echo APP_URL; ?>includes/mensajes_ajax.php";
 </script>
 <script src="<?php echo APP_URL; ?>scripts/chat.js"></script>

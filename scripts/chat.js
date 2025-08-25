@@ -29,27 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
   async function cargarMensajes() {
     try {
       const res = await fetch(
-        `../includes/mensajes_ajax.php?receptor_id=${receptorId}&ultimo_id=${ultimoMensajeId}`
+        `${window.MENSAJES_ENDPOINT}?receptor_id=${receptorId}&ultimo_id=${ultimoMensajeId}`
       );
-
       if (!res.ok) {
-        console.error("Chat: respuesta HTTP no OK", res.status);
+        console.error("Chat: error HTTP", res.status);
         return;
       }
 
-      let data;
-      try {
-        data = await res.json();
-      } catch (err) {
-        console.error("Chat: error al parsear JSON", err, await res.text());
-        return;
-      }
+      const data = await res.json();
 
-      // Validar que sea un array antes de forEach
       if (Array.isArray(data)) {
         data.forEach(agregarMensaje);
+      } else if (data.success === false) {
+        console.error("Error AJAX:", data.error, data.detalle ?? "");
       } else {
-        console.warn("Chat: datos recibidos no son un array", data);
+        console.warn("Datos recibidos no son un array:", data);
       }
     } catch (err) {
       console.error("Error al cargar mensajes:", err);
@@ -61,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const formData = new FormData(chatForm);
 
     try {
-      const res = await fetch("../includes/mensajes_ajax.php", {
+      const res = await fetch(window.MENSAJES_ENDPOINT, {
         method: "POST",
         body: formData,
       });
@@ -71,17 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      let data;
-      try {
-        data = await res.json();
-      } catch (err) {
-        console.error(
-          "Chat: error al parsear JSON en envío",
-          err,
-          await res.text()
-        );
-        return;
-      }
+      const data = await res.json();
 
       if (data.success) {
         agregarMensaje({

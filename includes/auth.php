@@ -1,6 +1,11 @@
 <?php
-// Este archivo asume que config.php ya se ha incluido antes,
-// y que la sesión ya está iniciada allí (no usar session_start() aquí)
+// Incluir configuración primero para tener APP_URL y otras constantes
+require_once __DIR__ . '/config.php';
+
+// Iniciar sesión si no está iniciada
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 
 // Tiempo máximo de sesión: 6 horas
 define('SESSION_EXPIRATION_SECONDS', 6 * 60 * 60);

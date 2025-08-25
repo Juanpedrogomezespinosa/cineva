@@ -10,7 +10,6 @@ error_reporting(E_ALL);
 
 header('Content-Type: application/json');
 
-// ⚠ No hacemos session_start() porque auth.php ya lo maneja
 $usuarioActual = $_SESSION['usuario_id'] ?? null;
 if (!$usuarioActual) {
     echo json_encode(['success' => false, 'error' => 'No autorizado']);
@@ -62,6 +61,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ------------------------
+// COMPROBAR MENSAJES NO LEÍDOS
+// ------------------------
+if (isset($_GET['check_no_leidos'])) {
+    try {
+        $stmt = $db->prepare("SELECT COUNT(*) AS total_no_leidos FROM mensajes WHERE receptor_id = :uid AND leido = 0");
+        $stmt->execute([':uid' => $usuarioActual]);
+        $noLeidos = (int)$stmt->fetchColumn();
+        echo json_encode(['success' => true, 'no_leidos' => $noLeidos]);
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error al contar mensajes no leídos',
+            'detalle' => $e->getMessage()
+        ]);
+    }
+    exit;
+}
+
+// ------------------------
 // OBTENER MENSAJES (GET)
 // ------------------------
 $receptor = isset($_GET['receptor_id']) ? (int)$_GET['receptor_id'] : null;
@@ -73,7 +91,6 @@ if (!$receptor) {
 }
 
 try {
-    // ✅ Placeholders únicos para evitar errores de PDO
     $stmt = $db->prepare("
         SELECT m.id, m.mensaje, m.creado_en, m.emisor_id, u.nombre, u.avatar
         FROM mensajes m
@@ -94,10 +111,9 @@ try {
 
     $mensajes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Marcar mensajes como leídos del usuario actual
     marcarMensajesComoLeidos($db, $receptor, $usuarioActual);
 
-    echo json_encode($mensajes);
+    echo json_encode($mensajes ?: []);
 
 } catch (Exception $e) {
     echo json_encode([
