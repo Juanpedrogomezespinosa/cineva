@@ -2,12 +2,15 @@
 require_once '../includes/config.php';
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
+include __DIR__ . '/../templates/header.php'; 
 
 $mensaje = '';
 $db = new Database();
 $pdo = $db->getConnection();
 
 $usuario_id = $_SESSION['usuario_id'];
+
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = trim($_POST['titulo'] ?? '');
@@ -93,6 +96,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="<?= APP_URL ?>css/styles.css" />
 </head>
 <body>
+    <div class="containter-principal">
+    <div class="container-agregar">
+
     <h1>Agregar nueva película</h1>
 
     <?php if ($mensaje): ?>
@@ -130,7 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <button type="submit">Guardar película</button>
     </form>
+    </div>
+    <a class="url" href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+</div>
 
-    <a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+<?php include __DIR__ . '/../templates/footer.php'; ?>
+
 </body>
 </html>

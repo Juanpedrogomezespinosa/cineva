@@ -1,0 +1,45 @@
+/* Estilos container principal */
+
+.containter-principal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem;
+}
+
+/* Estilos del formulario */
+.container-agregar {
+  border: 1.8px solid #f4bf2c;
+  box-shadow: inset;
+  border-radius: 8px;
+  max-width: 500px;
+  align-items: center;
+  padding: 1rem;
+}
+
+.container-agregar h1 {
+  color: #f4bf2c;
+}
+
+.container-agregar button {
+  width: 100%;
+  min-height: 2rem;
+  border-radius: 8px;
+  background-color: #f4bf2c;
+  font-size: medium;
+}
+
+.container-agregar button :hover {
+  -webkit-box-shadow: -5px 9px 24px -10px rgba(244, 191, 44, 0.86);
+  box-shadow: -5px 9px 24px -10px rgba(244, 191, 44, 0.86);
+}
+
+.url {
+  margin-top: 1rem;
+  text-decoration: none;
+  color: #f4bf2c;
+}
+
+.url:hover {
+  text-decoration: underline;
+}
