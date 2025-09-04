@@ -19,7 +19,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 <nav class="navbar">
     <!-- IZQUIERDA -->
     <div class="nav-left">
-        <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn">+ Publicar</a>
+        <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn" >+ Publicar</a>
     </div>
 
     <!-- CENTRO -->

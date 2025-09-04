@@ -168,3 +168,8 @@
     grid-template-columns: 1fr;
   }
 }
+
+.link-social {
+  text-decoration: none;
+  color: #f4bf2c;
+}

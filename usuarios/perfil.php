@@ -87,8 +87,8 @@ include __DIR__ . '/../templates/header.php';
     <!-- Seguidores, Seguidos y Publicaciones -->
     <div class="perfil-social">
         <p>
-            <a href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
-            <a href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
+            <a class="link-social" href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
+            <a class="link-social" href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
             Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
         </p>
 

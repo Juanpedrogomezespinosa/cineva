@@ -105,37 +105,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="color:red;"><?= htmlspecialchars($mensaje); ?></p>
     <?php endif; ?>
 
-    <form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/agregar.php">
-        <label for="titulo">Título:</label><br />
-        <input type="text" id="titulo" name="titulo" required /><br /><br />
+<form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/agregar.php">
+    <div class="form-grid">
+        <!-- Columna izquierda -->
+        <div class="form-left">
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" required />
+            </div>
 
-        <label for="genero">Género:</label><br />
-        <input type="text" id="genero" name="genero" required /><br /><br />
+            <div class="form-group">
+                <label for="genero">Género</label>
+                <input type="text" id="genero" name="genero" required />
+            </div>
 
-        <label for="plataforma">Plataforma:</label><br />
-        <input type="text" id="plataforma" name="plataforma" required /><br /><br />
+            <div class="form-group">
+                <label for="plataforma">Plataforma</label>
+                <input type="text" id="plataforma" name="plataforma" required />
+            </div>
 
-        <label>
-            <input type="checkbox" name="visto" />
-            Visto
-        </label><br />
+            <div class="container-checkbox">
+                <label><input type="checkbox" name="visto" /> Visto</label>
+                <label><input type="checkbox" name="favorito" /> Favorito</label>
+            </div>
 
-        <label>
-            <input type="checkbox" name="favorito" />
-            Favorito
-        </label><br /><br />
+            <div class="form-group">
+                <label for="valoracion">Valoración (1-5)</label>
+                <input type="number" id="valoracion" name="valoracion" min="1" max="5" />
+            </div>
+        </div>
 
-        <label for="portada">Portada (jpg/png/gif, máx. 2MB):</label><br />
-        <input type="file" id="portada" name="portada" accept=".jpg,.jpeg,.png,.gif" /><br /><br />
+        <!-- Columna derecha -->
+        <div class="form-right">
+            <div class="form-group">
+                <label for="portada">Portada</label>
+                <input type="file" id="portada" name="portada" accept=".jpg,.jpeg,.png,.gif" />
+            </div>
 
-        <label for="valoracion">Valoración (1-5):</label><br />
-        <input type="number" id="valoracion" name="valoracion" min="1" max="5" /><br /><br />
+            <div class="form-group">
+                <label for="resena">Reseña</label>
+                <textarea id="resena" name="resena" rows="6"></textarea>
+            </div>
+        </div>
+    </div>
 
-        <label for="resena">Reseña:</label><br />
-        <textarea id="resena" name="resena" rows="4" cols="50"></textarea><br /><br />
-
+    <!-- Botón centrado -->
+    <div class="form-actions">
         <button type="submit">Guardar película</button>
-    </form>
+    </div>
+</form>
+
     </div>
     <a class="url" href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
 </div>
