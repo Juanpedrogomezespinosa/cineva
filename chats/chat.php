@@ -29,34 +29,42 @@ if (!$usuarioReceptor) {
 // Marcar como leídos los mensajes que existan
 marcarMensajesComoLeidos($db, $usuarioReceptor['id'], $usuarioActual);
 
-// Incluir header
 include '../templates/header.php';
 ?>
 
-<main class="contenedor-chat">
-    <h2>Chat con <?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES); ?></h2>
+<div class="chat-container">
 
-    <div id="chat-box" class="chat-box">
+    <!-- Header: nombre usuario -->
+    <header class="chat-header">
+        <h2><?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES); ?></h2>
+    </header>
+
+    <!-- Sección de mensajes -->
+    <section id="chat-box" class="chat-box">
         <!-- Mensajes se cargarán vía AJAX -->
-    </div>
+    </section>
 
-    <form id="chat-form" class="formulario-chat">
-        <input
-            type="hidden"
-            name="receptor_id"
-            value="<?php echo (int)$usuarioReceptor['id']; ?>"
-            data-current-user-id="<?php echo (int)$usuarioActual; ?>"
-        >
-        <input
-            type="text"
-            name="mensaje"
-            placeholder="Escribe tu mensaje..."
-            required
-            autocomplete="off"
-        >
-        <button type="submit">Enviar</button>
-    </form>
-</main>
+    <!-- Footer: input + botón -->
+    <footer class="chat-footer">
+        <form id="chat-form" class="formulario-chat">
+            <input
+                type="hidden"
+                name="receptor_id"
+                value="<?php echo (int)$usuarioReceptor['id']; ?>"
+                data-current-user-id="<?php echo (int)$usuarioActual; ?>"
+            >
+            <input
+                type="text"
+                name="mensaje"
+                placeholder="Escribe tu mensaje..."
+                required
+                autocomplete="off"
+            >
+            <button type="submit">Enviar</button>
+        </form>
+    </footer>
+
+</div>
 
 <link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css?v=<?php echo filemtime(__DIR__ . '/../css/chat.css'); ?>">
 
