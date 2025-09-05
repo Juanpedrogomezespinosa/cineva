@@ -18,6 +18,11 @@ if (!$usuarioActual) {
 
 $db = (new Database())->getConnection();
 
+// Avatar del usuario actual
+$stmtAvatarActual = $db->prepare("SELECT avatar FROM usuarios WHERE id = :uid");
+$stmtAvatarActual->execute([':uid' => $usuarioActual]);
+$avatarUsuarioActual = $stmtAvatarActual->fetchColumn() ?: 'default.png';
+
 // ------------------------
 // ENVÍO DE MENSAJE (POST)
 // ------------------------
@@ -40,11 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensajeInsertado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             echo json_encode([
-                'success'   => true,
-                'mensaje'   => $mensajeInsertado['mensaje'],
-                'nombre'    => 'Tú',
+                'success' => true,
+                'mensaje' => $mensajeInsertado['mensaje'],
+                'nombre' => 'Tú',
                 'creado_en' => $mensajeInsertado['creado_en'],
-                'id'        => (int)$mensajeInsertado['id']
+                'id' => (int)$mensajeInsertado['id'],
+                'avatar_usuario_actual' => $avatarUsuarioActual
             ]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Error al enviar mensaje']);
@@ -57,25 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 
-    exit;
-}
-
-// ------------------------
-// COMPROBAR MENSAJES NO LEÍDOS
-// ------------------------
-if (isset($_GET['check_no_leidos'])) {
-    try {
-        $stmt = $db->prepare("SELECT COUNT(*) AS total_no_leidos FROM mensajes WHERE receptor_id = :uid AND leido = 0");
-        $stmt->execute([':uid' => $usuarioActual]);
-        $noLeidos = (int)$stmt->fetchColumn();
-        echo json_encode(['success' => true, 'no_leidos' => $noLeidos]);
-    } catch (Exception $e) {
-        echo json_encode([
-            'success' => false,
-            'error' => 'Error al contar mensajes no leídos',
-            'detalle' => $e->getMessage()
-        ]);
-    }
     exit;
 }
 
@@ -111,10 +98,17 @@ try {
 
     $mensajes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // Marcar mensajes como leídos
     marcarMensajesComoLeidos($db, $receptor, $usuarioActual);
 
-    echo json_encode($mensajes ?: []);
+    // Agregar avatar_usuario_actual para tus propios mensajes
+    foreach ($mensajes as &$mensaje) {
+        if ((int)$mensaje['emisor_id'] === $usuarioActual) {
+            $mensaje['avatar_usuario_actual'] = $avatarUsuarioActual;
+        }
+    }
 
+    echo json_encode($mensajes ?: []);
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,

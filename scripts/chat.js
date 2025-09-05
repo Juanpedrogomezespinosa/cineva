@@ -10,15 +10,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let ultimoMensajeId = 0;
 
+  // Formatear hora en 24h, sin fecha
+  function formatearHora24(creadoEn) {
+    // creadoEn = "YYYY-MM-DD HH:MM:SS"
+    const partes = creadoEn.split(" "); // ["YYYY-MM-DD", "HH:MM:SS"]
+    if (partes.length < 2) return "";
+    const tiempo = partes[1].split(":"); // ["HH", "MM", "SS"]
+    const hh = tiempo[0].padStart(2, "0");
+    const mm = tiempo[1].padStart(2, "0");
+    return `${hh}:${mm}`;
+  }
+
+  function escapeHtml(texto) {
+    const mapa = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
+    };
+    return String(texto).replace(/[&<>"']/g, (m) => mapa[m]);
+  }
+
   function agregarMensaje(msgObj) {
-    const { id, mensaje, nombre, creado_en, emisor_id } = msgObj;
+    const {
+      id,
+      mensaje,
+      nombre,
+      creado_en,
+      emisor_id,
+      avatar,
+      avatar_usuario_actual,
+    } = msgObj;
 
     if (id <= ultimoMensajeId) return;
 
     const div = document.createElement("div");
     div.classList.add("mensaje");
+
     if (emisor_id === currentUserId) div.classList.add("usuario");
-    div.innerHTML = `<strong>${nombre}:</strong> ${mensaje} <small>${creado_en}</small>`;
+
+    const avatarUrl =
+      emisor_id === currentUserId
+        ? avatar_usuario_actual || "default.png"
+        : avatar || "default.png";
+
+    const hora24 = formatearHora24(creado_en);
+
+    div.innerHTML = `
+      <img src="../img/avatars/${avatarUrl}" class="avatar" alt="Avatar de ${nombre}">
+      <div class="contenido">
+        <strong>${nombre}</strong>
+        <div class="texto-mensaje">${escapeHtml(mensaje)}</div>
+        <small class="hora">${hora24}</small>
+      </div>
+    `;
 
     chatBox.appendChild(div);
     div.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -74,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
           nombre: "Tú",
           creado_en: data.creado_en,
           emisor_id: currentUserId,
+          avatar_usuario_actual: data.avatar_usuario_actual,
         });
         chatForm.mensaje.value = "";
       } else {

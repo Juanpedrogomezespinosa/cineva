@@ -1,6 +1,6 @@
 # 🎬 Proyecto PHP: Lista de Películas por Ver
 
-#### Arquitectura:
+#### estructura de carpetas:
 
 cineva/
 │
@@ -260,3 +260,28 @@ Para los más experimentados del grupo o quien quiera asumir un reto.
 nueva idea: que te aparezca una notificación cada vez que alguien comente tu publicación y cada vez que te siga alguien.
 
 cuando entres en el perfil de alguien que te sigue, debe poner "te sigue"
+
+|---------------------------------------------------|
+| Nombre usuario |
+|---------------------------------------------------|
+| |mensaje entrante| |
+| |
+| |mensaje saliente| |
+| |
+| |
+| |
+| |
+| |
+| |
+|---------------------------------------------------|
+| |boton enviar| |
+|---------------------------------------------------|
+
+estructura del mensaje:
+
+|-------------------------|
+|texto mensaje |
+| |
+| hora |
+|-------------------------|
+La hora debe ser en formato 24 horas, por ejemplo 21:09

@@ -29,6 +29,7 @@ if (!$usuarioReceptor) {
 // Marcar como leídos los mensajes que existan
 marcarMensajesComoLeidos($db, $usuarioReceptor['id'], $usuarioActual);
 
+// Incluir header
 include '../templates/header.php';
 ?>
 
@@ -57,10 +58,9 @@ include '../templates/header.php';
     </form>
 </main>
 
-<link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css">
+<link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css?v=<?php echo filemtime(__DIR__ . '/../css/chat.css'); ?>">
 
 <script>
-// Endpoint absoluto para AJAX
 window.MENSAJES_ENDPOINT = "<?php echo APP_URL; ?>includes/mensajes_ajax.php";
 </script>
 <script src="<?php echo APP_URL; ?>scripts/chat.js"></script>

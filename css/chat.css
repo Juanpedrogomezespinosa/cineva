@@ -1,110 +1,141 @@
-/* Contenedor del chat */
+/* Contenedor general del chat */
+.contenedor-chat {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #121518;
+  color: #fcfceb;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 80vh; /* ventana de chat ocupa casi toda la pantalla */
+}
+
+/* Caja de mensajes */
 #chat-box {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1.8px solid #f4bf2c;
+  border-radius: 12px;
   padding: 12px;
-  background-color: #f5f5f5;
-  max-height: 500px;
+  background-color: #090d10;
+  flex: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-/* Burbuja de mensaje general */
-.mensaje {
-  padding: 10px 14px;
-  border-radius: 18px;
+/* Mensaje individual */
+#chat-box .mensaje {
+  display: flex;
+  gap: 10px; /* espacio entre avatar y contenido */
   max-width: 75%;
-  word-wrap: break-word;
-  position: relative;
-  background-color: #e1e1e1;
-  align-self: flex-start;
-  font-size: 14px;
 }
 
-/* Estilo para tus propios mensajes */
-.mensaje.usuario {
-  background-color: #dcf8c6;
+/* Avatar */
+#chat-box .mensaje .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #f4bf2c;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Contenido del mensaje */
+#chat-box .mensaje .contenido {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 14px;
+  border-radius: 14px;
+  word-wrap: break-word;
+}
+
+/* Mensaje entrante (izquierda) */
+#chat-box .mensaje:not(.usuario) {
+  flex-direction: row; /* avatar a la izquierda */
+  align-self: flex-start;
+}
+
+#chat-box .mensaje:not(.usuario) .contenido {
+  background-color: #7d641d !important;
+  color: #fcfceb !important;
+}
+
+/* Mensaje saliente (derecha) */
+#chat-box .mensaje.usuario {
+  flex-direction: row-reverse; /* avatar a la derecha */
   align-self: flex-end;
 }
 
-/* Nombre y texto */
-.mensaje strong {
-  display: block;
+#chat-box .mensaje.usuario .contenido {
+  background-color: #f4bf2c !important;
+  color: #06080e !important;
+}
+
+/* Texto del mensaje */
+#chat-box .mensaje .texto-mensaje {
+  font-size: 15px;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: inherit;
+}
+
+/* Hora en la esquina inferior derecha */
+#chat-box .mensaje .hora {
+  font-size: 11px;
+  opacity: 0.8;
+  color: inherit;
+  align-self: flex-end;
+}
+
+/* Nombre del usuario */
+#chat-box .mensaje strong {
   font-size: 13px;
   font-weight: bold;
-  color: #333;
+  margin-bottom: 4px;
+  color: inherit;
 }
 
-/* Fecha o tiempo */
-.mensaje small {
-  font-size: 11px;
-  color: #666;
-  margin-top: 4px;
-  display: block;
-  text-align: right;
-}
-
-/* Formulario del mensaje */
+/* Formulario de envío */
 #chat-form {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
 
+/* Input de mensaje */
 #chat-form input[type="text"] {
   flex: 1;
-  padding: 10px;
+  padding: 10px 16px;
   border-radius: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid #f4bf2c;
+  background-color: #2a2f33;
+  color: #fcfceb;
   font-size: 14px;
   outline: none;
 }
 
+/* Botón enviar */
 #chat-form button {
   padding: 10px 16px;
-  background-color: #4caf50;
-  color: white;
+  background-color: #f4bf2c !important;
+  color: #06080e !important;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  transition: box-shadow 0.2s ease;
 }
 
 #chat-form button:hover {
-  background-color: #45a049;
+  box-shadow: 0 4px 10px rgba(244, 191, 44, 0.5);
 }
 
-/* Modo oscuro automático si el navegador lo tiene */
-@media (prefers-color-scheme: dark) {
-  body {
-    background-color: #121212;
-    color: #eee;
-  }
-
-  #chat-box {
-    background-color: #1e1e1e;
-    border-color: #333;
-  }
-
-  .mensaje {
-    background-color: #2a2a2a;
-    color: #ddd;
-  }
-
-  .mensaje.usuario {
-    background-color: #4a8f6f;
-  }
-
-  #chat-form input[type="text"] {
-    background-color: #2e2e2e;
-    color: #eee;
-    border-color: #444;
-  }
-
-  #chat-form button {
-    background-color: #4caf50;
-  }
+/* Scroll automático con espacio inferior */
+#chat-box::after {
+  content: "";
+  display: block;
+  height: 10px;
 }

@@ -11,6 +11,7 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $id = $_SESSION['usuario_id'];
 $nombre = $_POST['nombre'] ?? '';
+$biografia = $_POST['biografia'] ?? '';
 
 $db = new Database();
 $pdo = $db->getConnection();
@@ -63,11 +64,11 @@ if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
 // --- Actualizar datos del usuario ---
 try {
     if ($avatar) {
-        $stmt = $pdo->prepare("UPDATE usuarios SET nombre = ?, avatar = ? WHERE id = ?");
-        $stmt->execute([$nombre, $avatar, $id]);
+        $stmt = $pdo->prepare("UPDATE usuarios SET nombre = ?, biografia = ?, avatar = ? WHERE id = ?");
+        $stmt->execute([$nombre, $biografia, $avatar, $id]);
     } else {
-        $stmt = $pdo->prepare("UPDATE usuarios SET nombre = ? WHERE id = ?");
-        $stmt->execute([$nombre, $id]);
+        $stmt = $pdo->prepare("UPDATE usuarios SET nombre = ?, biografia = ? WHERE id = ?");
+        $stmt->execute([$nombre, $biografia, $id]);
     }
 } catch (PDOException $e) {
     die('Error al actualizar usuario: ' . $e->getMessage());

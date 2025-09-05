@@ -3,8 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
-
 session_start();
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/db.php';
@@ -77,39 +75,54 @@ include __DIR__ . '/../templates/header.php';
         <?php echo $esPerfilPropio ? "Bienvenido, " . htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') . "!" : "Perfil de " . htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>
     </h1>
 
-    <div class="avatar-perfil">
-        <?php $avatar = !empty($usuario['avatar']) ? $usuario['avatar'] : 'default.png'; ?>
-        <img src="<?php echo APP_URL . 'img/avatars/' . htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8'); ?>" 
-             alt="Avatar de <?php echo htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
-             width="150" style="border-radius:50%; border:2px solid #f4bf2c;">
-    </div>
+    <div class="perfil-info">
+        <div class="avatar-perfil">
+            <?php $avatar = !empty($usuario['avatar']) ? $usuario['avatar'] : 'default.png'; ?>
+            <img src="<?php echo APP_URL . 'img/avatars/' . htmlspecialchars($avatar, ENT_QUOTES, 'UTF-8'); ?>" 
+                 alt="Avatar de <?php echo htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
+                 width="150" style="border-radius:50%; border:2px solid #f4bf2c;">
+        </div>
 
-    <!-- Seguidores, Seguidos y Publicaciones -->
-    <div class="perfil-social">
-        <p>
-            <a class="link-social" href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
-            <a class="link-social" href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
-            Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
-        </p>
-
-        <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
-            <form method="post" action="">
-                <?php if ($yaSigue): ?>
-                    <button type="submit" name="dejar_seguir">Dejar de seguir</button>
-                <?php else: ?>
-                    <button type="submit" name="seguir">Seguir</button>
+        <div class="perfil-detalles">
+            <div class="perfil-nombre">
+                <?php echo htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>
+                <?php if ($esPerfilPropio): ?>
+                    <a href="<?php echo APP_URL; ?>usuarios/editar-perfil.php" class="editar-perfil" title="Editar perfil">
+                        <img src="<?php echo APP_URL; ?>img/icons/editar.svg" alt="Editar perfil" width="20" style="vertical-align: middle; margin-left: 10px;">
+                    </a>
                 <?php endif; ?>
-            </form>
+            </div>
 
-            <!-- Botón para mensaje directo -->
-            <p>
-                <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
-                   class="btn-mensaje-directo" 
-                   style="padding:8px 12px; background-color:#f4bf2c; color:#000; text-decoration:none; border-radius:4px;">
-                    Enviar mensaje
-                </a>
-            </p>
-        <?php endif; ?>
+            <div class="perfil-biografia">
+                <?php echo !empty($usuario['biografia']) ? htmlspecialchars($usuario['biografia'], ENT_QUOTES, 'UTF-8') : 'Esta persona no ha agregado biografía.'; ?>
+            </div>
+
+            <div class="perfil-social">
+                <p>
+                    <a class="link-social" href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
+                    <a class="link-social" href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
+                    Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
+                </p>
+
+                <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
+                    <form method="post" action="">
+                        <?php if ($yaSigue): ?>
+                            <button type="submit" name="dejar_seguir">Dejar de seguir</button>
+                        <?php else: ?>
+                            <button type="submit" name="seguir">Seguir</button>
+                        <?php endif; ?>
+                    </form>
+
+                    <p>
+                        <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
+                           class="btn-mensaje-directo" 
+                           style="padding:8px 12px; background-color:#f4bf2c; color:#000; text-decoration:none; border-radius:4px;">
+                            Enviar mensaje
+                        </a>
+                    </p>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 
     <h2><?php echo $esPerfilPropio ? 'Tus publicaciones' : 'Publicaciones de ' . htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?></h2>
