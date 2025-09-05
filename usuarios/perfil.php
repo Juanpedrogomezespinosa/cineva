@@ -88,7 +88,7 @@ include __DIR__ . '/../templates/header.php';
                 <?php echo htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8'); ?>
                 <?php if ($esPerfilPropio): ?>
                     <a href="<?php echo APP_URL; ?>usuarios/editar-perfil.php" class="editar-perfil" title="Editar perfil">
-                        <img src="<?php echo APP_URL; ?>img/icons/editar.svg" alt="Editar perfil" width="20" style="vertical-align: middle; margin-left: 10px;">
+                        <img src="<?php echo APP_URL; ?>img/icons/editar.svg" alt="Editar perfil" width="20">
                     </a>
                 <?php endif; ?>
             </div>
@@ -115,8 +115,7 @@ include __DIR__ . '/../templates/header.php';
 
                     <p>
                         <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
-                           class="btn-mensaje-directo" 
-                           style="padding:8px 12px; background-color:#f4bf2c; color:#000; text-decoration:none; border-radius:4px;">
+                           class="btn-mensaje-directo">
                             Enviar mensaje
                         </a>
                     </p>
@@ -163,8 +162,13 @@ include __DIR__ . '/../templates/header.php';
 
                         <?php if ($esPerfilPropio): ?>
                             <div class="acciones-card">
-                                <a href="<?php echo APP_URL; ?>peliculas/editar.php?id=<?php echo $pelicula['id']; ?>">Editar</a>
-                                <a href="<?php echo APP_URL; ?>peliculas/eliminar.php?id=<?php echo $pelicula['id']; ?>" onclick="return confirm('¿Seguro que quieres eliminar esta película?');">Eliminar</a>
+                                <a href="<?php echo APP_URL; ?>peliculas/editar.php?id=<?php echo $pelicula['id']; ?>" title="Editar">
+                                    <img src="<?php echo APP_URL; ?>img/icons/editar.svg" alt="Editar">
+                                </a>
+                                <a href="<?php echo APP_URL; ?>peliculas/eliminar.php?id=<?php echo $pelicula['id']; ?>" 
+                                   onclick="return confirm('¿Seguro que quieres eliminar esta película?');" title="Eliminar">
+                                    <img src="<?php echo APP_URL; ?>img/icons/delete.svg" alt="Eliminar">
+                                </a>
                             </div>
                         <?php endif; ?>
                     </div>

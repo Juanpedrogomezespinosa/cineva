@@ -48,6 +48,9 @@
   font-size: 1.6rem;
   margin: 0;
   color: #f4bf2c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* nombre izquierda, icono derecha */
 }
 
 .perfil-biografia {
@@ -78,15 +81,6 @@
 }
 
 /* Editar perfil */
-.perfil-nombre {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Empuja el nombre a la izquierda y el icono a la derecha */
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #f4bf2c;
-}
-
 .editar-perfil img {
   cursor: pointer;
   transition: transform 0.2s;
@@ -177,29 +171,45 @@
   color: #f4bf2c;
 }
 
+.usuario-publico {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Acciones: editar/eliminar */
 .acciones-card {
   margin-top: 8px;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 5px;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
 }
 
 .acciones-card a {
-  text-decoration: none;
-  color: #f4bf2c;
-  background-color: #090d10;
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-weight: bold;
-  text-align: center;
-  flex: 1;
-  transition: background-color 0.3s, color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: none; /* Quita cualquier fondo */
+  border: none; /* Quita bordes si existieran */
+  transition: transform 0.2s;
 }
 
 .acciones-card a:hover {
-  background-color: #f4bf2c;
-  color: #121518;
+  background: none; /* Quitar cualquier fondo */
+  color: inherit; /* Mantener color original del icono si tuviera algún texto */
+  transform: scale(1.1); /* Efecto hover */
+}
+
+.acciones-card a img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+
+.acciones-card a:hover img {
+  transform: scale(1.1);
 }
 
 /* Responsive máximo 5 columnas */
