@@ -1,6 +1,6 @@
 <?php
 /**
- * Navbar con icono de mensajes dinámico y notificaciones en naranja.
+ * Navbar dinámico con control de sesión.
  */
 
 declare(strict_types=1);
@@ -19,7 +19,9 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 <nav class="navbar">
     <!-- IZQUIERDA -->
     <div class="nav-left">
-        <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn" >+ Publicar</a>
+        <?php if ($usuarioActualId): ?>
+            <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn">+ Publicar</a>
+        <?php endif; ?>
     </div>
 
     <!-- CENTRO -->
@@ -46,15 +48,19 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                     alt="Mensajes"
                     width="24"
                     height="24"
-                    style="filter: invert(100%);" 
                     id="img-mensajes"
                 >
             </a>
 
-            <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="btn-logout">Cerrar sesión</a>
-        <?php else: ?>
-            <a href="<?php echo APP_URL; ?>usuarios/login.php" class="btn">Iniciar sesión</a>
-            <a href="<?php echo APP_URL; ?>usuarios/register.php" class="btn">Registrarse</a>
+            <!-- Solo icono de logout -->
+            <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="icon-logout" title="Cerrar sesión">
+                <img
+                    src="<?php echo APP_URL; ?>img/icons/logout.svg"
+                    alt="Cerrar sesión"
+                    width="24"
+                    height="24"
+                >
+            </a>
         <?php endif; ?>
     </div>
 </nav>
@@ -70,18 +76,13 @@ async function actualizarIconoMensajes() {
 
         if (data.no_leidos > 0) {
             img.src = '<?php echo APP_URL; ?>img/icons/chat-sin-leer.svg';
-            // Filtro para naranja vibrante (#f4bf2c aproximado)
-            img.style.filter = 'invert(67%) sepia(85%) saturate(750%) hue-rotate(10deg) brightness(98%) contrast(101%)';
         } else {
             img.src = '<?php echo APP_URL; ?>img/icons/chat.svg';
-            img.style.filter = 'invert(100%)'; // blanco normal
         }
     } catch (e) {
         console.error('Error al actualizar icono de mensajes:', e);
     }
 }
-
-// Actualizar cada 3 segundos
 actualizarIconoMensajes();
 setInterval(actualizarIconoMensajes, 3000);
 </script>

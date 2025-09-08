@@ -1,4 +1,6 @@
-/* Navbar */
+/* ============================
+   ESTILOS DE LA NAVBAR
+============================ */
 .navbar {
   display: flex;
   align-items: center;
@@ -11,7 +13,9 @@
   gap: 10px;
 }
 
-/* IZQUIERDA */
+/* ============================
+   SECCIÓN IZQUIERDA
+============================ */
 .nav-left {
   flex: 0 0 auto;
 }
@@ -30,7 +34,9 @@
   background-color: #e0a900;
 }
 
-/* CENTRO */
+/* ============================
+   SECCIÓN CENTRAL
+============================ */
 .nav-center {
   flex: 1;
   display: flex;
@@ -41,22 +47,17 @@
   font-size: 1.5rem;
   color: #f4bf2c;
   font-weight: bold;
-}
-
-/* Centro - Título clicable */
-.nav-center .site-title {
-  font-size: 1.5rem;
-  color: #f4bf2c;
-  font-weight: bold;
   text-decoration: none;
   transition: color 0.3s;
 }
 
-.nav-center .site-title:hover {
+.site-title:hover {
   color: #e0a900;
 }
 
-/* DERECHA */
+/* ============================
+   SECCIÓN DERECHA
+============================ */
 .nav-right {
   flex: 0 0 auto;
   display: flex;
@@ -64,12 +65,13 @@
   gap: 15px;
 }
 
+/* Texto de bienvenida */
 .nav-right .welcome {
   color: #fcfceb;
   font-size: 0.95rem;
 }
 
-/* Usuario clicable */
+/* Enlace al perfil de usuario */
 .nav-right .welcome .usuario-link {
   color: #f4bf2c;
   text-decoration: underline;
@@ -82,25 +84,21 @@
   text-decoration: none;
 }
 
-.nav-right .btn-logout,
-.nav-right .btn {
-  background-color: transparent;
-  color: #f4bf2c;
-  padding: 6px 12px;
-  border: 1px solid #f4bf2c;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s;
+/* Iconos (chat y logout) */
+.icon-mensajes img,
+.icon-logout img {
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.nav-right .btn-logout:hover,
-.nav-right .btn:hover {
-  background-color: #f4bf2c;
-  color: #121518;
+.icon-mensajes img:hover,
+.icon-logout img:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
 }
 
-/* Responsive */
+/* ============================
+   RESPONSIVE
+============================ */
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;
@@ -109,7 +107,7 @@
   }
 
   .nav-center {
-    order: -1; /* título arriba del todo */
+    order: -1; /* título arriba */
     justify-content: center;
   }
 
