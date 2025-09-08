@@ -111,48 +111,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <link rel="stylesheet" href="<?= APP_URL ?>css/styles.css" />
 </head>
 <body>
-<h1>Editar película</h1>
+<div class="containter-principal">
+    <div class="container-agregar">
+        <h1>Editar película</h1>
+        <?php if ($mensaje): ?>
+            <p style="color:red; text-align: center;"><?= htmlspecialchars($mensaje); ?></p>
+        <?php endif; ?>
 
-<?php if ($mensaje): ?>
-    <p style="color:red;"><?= htmlspecialchars($mensaje); ?></p>
-<?php endif; ?>
+        <form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/editar.php?id=<?= $id; ?>">
+            <div class="form-grid">
+                <div class="columna-1">
+                    <div class="form-group">
+                        <label for="titulo">Título:</label>
+                        <input type="text" id="titulo" name="titulo" value="<?= htmlspecialchars($pelicula['titulo']); ?>" required />
+                    </div>
 
-<form method="POST" enctype="multipart/form-data" action="<?= APP_URL ?>peliculas/editar.php?id=<?= $id; ?>">
-    <label for="titulo">Título:</label><br />
-    <input type="text" id="titulo" name="titulo" value="<?= htmlspecialchars($pelicula['titulo']); ?>" required /><br /><br />
+                    <div class="form-group">
+                        <label for="genero">Género:</label>
+                        <input type="text" id="genero" name="genero" value="<?= htmlspecialchars($pelicula['genero']); ?>" required />
+                    </div>
 
-    <label for="genero">Género:</label><br />
-    <input type="text" id="genero" name="genero" value="<?= htmlspecialchars($pelicula['genero']); ?>" required /><br /><br />
+                    <div class="form-group">
+                        <label for="plataforma">Plataforma:</label>
+                        <input type="text" id="plataforma" name="plataforma" value="<?= htmlspecialchars($pelicula['plataforma']); ?>" required />
+                    </div>
 
-    <label for="plataforma">Plataforma:</label><br />
-    <input type="text" id="plataforma" name="plataforma" value="<?= htmlspecialchars($pelicula['plataforma']); ?>" required /><br /><br />
+                    <div class="form-group">
+                        <label for="valoracion">Valoración (1-5):</label>
+                        <input type="number" id="valoracion" name="valoracion" min="1" max="5" value="<?= (int)$pelicula['valoracion']; ?>" />
+                    </div>
+                </div>
 
-    <label>
-        <input type="checkbox" name="visto" <?= $pelicula['visto'] ? 'checked' : ''; ?> />
-        Visto
-    </label><br />
+                <div class="columna-2">
+                    <div class="form-group">
+                        <label for="resena">Reseña:</label>
+                        <textarea id="resena" name="resena"><?= htmlspecialchars($pelicula['resena']); ?></textarea>
+                    </div>
 
-    <label>
-        <input type="checkbox" name="favorito" <?= $pelicula['favorito'] ? 'checked' : ''; ?> />
-        Favorito
-    </label><br /><br />
+                    <div class="form-group">
+                        <label for="portada">Cambiar portada:</label>
+                        <div class="container-portada">
+                            <div class="container-checkbox">
+                                <label>
+                                    <input type="checkbox" name="visto" <?= $pelicula['visto'] ? 'checked' : ''; ?> />
+                                    Visto
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="favorito" <?= $pelicula['favorito'] ? 'checked' : ''; ?> />
+                                    Favorito
+                                </label>
+                            </div>
+                            <input type="file" id="portada" name="portada" accept=".jpg,.jpeg,.png,.gif" />
+                            <?php if ($pelicula['portada']): ?>
+                                <img src="<?= APP_URL ?>img/portadas/<?= htmlspecialchars($pelicula['portada']); ?>" alt="Portada" />
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <?php if ($pelicula['portada']): ?>
-        <img src="<?= APP_URL ?>img/portadas/<?= htmlspecialchars($pelicula['portada']); ?>" alt="Portada" style="max-width:150px;" /><br />
-    <?php endif; ?>
-
-    <label for="portada">Cambiar portada (imagen jpg/png/gif, máx 2MB):</label><br />
-    <input type="file" id="portada" name="portada" accept=".jpg,.jpeg,.png,.gif" /><br /><br />
-
-    <label for="valoracion">Valoración (1-5):</label><br />
-    <input type="number" id="valoracion" name="valoracion" min="1" max="5" value="<?= (int)$pelicula['valoracion']; ?>" /><br /><br />
-
-    <label for="resena">Reseña:</label><br />
-    <textarea id="resena" name="resena" rows="4" cols="50"><?= htmlspecialchars($pelicula['resena']); ?></textarea><br /><br />
-
-    <button type="submit">Actualizar película</button>
-</form>
-
-<a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+            <div class="form-actions">
+                <button type="submit">Actualizar película</button>
+            </div>
+        </form>
+    </div>
+    <a class="url" href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+</div>
 </body>
 </html>

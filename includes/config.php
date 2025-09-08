@@ -21,4 +21,4 @@ define('AVATARS_PATH', IMG_PATH . 'avatars/');
 
 // Configuración de la aplicación
 define('APP_NAME', 'Cineva');
-define('APP_URL', 'http://localhost/proyectos/cineva/'); // Cambiar según entorno
+define('APP_URL', 'http://localhost:8080/proyectos/cineva/'); // Cambiar según entorno
