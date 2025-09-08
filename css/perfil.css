@@ -50,7 +50,7 @@
   color: #f4bf2c;
   display: flex;
   align-items: center;
-  justify-content: space-between; /* nombre izquierda, icono derecha */
+  justify-content: space-between;
 }
 
 .perfil-biografia {
@@ -78,6 +78,35 @@
 
 .link-social:hover {
   text-decoration: underline;
+}
+
+/* Acciones: seguir y mensaje horizontal */
+.perfil-acciones-botones {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Botón seguir/dejar de seguir */
+.btn-seguir {
+  padding: 6px 14px;
+  background-color: #f4bf2c;
+  color: #121518;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-seguir:hover {
+  background-color: #e0a900;
+}
+
+/* Icono de mensaje */
+.btn-mensaje img {
+  display: block;
 }
 
 /* Editar perfil */
@@ -191,15 +220,15 @@
   justify-content: center;
   padding: 0;
   cursor: pointer;
-  background: none; /* Quita cualquier fondo */
-  border: none; /* Quita bordes si existieran */
+  background: none;
+  border: none;
   transition: transform 0.2s;
 }
 
 .acciones-card a:hover {
-  background: none; /* Quitar cualquier fondo */
-  color: inherit; /* Mantener color original del icono si tuviera algún texto */
-  transform: scale(1.1); /* Efecto hover */
+  background: none;
+  color: inherit;
+  transform: scale(1.1);
 }
 
 .acciones-card a img {

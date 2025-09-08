@@ -99,26 +99,26 @@ include __DIR__ . '/../templates/header.php';
 
             <div class="perfil-social">
                 <p>
-                    <a class="link-social" href="seguidores.php?id=<?php echo $id; ?>">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
-                    <a class="link-social" href="seguidos.php?id=<?php echo $id; ?>">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
+                    <a class="link-social" href="seguidores.php?id=<?php echo $id; ?>" style="color:#f4bf2c;">Seguidores: <strong><?php echo $seguidoresCount; ?></strong></a> | 
+                    <a class="link-social" href="seguidos.php?id=<?php echo $id; ?>" style="color:#f4bf2c;">Seguidos: <strong><?php echo $seguidosCount; ?></strong></a> | 
                     Publicaciones: <strong><?php echo $totalPublicaciones; ?></strong>
                 </p>
 
                 <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
-                    <form method="post" action="">
-                        <?php if ($yaSigue): ?>
-                            <button type="submit" name="dejar_seguir">Dejar de seguir</button>
-                        <?php else: ?>
-                            <button type="submit" name="seguir">Seguir</button>
-                        <?php endif; ?>
-                    </form>
+                    <div class="perfil-acciones-botones">
+                        <form method="post" action="" style="margin:0;">
+                            <?php if ($yaSigue): ?>
+                                <button type="submit" name="dejar_seguir" class="btn-seguir">Dejar de seguir</button>
+                            <?php else: ?>
+                                <button type="submit" name="seguir" class="btn-seguir">Seguir</button>
+                            <?php endif; ?>
+                        </form>
 
-                    <p>
                         <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
-                           class="btn-mensaje-directo">
-                            Enviar mensaje
+                           title="Enviar mensaje" class="btn-mensaje">
+                            <img src="<?php echo APP_URL; ?>img/icons/enviar-mensaje.svg" alt="Enviar mensaje" width="24">
                         </a>
-                    </p>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
