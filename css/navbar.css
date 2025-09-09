@@ -89,13 +89,16 @@
 
 /* Iconos */
 .nav-right img,
-.nav-left .btn img {
+.nav-left .btn img,
+.mobile-menu img {
   transition: transform 0.2s ease, opacity 0.2s ease;
   cursor: pointer;
+  background: none;
 }
 
 .nav-right img:hover,
-.nav-left .btn img:hover {
+.nav-left .btn img:hover,
+.mobile-menu img:hover {
   transform: scale(1.1);
   opacity: 0.8;
 }
@@ -143,11 +146,9 @@
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
 }
-
 .hamburger.active span:nth-child(2) {
   opacity: 0;
 }
-
 .hamburger.active span:nth-child(3) {
   top: 50%;
   transform: translateY(-50%) rotate(-45deg);
@@ -177,6 +178,19 @@
   color: #f4bf2c;
 }
 
+/* Texto "Notificaciones" junto al icono en móvil */
+.mobile-menu .icon-notificaciones {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mobile-menu .icon-notificaciones .texto-notificaciones {
+  font-size: 1rem;
+  color: #fcfceb;
+}
+
+/* Animación dropdown menú móvil */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -189,31 +203,93 @@
 }
 
 /* ============================
+   NOTIFICACIONES
+============================ */
+.icon-notificaciones {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #f4bf2c;
+  font-weight: bold;
+  font-size: 0.85rem;
+  display: none; /* oculto por defecto */
+  background: none; /* sin fondo */
+  padding: 0;
+  line-height: 1;
+}
+
+.badge:empty {
+  display: none;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 30px;
+  background: #121518;
+  border: 1px solid #333;
+  width: 250px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 2000;
+  color: #fcfceb;
+}
+
+.dropdown.show {
+  display: block;
+}
+
+.notificacion-item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #333;
+  font-size: 1rem;
+  color: #fcfceb;
+}
+
+.notificacion-item:hover {
+  background-color: #1c1f23;
+}
+
+/* ============================
    RESPONSIVE
 ============================ */
 @media (max-width: 768px) {
   .nav-right {
     display: none;
   }
-
   .hamburger {
     display: flex;
   }
-
   .nav-left .btn {
     background: none;
     color: inherit;
     padding: 0;
     border: none;
   }
-
   .nav-left .btn span {
     display: none;
   }
-
   .nav-left .btn img {
     display: block;
     width: 26px;
     height: 26px;
+  }
+
+  /* Badge móvil sin fondo */
+  .mobile-menu .icon-notificaciones .badge {
+    top: 0;
+    right: 0;
+    background: none;
+    padding: 0;
+    font-size: 0.85rem;
+    color: #f4bf2c;
   }
 }

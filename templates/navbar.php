@@ -43,6 +43,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                 </a>
             </span>
 
+            <!-- ICONO DE MENSAJES -->
             <a href="<?php echo APP_URL; ?>chats/index.php" class="icon-mensajes" id="icon-mensajes" title="Mensajes">
                 <img
                     src="<?php echo APP_URL; ?>img/icons/chat.svg"
@@ -53,6 +54,19 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                 >
             </a>
 
+            <!-- ICONO DE NOTIFICACIONES -->
+            <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones" title="Notificaciones">
+                <img
+                    src="<?php echo APP_URL; ?>img/icons/notificacion.svg"
+                    alt="Notificaciones"
+                    width="24"
+                    height="24"
+                >
+                <span id="contador-notificaciones" class="badge"></span>
+            </a>
+            <div id="lista-notificaciones" class="dropdown"></div>
+
+            <!-- CERRAR SESIÓN -->
             <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="icon-logout" title="Cerrar sesión">
                 <img
                     src="<?php echo APP_URL; ?>img/icons/logout.svg"
@@ -86,6 +100,16 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
     <a href="<?php echo APP_URL; ?>usuarios/logout.php">
         <img src="<?php echo APP_URL; ?>img/icons/logout.svg" alt="Cerrar sesión" width="22" height="22"> Cerrar sesión
     </a>
+    <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones-movil" title="Notificaciones">
+        <img
+            src="<?php echo APP_URL; ?>img/icons/notificacion.svg"
+            alt="Notificaciones"
+            width="22"
+            height="22"
+        >
+        <span id="contador-notificaciones-movil" class="badge"></span>
+        <span class="texto-notificaciones">Notificaciones</span>
+    </a>
 </div>
 <?php endif; ?>
 
@@ -101,7 +125,9 @@ if (hamburger) {
     });
 }
 
-// Actualización dinámica del icono de mensajes
+// ====================
+// Actualización dinámica de mensajes
+// ====================
 async function actualizarIconoMensajes() {
     try {
         const res = await fetch('<?php echo APP_URL; ?>includes/mensajes_ajax.php?check_no_leidos=1');
@@ -120,5 +146,72 @@ async function actualizarIconoMensajes() {
 }
 actualizarIconoMensajes();
 setInterval(actualizarIconoMensajes, 3000);
+
+// ====================
+// Sistema de notificaciones
+// ====================
+async function cargarNotificaciones() {
+    try {
+        const res = await fetch('<?php echo APP_URL; ?>includes/notificaciones_ajax.php');
+        if (!res.ok) return;
+        const data = await res.json();
+
+        const lista = document.getElementById('lista-notificaciones');
+        const contador = document.getElementById('contador-notificaciones');
+        const contadorMovil = document.getElementById('contador-notificaciones-movil');
+        lista.innerHTML = '';
+        let noLeidas = 0;
+
+        data.forEach(n => {
+            if (n.leido == 0) noLeidas++;
+            const item = document.createElement('div');
+            item.classList.add('notificacion-item');
+            item.textContent = n.tipo === 'seguimiento'
+                ? `${n.origen_nombre} te ha seguido`
+                : `${n.origen_nombre} comentó en tu película`;
+            lista.appendChild(item);
+        });
+
+        // Mostrar solo número, sin fondo
+        if (contador) {
+            if (noLeidas > 0) {
+                contador.textContent = noLeidas;
+                contador.style.display = "inline-block";
+            } else {
+                contador.textContent = "";
+                contador.style.display = "none";
+            }
+        }
+
+        if (contadorMovil) {
+            if (noLeidas > 0) {
+                contadorMovil.textContent = noLeidas;
+                contadorMovil.style.display = "inline-block";
+            } else {
+                contadorMovil.textContent = "";
+                contadorMovil.style.display = "none";
+            }
+        }
+    } catch (e) {
+        console.error('Error al cargar notificaciones:', e);
+    }
+}
+
+const iconoNotificaciones = document.getElementById('icono-notificaciones');
+if (iconoNotificaciones) {
+    iconoNotificaciones.addEventListener('click', async () => {
+        document.getElementById('lista-notificaciones').classList.toggle('show');
+        await fetch('<?php echo APP_URL; ?>includes/marcar_notificaciones.php', { method: 'POST' });
+
+        const contador = document.getElementById('contador-notificaciones');
+        const contadorMovil = document.getElementById('contador-notificaciones-movil');
+
+        if (contador) contador.style.display = 'none';
+        if (contadorMovil) contadorMovil.style.display = 'none';
+    });
+}
+
+cargarNotificaciones();
+setInterval(cargarNotificaciones, 30000);
 </script>
 <?php endif; ?>

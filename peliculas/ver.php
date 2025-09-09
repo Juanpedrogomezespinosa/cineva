@@ -3,7 +3,6 @@ require_once '../includes/config.php';
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 
-// Evitar warning si la sesión ya está iniciada
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -29,7 +28,7 @@ if (!$pelicula) {
     exit;
 }
 
-// Obtener comentarios de la película
+// Obtener comentarios
 $stmtComentarios = $pdo->prepare("
     SELECT c.*, u.nombre AS usuario_nombre, u.avatar, u.id AS usuario_id
     FROM comentarios c
@@ -48,6 +47,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
         $stmtInsert->execute([$usuario_id, $pelicula['id'], $texto]);
 
         $nuevo_id = $pdo->lastInsertId();
+
+        // Crear notificación solo si el autor del comentario no es el dueño de la película
+        if ($pelicula['usuario_id'] != $usuario_id) {
+            $stmtNotif = $pdo->prepare("INSERT INTO notificaciones (usuario_id, tipo, origen_id, relacion_id) 
+                                        VALUES (?, 'comentario', ?, ?)");
+            $stmtNotif->execute([$pelicula['usuario_id'], $usuario_id, $nuevo_id]);
+        }
+
         $stmtNuevo = $pdo->prepare("
             SELECT c.*, u.nombre AS usuario_nombre, u.avatar, u.id AS usuario_id
             FROM comentarios c
@@ -65,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
 
 include __DIR__ . '/../templates/header.php';
 ?>
+
 
 <section class="pelicula-detalle">
     <div class="portada-horizontal">
