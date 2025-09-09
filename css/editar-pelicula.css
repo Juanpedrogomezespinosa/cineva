@@ -7,11 +7,13 @@ body {
   padding: 0;
 }
 
-.containter-principal {
+.container-principal { /* Corregí el nombre de la clase a "container" */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 0.5rem;
+  align-items: center; /* Centra horizontalmente el contenido */
+  justify-content: center; /* Centra verticalmente el contenido */
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+  padding: 0.5rem; /* Mantengo el padding por si el contenido es más grande que la pantalla */
 }
 
 /* Estilos del formulario */
