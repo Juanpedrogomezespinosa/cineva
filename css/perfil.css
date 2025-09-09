@@ -80,14 +80,61 @@
   text-decoration: underline;
 }
 
-/* Editar perfil */
-.editar-perfil img {
+/* Botones de seguir/dejar de seguir */
+.btn-seguir, .btn-dejar-seguir {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  border: none;
+  margin-top: 10px;
 }
 
-.editar-perfil img:hover {
-  transform: scale(1.1);
+/* Botón Seguir */
+.btn-seguir {
+  background: linear-gradient(135deg, #f4bf2c, #e0a900);
+  color: #121518;
+  box-shadow: 0 4px 8px rgba(244, 191, 44, 0.3);
+}
+
+.btn-seguir:hover {
+  background: linear-gradient(135deg, #ffd84d, #e0a900);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(244, 191, 44, 0.5);
+}
+
+/* Botón Dejar de seguir */
+.btn-dejar-seguir {
+  background: linear-gradient(135deg, #ffd84d, #e0a900);
+  color: #121518;
+  box-shadow: 0 4px 8px rgba(244, 191, 44, 0.5);
+}
+
+.btn-dejar-seguir:hover {
+  background: linear-gradient(135deg, #ffd84d, #e0a900);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(244, 191, 44, 0.5);
+}
+
+/* Botón mensaje directo */
+.btn-mensaje-directo {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #1d2125;
+  color: #f4bf2c;
+  border: 1px solid #f4bf2c;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btn-mensaje-directo:hover {
+  background: #f4bf2c;
+  color: #121518;
 }
 
 /* Botón de agregar película */

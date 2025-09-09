@@ -107,16 +107,16 @@ include __DIR__ . '/../templates/header.php';
                 <?php if (!$esPerfilPropio && $usuarioLogueado): ?>
                     <form method="post" action="">
                         <?php if ($yaSigue): ?>
-                            <button type="submit" name="dejar_seguir">Dejar de seguir</button>
+                            <button type="submit" name="dejar_seguir" class="btn-dejar-seguir">✖ Dejar de seguir</button>
                         <?php else: ?>
-                            <button type="submit" name="seguir">Seguir</button>
+                            <button type="submit" name="seguir" class="btn-seguir">➕ Seguir</button>
                         <?php endif; ?>
                     </form>
 
                     <p>
                         <a href="<?php echo APP_URL; ?>chats/chat.php?usuario=<?php echo $usuario['id']; ?>" 
                            class="btn-mensaje-directo">
-                            Enviar mensaje
+                            💬 Enviar mensaje
                         </a>
                     </p>
                 <?php endif; ?>
