@@ -3,7 +3,11 @@ require_once '../includes/config.php';
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 
-session_start();
+// Evitar warning si la sesión ya está iniciada
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
 $usuario_id = $_SESSION['usuario_id'] ?? null;
 
 $db = new Database();
@@ -27,7 +31,7 @@ if (!$pelicula) {
 
 // Obtener comentarios de la película
 $stmtComentarios = $pdo->prepare("
-    SELECT c.*, u.nombre AS usuario_nombre, u.avatar
+    SELECT c.*, u.nombre AS usuario_nombre, u.avatar, u.id AS usuario_id
     FROM comentarios c
     JOIN usuarios u ON c.usuario_id = u.id
     WHERE c.pelicula_id = ?
@@ -45,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
 
         $nuevo_id = $pdo->lastInsertId();
         $stmtNuevo = $pdo->prepare("
-            SELECT c.*, u.nombre AS usuario_nombre, u.avatar
+            SELECT c.*, u.nombre AS usuario_nombre, u.avatar, u.id AS usuario_id
             FROM comentarios c
             JOIN usuarios u ON c.usuario_id = u.id
             WHERE c.id = ?
@@ -58,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
         exit;
     }
 }
-?>
 
-<?php include __DIR__ . '/../templates/header.php'; ?>
+include __DIR__ . '/../templates/header.php';
+?>
 
 <section class="pelicula-detalle">
     <div class="portada-horizontal">
@@ -105,7 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
                     <div class="comentario" id="comentario-<?= $com['id']; ?>">
                         <div class="usuario-comentario">
                             <img src="<?= APP_URL ?>img/avatars/<?= htmlspecialchars($com['avatar']); ?>" alt="<?= htmlspecialchars($com['usuario_nombre']); ?>" class="avatar">
-                            <strong><?= htmlspecialchars($com['usuario_nombre']); ?></strong> <span class="fecha"><?= $com['fecha_comentario']; ?></span>
+                            <strong>
+                                <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $com['usuario_id']; ?>" class="link-social">
+                                    <?= htmlspecialchars($com['usuario_nombre']); ?>
+                                </a>
+                            </strong>
+                            <span class="fecha"><?= $com['fecha_comentario']; ?></span>
                         </div>
                         <p><?= nl2br(htmlspecialchars($com['comentario'])); ?></p>
                     </div>
@@ -143,7 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 div.innerHTML = `
                     <div class="usuario-comentario">
                         <img src="<?= APP_URL ?>img/avatars/${com.avatar}" alt="${com.usuario_nombre}" class="avatar">
-                        <strong>${com.usuario_nombre}</strong> <span class="fecha">${com.fecha_comentario}</span>
+                        <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${com.usuario_id}" class="link-social">${com.usuario_nombre}</a></strong>
+                        <span class="fecha">${com.fecha_comentario}</span>
                     </div>
                     <p>${com.comentario.replace(/\n/g, '<br>')}</p>
                 `;
