@@ -1,6 +1,6 @@
 <?php
 /**
- * Navbar dinámico con control de sesión.
+ * Navbar dinámico con control de sesión y animación hamburguesa → X.
  */
 declare(strict_types=1);
 
@@ -66,8 +66,10 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 
     <!-- BOTÓN HAMBURGUESA (solo móvil) -->
     <?php if ($usuarioActualId): ?>
-    <div class="hamburger">
-        <img src="<?php echo APP_URL; ?>img/icons/menu.svg" alt="Menú" width="28" height="28" id="hamburger-toggle">
+    <div class="hamburger" id="hamburger-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
     </div>
     <?php endif; ?>
 </nav>
@@ -95,10 +97,11 @@ const mobileMenu = document.getElementById('mobile-menu');
 if (hamburger) {
     hamburger.addEventListener('click', () => {
         mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        hamburger.classList.toggle('active');
     });
 }
 
-// Actualización dinámica del icono de mensajes (solo escritorio)
+// Actualización dinámica del icono de mensajes
 async function actualizarIconoMensajes() {
     try {
         const res = await fetch('<?php echo APP_URL; ?>includes/mensajes_ajax.php?check_no_leidos=1');
