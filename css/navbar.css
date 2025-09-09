@@ -6,20 +6,15 @@
   align-items: center;
   justify-content: space-between;
   background-color: #090d10;
-  padding: 12px 30px;
+  padding: 12px 20px;
   position: sticky;
   top: 0;
   z-index: 1000;
-  gap: 10px;
 }
 
 /* ============================
    SECCIÓN IZQUIERDA
 ============================ */
-.nav-left {
-  flex: 0 0 auto;
-}
-
 .nav-left .btn {
   background-color: #f4bf2c;
   color: #121518;
@@ -28,10 +23,21 @@
   font-weight: bold;
   text-decoration: none;
   transition: background-color 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .nav-left .btn:hover {
   background-color: #e0a900;
+}
+
+/* Texto y icono del botón */
+.nav-left .btn span {
+  display: inline; /* visible en escritorio */
+}
+.nav-left .btn img {
+  display: none; /* oculto en escritorio */
 }
 
 /* ============================
@@ -59,65 +65,111 @@
    SECCIÓN DERECHA
 ============================ */
 .nav-right {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-/* Texto de bienvenida */
 .nav-right .welcome {
   color: #fcfceb;
   font-size: 0.95rem;
 }
 
-/* Enlace al perfil de usuario */
-.nav-right .welcome .usuario-link {
+.nav-right .usuario-link {
   color: #f4bf2c;
   text-decoration: underline;
   font-weight: bold;
   transition: color 0.3s;
 }
 
-.nav-right .welcome .usuario-link:hover {
+.nav-right .usuario-link:hover {
   color: #e0a900;
   text-decoration: none;
 }
 
-/* Iconos (chat y logout) */
-.icon-mensajes img,
-.icon-logout img {
+/* Iconos */
+.nav-right img,
+.hamburger img,
+.nav-left .btn img {
   transition: transform 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
 }
 
-.icon-mensajes img:hover,
-.icon-logout img:hover {
+.nav-right img:hover,
+.hamburger img:hover,
+.nav-left .btn img:hover {
   transform: scale(1.1);
   opacity: 0.8;
+}
+
+/* ============================
+   MENÚ HAMBURGUESA
+============================ */
+.hamburger {
+  display: none; /* oculto por defecto */
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #121518;
+  padding: 15px;
+  border-top: 2px solid #f4bf2c;
+  animation: slideDown 0.3s ease;
+}
+
+.mobile-menu a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fcfceb;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.mobile-menu a:hover {
+  color: #f4bf2c;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ============================
    RESPONSIVE
 ============================ */
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .nav-center {
-    order: -1; /* título arriba */
-    justify-content: center;
-  }
-
   .nav-right {
-    flex-direction: column;
-    gap: 8px;
-    align-items: center;
+    display: none; /* oculta la derecha en móvil */
   }
 
-  .nav-left {
-    margin-bottom: 5px;
+  .hamburger {
+    display: block; /* muestra hamburguesa */
+  }
+
+  /* Botón Publicar: solo icono en móvil */
+  .nav-left .btn {
+    background: none;
+    color: inherit;
+    padding: 0;
+    border: none;
+  }
+
+  .nav-left .btn span {
+    display: none; /* ocultar texto en móvil */
+  }
+
+  .nav-left .btn img {
+    display: block; /* mostrar icono en móvil */
+    width: 26px;
+    height: 26px;
   }
 }

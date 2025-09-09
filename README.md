@@ -285,3 +285,10 @@ estructura del mensaje:
 | hora |
 |-------------------------|
 La hora debe ser en formato 24 horas, por ejemplo 21:09
+
+próximas implementaciones:
+
+- Sistema de notificaciones (añadir icono campana)
+- Hacer que en el icono de chats aparezca un número cada vez que te hablen.
+
+mandar proyecto a: IFCD0210mainjobs@gmail.com
