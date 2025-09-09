@@ -288,7 +288,11 @@ La hora debe ser en formato 24 horas, por ejemplo 21:09
 
 próximas implementaciones:
 
-- Sistema de notificaciones (añadir icono campana)
+- Sistema de notificaciones para nuevos seguidores, nuevos comentarios en la publicación. (añadir icono campana)
 - Hacer que en el icono de chats aparezca un número cada vez que te hablen.
+- hacer que los comentarios dentro de la publicación puedan editarse y eliminarse.
+- añadir posibilidad de enviar publicación a otro usuario, es decir, añadir opción de compartir.
+- Añadir sección para ti y sección seguidores (dividir el contenido entre usuarios que sigues (seguidores) y lo que te recomienda la app (para ti)) en el front se dará la opción de elegir pestaña.
+- hacer todas las pantallas responsive tamaño tablet y móvil.
 
 mandar proyecto a: IFCD0210mainjobs@gmail.com
