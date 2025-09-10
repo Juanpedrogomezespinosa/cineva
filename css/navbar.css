@@ -212,20 +212,22 @@
   gap: 4px;
 }
 
-.badge {
+/* Contador de notificaciones (escritorio) */
+.notif-count {
   position: absolute;
-  top: 0;
   right: 0;
+  bottom: 0;
+  transform: translate(50%, 50%);
   color: #f4bf2c;
   font-weight: bold;
-  font-size: 0.85rem;
-  display: none; /* oculto por defecto */
-  background: none; /* sin fondo */
+  font-size: 0.75rem;
+  display: none;
+  background: none;
   padding: 0;
   line-height: 1;
 }
 
-.badge:empty {
+.notif-count:empty {
   display: none;
 }
 
@@ -284,7 +286,7 @@
   }
 
   /* Badge móvil sin fondo */
-  .mobile-menu .icon-notificaciones .badge {
+  .mobile-menu .icon-notificaciones .notif-count {
     top: 0;
     right: 0;
     background: none;

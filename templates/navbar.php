@@ -62,7 +62,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                     width="24"
                     height="24"
                 >
-                <span id="contador-notificaciones" class="badge"></span>
+                <span id="contador-notificaciones" class="notif-count"></span>
             </a>
             <div id="lista-notificaciones" class="dropdown"></div>
 
@@ -107,7 +107,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
             width="22"
             height="22"
         >
-        <span id="contador-notificaciones-movil" class="badge"></span>
+        <span id="contador-notificaciones-movil" class="notif-count"></span>
         <span class="texto-notificaciones">Notificaciones</span>
     </a>
 </div>
@@ -150,6 +150,7 @@ setInterval(actualizarIconoMensajes, 3000);
 // ====================
 // Sistema de notificaciones
 // ====================
+
 async function cargarNotificaciones() {
     try {
         const res = await fetch('<?php echo APP_URL; ?>includes/notificaciones_ajax.php');
@@ -172,10 +173,10 @@ async function cargarNotificaciones() {
             lista.appendChild(item);
         });
 
-        // Mostrar solo número, sin fondo
+        // Mostrar número o "9+"
         if (contador) {
             if (noLeidas > 0) {
-                contador.textContent = noLeidas;
+                contador.textContent = noLeidas > 9 ? "9+" : noLeidas;
                 contador.style.display = "inline-block";
             } else {
                 contador.textContent = "";
@@ -185,7 +186,7 @@ async function cargarNotificaciones() {
 
         if (contadorMovil) {
             if (noLeidas > 0) {
-                contadorMovil.textContent = noLeidas;
+                contadorMovil.textContent = noLeidas > 9 ? "9+" : noLeidas;
                 contadorMovil.style.display = "inline-block";
             } else {
                 contadorMovil.textContent = "";
@@ -196,6 +197,7 @@ async function cargarNotificaciones() {
         console.error('Error al cargar notificaciones:', e);
     }
 }
+
 
 const iconoNotificaciones = document.getElementById('icono-notificaciones');
 if (iconoNotificaciones) {
