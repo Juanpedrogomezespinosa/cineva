@@ -3,8 +3,13 @@ require_once '../includes/config.php';
 require_once '../includes/auth.php';
 require_once '../includes/db.php';
 
-session_start();
+// Inicia la sesión solo si no hay una activa
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $usuario_id = $_SESSION['usuario_id'] ?? null;
+
 
 $db = new Database();
 $pdo = $db->getConnection();
