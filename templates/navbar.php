@@ -39,7 +39,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 
             <!-- Icono de mensajes -->
             <a href="<?php echo APP_URL; ?>chats/index.php" class="icon-mensajes" id="icon-mensajes" title="Mensajes">
-                <img src="<?php echo APP_URL; ?>img/icons/chat.svg" alt="Mensajes" width="24" height="24" id="img-mensajes" style="fill:#f4bf2c;">
+                <img src="<?php echo APP_URL; ?>img/icons/chat.svg" alt="Mensajes" width="24" height="24">
                 <span id="contador-mensajes" class="notif-count"></span>
             </a>
 
@@ -111,7 +111,6 @@ async function actualizarIconoMensajes() {
         const contador = document.getElementById('contador-mensajes');
         const contadorMovil = document.getElementById('contador-mensajes-movil');
 
-        // Mostrar el contador igual que las notificaciones
         const mostrarContador = (elemento, cantidad) => {
             if (!elemento) return;
             if (cantidad > 0) {
@@ -135,7 +134,7 @@ actualizarIconoMensajes();
 setInterval(actualizarIconoMensajes, 3000);
 
 // =========================
-// GENERAR URL PARA NOTIFICACIÓN
+// MARCAR NOTIFICACIÓN INDIVIDUAL
 // =========================
 function generarURL(notificacion) {
     let destino = "#";
@@ -156,12 +155,14 @@ async function toggleFollow(usuarioId, boton) {
         const respuesta = await fetch(`${APP_URL}usuarios/accion_follow.php`, {
             method: "POST",
             headers: {"Content-Type": "application/x-www-form-urlencoded"},
-            body: `usuario_id=${usuarioId}&accion=${accion}`
+            body: `usuario_id=${usuarioId}&accion=${accion}`,
+            credentials: 'same-origin'
         });
         const datos = await respuesta.json();
         if (datos.success) {
-            boton.textContent = accion === "seguir" ? "Dejar de seguir" : "Seguir";
+            boton.textContent = accion === "seguir" ? "Siguiendo" : "Seguir";
             boton.dataset.siguiendo = accion === "seguir" ? "1" : "0";
+            boton.disabled = accion === "seguir";
         }
     } catch (error) {
         console.error("Error al cambiar estado de seguimiento:", error);
@@ -189,11 +190,15 @@ async function cargarNotificaciones() {
             item.classList.add('notificacion-item');
 
             if (n.tipo === 'seguimiento') {
+                const yaSigues = Number(n.ya_sigues) === 1;
                 item.innerHTML = `
                     <span>${n.origen_nombre} te ha seguido</span>
-                    <button class="follow-btn" data-usuario="${n.origen_id}" data-siguiendo="0">Seguir</button>
+                    <button class="follow-btn" data-usuario="${n.origen_id}" data-siguiendo="${yaSigues ? 1 : 0}">
+                        ${yaSigues ? 'Siguiendo' : 'Seguir'}
+                    </button>
                 `;
                 const boton = item.querySelector('.follow-btn');
+                boton.disabled = yaSigues;
                 boton.addEventListener('click', () => toggleFollow(n.origen_id, boton));
             } else {
                 item.innerHTML = `<a href="${generarURL(n)}">${n.origen_nombre} comentó en tu película</a>`;
@@ -221,19 +226,66 @@ async function cargarNotificaciones() {
     }
 }
 
-// Toggle dropdown notificaciones
+// =========================
+// TOGGLE DROPDOWN NOTIFICACIONES
+// =========================
 const iconoNotificaciones = document.getElementById('icono-notificaciones');
 const iconoNotificacionesMovil = document.getElementById('icono-notificaciones-movil');
 
 if (iconoNotificaciones) {
-    iconoNotificaciones.addEventListener('click', () => {
-        document.getElementById('lista-notificaciones').classList.toggle('show');
+    iconoNotificaciones.addEventListener('click', async () => {
+        const lista = document.getElementById('lista-notificaciones');
+        const opening = !lista.classList.contains('show');
+        lista.classList.toggle('show');
+
+        if (opening) {
+            // Marcar todas como leídas
+            try {
+                const res = await fetch(`${APP_URL}includes/marcar_todas_notificaciones.php`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Accept': 'application/json' }
+                });
+                const datos = await res.json();
+                if (datos.success) {
+                    document.getElementById('contador-notificaciones').textContent = '';
+                    document.getElementById('contador-notificaciones').style.display = 'none';
+                    document.getElementById('contador-notificaciones-movil').textContent = '';
+                    document.getElementById('contador-notificaciones-movil').style.display = 'none';
+                    cargarNotificaciones();
+                }
+            } catch (e) {
+                console.error("Error al marcar todas las notificaciones:", e);
+            }
+        }
     });
 }
 
 if (iconoNotificacionesMovil) {
-    iconoNotificacionesMovil.addEventListener('click', () => {
-        document.getElementById('lista-notificaciones').classList.toggle('show');
+    iconoNotificacionesMovil.addEventListener('click', async () => {
+        const lista = document.getElementById('lista-notificaciones');
+        const opening = !lista.classList.contains('show');
+        lista.classList.toggle('show');
+
+        if (opening) {
+            try {
+                const res = await fetch(`${APP_URL}includes/marcar_todas_notificaciones.php`, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Accept': 'application/json' }
+                });
+                const datos = await res.json();
+                if (datos.success) {
+                    document.getElementById('contador-notificaciones').textContent = '';
+                    document.getElementById('contador-notificaciones').style.display = 'none';
+                    document.getElementById('contador-notificaciones-movil').textContent = '';
+                    document.getElementById('contador-notificaciones-movil').style.display = 'none';
+                    cargarNotificaciones();
+                }
+            } catch (e) {
+                console.error("Error al marcar todas las notificaciones:", e);
+            }
+        }
     });
 }
 

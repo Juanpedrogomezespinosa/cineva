@@ -6,25 +6,67 @@ document.addEventListener("DOMContentLoaded", () => {
   // Genera la URL de destino según tipo de notificación
   function generarDestino(notificacion) {
     if (notificacion.tipo === "seguimiento") {
-      return `usuarios/perfil.php?id=${notificacion.origen_id}`;
+      return `usuarios/perfil.php?id=${encodeURIComponent(
+        notificacion.origen_id
+      )}`;
     } else if (notificacion.tipo === "comentario") {
-      return `peliculas/ver.php?id=${notificacion.comentario_pelicula_id}#comentario_${notificacion.relacion_id}`;
+      return `peliculas/ver.php?id=${encodeURIComponent(
+        notificacion.comentario_pelicula_id
+      )}#comentario_${encodeURIComponent(notificacion.relacion_id)}`;
     }
     return "#";
   }
 
   // Marca la notificación como leída y redirige
   function marcarYRedirigir(notificacion) {
-    fetch(`includes/marcar_notificacion_individual.php?id=${notificacion.id}`, {
-      method: "POST",
-    }).then(() => {
-      const destino = generarDestino(notificacion);
-      window.location.href = destino;
+    fetch(
+      `includes/marcar_notificacion_individual.php?id=${encodeURIComponent(
+        notificacion.id
+      )}`,
+      {
+        method: "POST",
+        credentials: "same-origin",
+      }
+    )
+      .then(() => {
+        window.location.href = generarDestino(notificacion);
+      })
+      .catch(() => {
+        window.location.href = generarDestino(notificacion);
+      });
+  }
+
+  // Marca una notificación como leída sin redirigir
+  function marcarLeida(notificacionId) {
+    return fetch(
+      `includes/marcar_notificacion_individual.php?id=${encodeURIComponent(
+        notificacionId
+      )}`,
+      {
+        method: "POST",
+        credentials: "same-origin",
+      }
+    ).catch(() => {
+      console.error("Error al marcar notificación como leída");
     });
   }
 
-  // Función para seguir a un usuario desde la notificación
-  function seguirUsuario(usuarioId, boton) {
+  // Marca todas las notificaciones como leídas
+  function marcarTodas() {
+    return fetch("includes/marcar_todas_notificaciones.php", {
+      method: "POST",
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    })
+      .then((res) => res.json())
+      .catch((e) => {
+        console.error("Error al marcar todas las notificaciones:", e);
+        return { success: false };
+      });
+  }
+
+  // Seguir usuario desde notificación
+  function seguirUsuario(usuarioId, boton, notificacionId) {
     const data = new FormData();
     data.append("usuario_id", usuarioId);
     data.append("accion", "seguir");
@@ -32,12 +74,18 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch("usuarios/accion_follow.php", {
       method: "POST",
       body: data,
+      credentials: "same-origin",
     })
       .then((res) => res.json())
       .then((res) => {
         if (res.success) {
-          boton.textContent = "Ya le sigues";
+          boton.textContent = "Siguiendo";
           boton.disabled = true;
+
+          // Marcar la notificación como leída al seguir de vuelta
+          if (notificacionId) {
+            marcarLeida(notificacionId);
+          }
         } else {
           alert(res.message || "Error al seguir al usuario");
         }
@@ -47,9 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // Carga las notificaciones y las muestra en el dropdown
+  // Cargar notificaciones y actualizar botones
   function cargarNotificaciones() {
-    fetch("includes/notificaciones_ajax.php")
+    fetch("includes/notificaciones_ajax.php", { credentials: "same-origin" })
       .then((res) => res.json())
       .then((datos) => {
         lista.innerHTML = "";
@@ -60,21 +108,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
           const elemento = document.createElement("div");
           elemento.classList.add("notificacion-item");
+          if (notificacion.leido == 0) elemento.classList.add("no-leida");
 
           if (notificacion.tipo === "seguimiento") {
+            const yaSigues = Number(notificacion.ya_sigues) === 1;
             elemento.innerHTML = `
-                            <span class="notificacion-text">${notificacion.origen_nombre} te ha seguido</span>
-                            <button class="btn-seguir" data-id="${notificacion.origen_id}">Seguir de vuelta</button>
-                        `;
+              <span class="notificacion-text">${
+                notificacion.origen_nombre
+              } te ha seguido</span>
+              <button class="btn-seguir" data-id="${notificacion.origen_id}" ${
+              yaSigues ? "disabled" : ""
+            }>${yaSigues ? "Siguiendo" : "Seguir"}</button>
+            `;
 
-            // Click en el botón "Seguir de vuelta"
             const boton = elemento.querySelector(".btn-seguir");
             boton.addEventListener("click", (e) => {
               e.stopPropagation();
-              seguirUsuario(notificacion.origen_id, boton);
+              seguirUsuario(notificacion.origen_id, boton, notificacion.id);
             });
 
-            // Click en el texto de la notificación → redirige al perfil
             elemento
               .querySelector(".notificacion-text")
               .addEventListener("click", () => {
@@ -98,14 +150,25 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((e) => console.error("Error al cargar notificaciones:", e));
   }
 
-  // Mostrar/ocultar lista al hacer click en el icono
+  // Toggle panel y marcar todas al abrir
   if (icono) {
     icono.addEventListener("click", () => {
+      const opening = !lista.classList.contains("show");
       lista.classList.toggle("show");
+
+      if (opening) {
+        marcarTodas().then((res) => {
+          if (res && res.success) {
+            contador.textContent = "";
+            contador.style.display = "none";
+            cargarNotificaciones();
+          }
+        });
+      }
     });
   }
 
-  // Cargar notificaciones al inicio y cada 30 segundos
+  // Cargar al inicio y cada 30 segundos
   cargarNotificaciones();
   setInterval(cargarNotificaciones, 30000);
 });

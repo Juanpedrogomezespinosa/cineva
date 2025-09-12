@@ -6,37 +6,60 @@ require_once __DIR__ . '/../includes/db.php';
 
 header('Content-Type: application/json');
 
-// Verificar sesión
+// Verificar autenticación
 if (!isset($_SESSION['usuario_id'])) {
-    echo json_encode(['success' => false, 'message' => 'No autenticado']);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Usuario no autenticado'
+    ]);
     exit;
 }
 
 // Verificar parámetros
 if (!isset($_POST['usuario_id'], $_POST['accion'])) {
-    echo json_encode(['success' => false, 'message' => 'Parámetros incorrectos']);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Faltan parámetros requeridos'
+    ]);
     exit;
 }
 
-$usuario_objetivo = (int) $_POST['usuario_id'];       // Usuario a seguir o dejar de seguir
-$accion = $_POST['accion'];                            // Acción: 'seguir' o 'dejar'
-$usuario_actual = (int) $_SESSION['usuario_id'];      // Usuario logueado
+$usuario_actual = (int) $_SESSION['usuario_id'];
+$usuario_objetivo = (int) $_POST['usuario_id'];
+$accion = trim($_POST['accion']);
 
-// Instancias
 $follows = new Follows();
 $db = new Database();
 $pdo = $db->getConnection();
 
 try {
     if ($accion === 'seguir') {
+        if ($usuario_actual === $usuario_objetivo) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'No puedes seguirte a ti mismo'
+            ]);
+            exit;
+        }
+
         $ok = $follows->seguirUsuario($usuario_actual, $usuario_objetivo);
 
         if ($ok) {
-            // Crear notificación solo si no te sigues a ti mismo
-            if ($usuario_objetivo !== $usuario_actual) {
+            // Comprobar si ya existe notificación de seguimiento
+            $check = $pdo->prepare("
+                SELECT COUNT(*) 
+                FROM notificaciones 
+                WHERE usuario_id = ? 
+                  AND tipo = 'seguimiento' 
+                  AND origen_id = ?
+            ");
+            $check->execute([$usuario_objetivo, $usuario_actual]);
+            $existe = (int) $check->fetchColumn();
+
+            if ($existe === 0) {
                 $stmt = $pdo->prepare("
-                    INSERT INTO notificaciones (usuario_id, tipo, origen_id, relacion_id) 
-                    VALUES (?, 'seguimiento', ?, NULL)
+                    INSERT INTO notificaciones (usuario_id, tipo, origen_id, relacion_id, creado_en, leido) 
+                    VALUES (?, 'seguimiento', ?, NULL, NOW(), 0)
                 ");
                 $stmt->execute([$usuario_objetivo, $usuario_actual]);
             }
@@ -49,8 +72,15 @@ try {
         echo json_encode(['success' => $ok]);
 
     } else {
-        echo json_encode(['success' => false, 'message' => 'Acción desconocida']);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Acción no reconocida'
+        ]);
     }
-} catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+
+} catch (Exception $error) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error en la operación: ' . $error->getMessage()
+    ]);
 }
