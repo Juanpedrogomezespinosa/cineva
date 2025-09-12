@@ -31,7 +31,9 @@ try {
             c.pelicula_id AS comentario_pelicula_id
         FROM notificaciones n
         JOIN usuarios u ON u.id = n.origen_id
-        LEFT JOIN comentarios c ON c.id = n.relacion_id AND n.tipo = 'comentario'
+        LEFT JOIN comentarios c 
+            ON c.id = n.relacion_id 
+            AND n.tipo = 'comentario'
         WHERE n.usuario_id = ?
         ORDER BY n.creado_en DESC
         LIMIT 10
@@ -39,6 +41,13 @@ try {
     $consulta->execute([$usuario_id]);
 
     $notificaciones = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+    // Asegurar que las notificaciones de seguimiento también devuelven campos consistentes
+    foreach ($notificaciones as &$notif) {
+        if ($notif['tipo'] === 'seguimiento') {
+            $notif['comentario_pelicula_id'] = null; // No aplica en seguimiento
+        }
+    }
 
     echo json_encode($notificaciones);
 

@@ -8,70 +8,81 @@ cineva/
 │ └── chat.js
 |
 ├── chats/
-│ └── index.php
+│ └── cargar_mensajes.php
 │ └── chat.php
 │ └── enviar_mensaje.php
-│ └── cargar_mensajes.php
+│ └── index.php
 |
 |
 ├── css/
-│ └── main.css # Estilos generales: reset, body, headers, footer, layout
+│ └── agregar.css
+│ └── chat.css
+│ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
+│ └── editar-perfil.css
+│ └── followers.css
 │ └── forms.css # Estilos de login, register, agregar/editar películas
+│ └── lista-chats.css
+│ └── main.css # Estilos generales: reset, body, headers, footer, layout
 │ └── navbar.css # Solo estilos del navbar
 │ └── pelicula.css
-│ └── chat.css
 │ └── perfil.css
-│ └── followers.css
-│ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
 │ └── styles.css # importación de todos los anteriores
 │
 ├── img/
-│ ├── portadas/ # Portadas de películas/series
-│ └── avatars/ # Fotos de perfil de usuarios
+│ ├── avatars/ # avatar de usuario
+│ |── icons/ # iconos usados en la app
+│ └── portadas/ # Portadas de películas/series
 │
 ├── includes/
+│ ├── amistad.php # Función eliminada.
+│ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
 │ ├── config.php # Configuración general (paths, constantes, etc.)
 │ ├── db.php # Conexión a la base de datos
 │ ├── follows.php
-│ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
 │ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
-│ ├── mensajes.php
+│ ├── marcar_notificacion_individual.php
+│ ├── marcar_notificaciones.php
 │ ├── mensajes_ajax.php
+│ ├── mensajes.php
+│ ├── notificaciones_ajax.php
 │ ├── peliculas.php # Funciones específicas para CRUD de películas
-│ ├── usuarios.php # Funciones específicas para CRUD de usuarios
-│ ├── amistad.php # Funciones para peticiones de amistad
-│ └── scraper.php # (opcional) scraping de plataformas de streaming
-│
-├── templates/
-│ ├── header.php
-│ ├── footer.php
-│ └── navbar.php # Menú superior con búsqueda, login/logout, etc.
+│ |── scraper.php # (opcional) scraping de plataformas de streaming sin usar actualmente, esta será una implementación futura.
+│ └── usuarios.php # Funciones específicas para CRUD de usuarios
 │
 ├── peliculas/
 │ ├── agregar.php # Formulario para añadir película/serie
 │ ├── editar.php # Editar película/serie existente
 │ ├── eliminar.php # Eliminar película/serie
 │ └── ver.php # Detalle de película/serie
+|
+├── scripts/
+│ ├── chat.js
+│ └── notificaciones.js
+|
+├── templates/
+│ ├── header.php
+│ ├── footer.php
+│ └── navbar.php # Menú superior con búsqueda, login/logout, etc.
+│
 │
 ├── usuarios/
 │ ├── accion_follow.php
+│ ├── editar-perfil.php
+│ ├── login.php
+│ ├── logout.php
 │ ├── perfil.php # Página de usuario con sus películas, filtros, stats
+│ ├── procesar-editar-perfil.php
 │ ├── register.php # Registro de nuevos usuarios
-│ ├── login.php # Login de usuario
-│ └── logout.php # Logout de usuario
+│ └── seguidores_ajax.php
 │ └── seguidores.php
 │ └── seguidos.php
 │
-├── amigos/
-│ └── index.php # Página para gestionar peticiones y amigos
-│
+├──.gitignore
+├──.htaccess
 ├── buscar.php # Resultados de búsqueda
 ├── dashboard.php # Feed general con todas las películas/series añadidas
 ├── index.php # Página de inicio (landing o feed público si no logueado)
-│
-├── README.md # Documentación del proyecto
-├── .htaccess # Opcional para seguridad
-└── .gitignore
+└── README.md # Documentación del proyecto
 
 #### Paleta de colores:
 
