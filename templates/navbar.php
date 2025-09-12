@@ -1,7 +1,4 @@
 <?php
-/**
- * Navbar dinámico con control de sesión y animación hamburguesa → X.
- */
 declare(strict_types=1);
 
 if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -16,24 +13,24 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 ?>
 
 <nav class="navbar">
-    <!-- IZQUIERDA -->
+    <!-- Sección izquierda -->
     <div class="nav-left">
         <?php if ($usuarioActualId): ?>
             <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn">
-                <img src="<?php echo APP_URL; ?>img/icons/crear.svg" alt="Crear"> 
+                <img src="<?php echo APP_URL; ?>img/icons/crear.svg" alt="Crear">
                 <span>+ Publicar</span>
             </a>
         <?php endif; ?>
     </div>
 
-    <!-- CENTRO -->
+    <!-- Sección central -->
     <div class="nav-center">
         <a href="<?php echo APP_URL; ?>dashboard.php" class="site-title">
             🎬 <?php echo APP_NAME; ?>
         </a>
     </div>
 
-    <!-- DERECHA (solo escritorio) -->
+    <!-- Sección derecha -->
     <div class="nav-right">
         <?php if ($usuarioActualId): ?>
             <span class="welcome">
@@ -43,7 +40,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                 </a>
             </span>
 
-            <!-- ICONO DE MENSAJES -->
+            <!-- Icono de mensajes -->
             <a href="<?php echo APP_URL; ?>chats/index.php" class="icon-mensajes" id="icon-mensajes" title="Mensajes">
                 <img
                     src="<?php echo APP_URL; ?>img/icons/chat.svg"
@@ -54,7 +51,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
                 >
             </a>
 
-            <!-- ICONO DE NOTIFICACIONES -->
+            <!-- Icono de notificaciones -->
             <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones" title="Notificaciones">
                 <img
                     src="<?php echo APP_URL; ?>img/icons/notificacion.svg"
@@ -66,7 +63,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
             </a>
             <div id="lista-notificaciones" class="dropdown"></div>
 
-            <!-- CERRAR SESIÓN -->
+            <!-- Cerrar sesión -->
             <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="icon-logout" title="Cerrar sesión">
                 <img
                     src="<?php echo APP_URL; ?>img/icons/logout.svg"
@@ -78,7 +75,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
         <?php endif; ?>
     </div>
 
-    <!-- BOTÓN HAMBURGUESA (solo móvil) -->
+    <!-- Menú hamburguesa (solo móvil) -->
     <?php if ($usuarioActualId): ?>
     <div class="hamburger" id="hamburger-toggle">
         <span></span>
@@ -88,7 +85,7 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
     <?php endif; ?>
 </nav>
 
-<!-- MENÚ MÓVIL DESPLEGABLE -->
+<!-- Menú móvil desplegable -->
 <?php if ($usuarioActualId): ?>
 <div class="mobile-menu" id="mobile-menu">
     <a href="<?php echo APP_URL; ?>usuarios/perfil.php">
@@ -115,6 +112,8 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 
 <?php if ($usuarioActualId): ?>
 <script>
+const APP_URL = "<?php echo APP_URL; ?>";
+
 const hamburger = document.getElementById('hamburger-toggle');
 const mobileMenu = document.getElementById('mobile-menu');
 
@@ -125,35 +124,39 @@ if (hamburger) {
     });
 }
 
-// ====================
-// Actualización dinámica de mensajes
-// ====================
 async function actualizarIconoMensajes() {
     try {
-        const res = await fetch('<?php echo APP_URL; ?>includes/mensajes_ajax.php?check_no_leidos=1');
+        const res = await fetch(`${APP_URL}includes/mensajes_ajax.php?check_no_leidos=1`);
         if (!res.ok) return;
         const data = await res.json();
         const img = document.getElementById('img-mensajes');
 
         if (img) {
             img.src = data.no_leidos > 0
-                ? '<?php echo APP_URL; ?>img/icons/chat-sin-leer.svg'
-                : '<?php echo APP_URL; ?>img/icons/chat.svg';
+                ? `${APP_URL}img/icons/chat-sin-leer.svg`
+                : `${APP_URL}img/icons/chat.svg`;
         }
     } catch (e) {
         console.error('Error al actualizar icono de mensajes:', e);
     }
 }
+
 actualizarIconoMensajes();
 setInterval(actualizarIconoMensajes, 3000);
 
-// ====================
-// Sistema de notificaciones
-// ====================
+function generarURL(notificacion) {
+    let destino = "#";
+    if (notificacion.tipo === "seguimiento") {
+        destino = `usuarios/perfil.php?id=${notificacion.origen_id}`;
+    } else if (notificacion.tipo === "comentario") {
+        destino = `peliculas/ver.php?id=${notificacion.comentario_pelicula_id}#comentario_${notificacion.relacion_id}`;
+    }
+    return `${APP_URL}includes/marcar_notificacion_individual.php?id=${notificacion.id}&url=${encodeURIComponent(destino)}`;
+}
 
 async function cargarNotificaciones() {
     try {
-        const res = await fetch('<?php echo APP_URL; ?>includes/notificaciones_ajax.php');
+        const res = await fetch(`${APP_URL}includes/notificaciones_ajax.php`);
         if (!res.ok) return;
         const data = await res.json();
 
@@ -165,51 +168,48 @@ async function cargarNotificaciones() {
 
         data.forEach(n => {
             if (n.leido == 0) noLeidas++;
-            const item = document.createElement('div');
+
+            const item = document.createElement('a');
             item.classList.add('notificacion-item');
+            item.href = generarURL(n);
             item.textContent = n.tipo === 'seguimiento'
                 ? `${n.origen_nombre} te ha seguido`
                 : `${n.origen_nombre} comentó en tu película`;
+
             lista.appendChild(item);
         });
 
-        // Mostrar número o "9+"
-        if (contador) {
-            if (noLeidas > 0) {
-                contador.textContent = noLeidas > 9 ? "9+" : noLeidas;
-                contador.style.display = "inline-block";
-            } else {
-                contador.textContent = "";
-                contador.style.display = "none";
+        const mostrarContador = (element, cantidad) => {
+            if (element) {
+                if (cantidad > 0) {
+                    element.textContent = cantidad > 9 ? "9+" : cantidad;
+                    element.style.display = "inline-block";
+                } else {
+                    element.textContent = "";
+                    element.style.display = "none";
+                }
             }
-        }
+        };
 
-        if (contadorMovil) {
-            if (noLeidas > 0) {
-                contadorMovil.textContent = noLeidas > 9 ? "9+" : noLeidas;
-                contadorMovil.style.display = "inline-block";
-            } else {
-                contadorMovil.textContent = "";
-                contadorMovil.style.display = "none";
-            }
-        }
+        mostrarContador(contador, noLeidas);
+        mostrarContador(contadorMovil, noLeidas);
     } catch (e) {
         console.error('Error al cargar notificaciones:', e);
     }
 }
 
-
 const iconoNotificaciones = document.getElementById('icono-notificaciones');
+const iconoNotificacionesMovil = document.getElementById('icono-notificaciones-movil');
+
 if (iconoNotificaciones) {
-    iconoNotificaciones.addEventListener('click', async () => {
+    iconoNotificaciones.addEventListener('click', () => {
         document.getElementById('lista-notificaciones').classList.toggle('show');
-        await fetch('<?php echo APP_URL; ?>includes/marcar_notificaciones.php', { method: 'POST' });
+    });
+}
 
-        const contador = document.getElementById('contador-notificaciones');
-        const contadorMovil = document.getElementById('contador-notificaciones-movil');
-
-        if (contador) contador.style.display = 'none';
-        if (contadorMovil) contadorMovil.style.display = 'none';
+if (iconoNotificacionesMovil) {
+    iconoNotificacionesMovil.addEventListener('click', () => {
+        document.getElementById('lista-notificaciones').classList.toggle('show');
     });
 }
 

@@ -114,7 +114,7 @@ include __DIR__ . '/../templates/header.php';
                 <p>No hay comentarios aún.</p>
             <?php else: ?>
                 <?php foreach ($comentarios as $com): ?>
-                    <div class="comentario" id="comentario-<?= $com['id']; ?>">
+                    <div class="comentario" id="comentario_<?= $com['id']; ?>">
                         <div class="usuario-comentario">
                             <img src="<?= APP_URL ?>img/avatars/<?= htmlspecialchars($com['avatar']); ?>" alt="<?= htmlspecialchars($com['usuario_nombre']); ?>" class="avatar">
                             <strong>
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(com => {
                 const div = document.createElement('div');
                 div.classList.add('comentario');
-                div.id = 'comentario-' + com.id;
+                div.id = 'comentario_' + com.id;
                 div.innerHTML = `
                     <div class="usuario-comentario">
                         <img src="<?= APP_URL ?>img/avatars/${com.avatar}" alt="${com.usuario_nombre}" class="avatar">

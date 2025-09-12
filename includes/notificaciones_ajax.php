@@ -10,24 +10,33 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-$user_id = (int) $_SESSION['usuario_id'];
+$usuario_id = (int) $_SESSION['usuario_id'];
 
 try {
     $db = new Database();
     $pdo = $db->getConnection();
 
-    $stmt = $pdo->prepare("
-        SELECT n.id, n.tipo, n.leido, n.creado_en, u.nombre AS origen_nombre
+    $consulta = $pdo->prepare("
+        SELECT 
+            n.id,
+            n.tipo,
+            n.leido,
+            n.creado_en,
+            n.relacion_id,
+            n.origen_id,
+            u.nombre AS origen_nombre,
+            c.pelicula_id AS comentario_pelicula_id
         FROM notificaciones n
         JOIN usuarios u ON u.id = n.origen_id
+        LEFT JOIN comentarios c ON c.id = n.relacion_id AND n.tipo = 'comentario'
         WHERE n.usuario_id = ?
         ORDER BY n.creado_en DESC
         LIMIT 10
     ");
-    $stmt->execute([$user_id]);
+    $consulta->execute([$usuario_id]);
 
-    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-} catch (Exception $e) {
+    echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
+} catch (Exception $error) {
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(['error' => $error->getMessage()]);
 }
