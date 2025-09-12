@@ -22,16 +22,15 @@ try {
     if (isset($_GET['url'])) {
         $url_relativa = urldecode($_GET['url']);
 
-        // Si empieza con "/", quitamos la barra para concatenar con APP_URL
-        $redireccion = strpos($url_relativa, '/') === 0
-            ? APP_URL . ltrim($url_relativa, '/')
-            : APP_URL . $url_relativa;
-
-        header("Location: " . $redireccion);
-        exit;
+        // Validar que sea una ruta interna permitida
+        if (preg_match('/^(peliculas\/|usuarios\/)/', $url_relativa)) {
+            $redireccion = APP_URL . $url_relativa;
+            header("Location: " . $redireccion);
+            exit;
+        }
     }
 
-    // Si no hay destino, vuelve al dashboard
+    // Si no hay destino válido, vuelve al dashboard
     header("Location: ../dashboard.php");
     exit;
 

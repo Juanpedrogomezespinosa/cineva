@@ -73,7 +73,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $usuario_id && isset($_POST['ajax']
 include __DIR__ . '/../templates/header.php';
 ?>
 
-
 <section class="pelicula-detalle">
     <div class="portada-horizontal">
         <?php if ($pelicula['portada']): ?>
