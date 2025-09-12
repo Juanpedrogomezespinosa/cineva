@@ -5,6 +5,7 @@ require_once __DIR__ . '/db.php';
 
 header('Content-Type: application/json');
 
+// Verificar sesión
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode([]);
     exit;
@@ -16,6 +17,7 @@ try {
     $db = new Database();
     $pdo = $db->getConnection();
 
+    // Obtener últimas 10 notificaciones del usuario
     $consulta = $pdo->prepare("
         SELECT 
             n.id,
@@ -25,6 +27,7 @@ try {
             n.relacion_id,
             n.origen_id,
             u.nombre AS origen_nombre,
+            u.avatar AS origen_avatar,
             c.pelicula_id AS comentario_pelicula_id
         FROM notificaciones n
         JOIN usuarios u ON u.id = n.origen_id
@@ -35,7 +38,10 @@ try {
     ");
     $consulta->execute([$usuario_id]);
 
-    echo json_encode($consulta->fetchAll(PDO::FETCH_ASSOC));
+    $notificaciones = $consulta->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($notificaciones);
+
 } catch (Exception $error) {
     http_response_code(500);
     echo json_encode(['error' => $error->getMessage()]);
