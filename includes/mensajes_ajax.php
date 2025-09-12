@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/auth.php';
@@ -22,6 +23,26 @@ $db = (new Database())->getConnection();
 $stmtAvatarActual = $db->prepare("SELECT avatar FROM usuarios WHERE id = :uid");
 $stmtAvatarActual->execute([':uid' => $usuarioActual]);
 $avatarUsuarioActual = $stmtAvatarActual->fetchColumn() ?: 'default.png';
+
+// ------------------------
+// CONSULTA DE MENSAJES SIN LEER
+// ------------------------
+if (isset($_GET['check_no_leidos'])) {
+    try {
+        $stmt = $db->prepare("SELECT COUNT(*) AS no_leidos FROM mensajes WHERE receptor_id = :uid AND leido = 0");
+        $stmt->execute([':uid' => $usuarioActual]);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        echo json_encode([
+            'success' => true,
+            'no_leidos' => (int) $resultado['no_leidos']
+        ]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'no_leidos' => 0, 'error' => $e->getMessage()]);
+    }
+    exit;
+}
 
 // ------------------------
 // ENVÍO DE MENSAJE (POST)
@@ -67,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ------------------------
-// OBTENER MENSAJES (GET)
+// OBTENER MENSAJES (GET normal)
 // ------------------------
 $receptor = isset($_GET['receptor_id']) ? (int)$_GET['receptor_id'] : null;
 $ultimoId = isset($_GET['ultimo_id']) ? (int)$_GET['ultimo_id'] : 0;

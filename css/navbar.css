@@ -235,7 +235,7 @@
   display: none;
   position: absolute;
   right: 0;
-  top: 30px;
+  top: 50px;
   background: #121518;
   border: 1px solid #333;
   width: 250px;
@@ -260,6 +260,34 @@
 
 .notificacion-item:hover {
   background-color: #1c1f23;
+}
+
+/* ============================
+   CONTADOR DE MENSAJES
+============================ */
+.icon-mensajes {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+#contador-mensajes,
+#contador-mensajes-movil {
+  position: absolute;
+  /* top: -6px; */
+  right: -6px;
+  color: #f4bf2c;
+  font-weight: bold;
+  font-size: 0.75rem;
+  display: none;
+  background: none;
+  padding: 0;
+  line-height: 1;
+}
+
+#contador-mensajes:empty,
+#contador-mensajes-movil:empty {
+  display: none;
 }
 
 /* ============================

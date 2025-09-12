@@ -13,7 +13,6 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 ?>
 
 <nav class="navbar">
-    <!-- Sección izquierda -->
     <div class="nav-left">
         <?php if ($usuarioActualId): ?>
             <a href="<?php echo APP_URL; ?>peliculas/agregar.php" class="btn">
@@ -23,69 +22,49 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
         <?php endif; ?>
     </div>
 
-    <!-- Sección central -->
     <div class="nav-center">
         <a href="<?php echo APP_URL; ?>dashboard.php" class="site-title">
             🎬 <?php echo APP_NAME; ?>
         </a>
     </div>
 
-    <!-- Sección derecha -->
     <div class="nav-right">
         <?php if ($usuarioActualId): ?>
             <span class="welcome">
                 Bienvenido,
                 <a href="<?php echo APP_URL; ?>usuarios/perfil.php" class="usuario-link">
-                    <?php echo htmlspecialchars((string)$usuarioActualNombre, ENT_QUOTES); ?>
+                    <?php echo htmlspecialchars($usuarioActualNombre, ENT_QUOTES); ?>
                 </a>
             </span>
 
             <!-- Icono de mensajes -->
             <a href="<?php echo APP_URL; ?>chats/index.php" class="icon-mensajes" id="icon-mensajes" title="Mensajes">
-                <img
-                    src="<?php echo APP_URL; ?>img/icons/chat.svg"
-                    alt="Mensajes"
-                    width="24"
-                    height="24"
-                    id="img-mensajes"
-                >
+                <img src="<?php echo APP_URL; ?>img/icons/chat.svg" alt="Mensajes" width="24" height="24" id="img-mensajes" style="fill:#f4bf2c;">
+                <span id="contador-mensajes" class="notif-count"></span>
             </a>
 
             <!-- Icono de notificaciones -->
             <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones" title="Notificaciones">
-                <img
-                    src="<?php echo APP_URL; ?>img/icons/notificacion.svg"
-                    alt="Notificaciones"
-                    width="24"
-                    height="24"
-                >
+                <img src="<?php echo APP_URL; ?>img/icons/notificacion.svg" alt="Notificaciones" width="24" height="24">
                 <span id="contador-notificaciones" class="notif-count"></span>
             </a>
             <div id="lista-notificaciones" class="dropdown"></div>
 
-            <!-- Cerrar sesión -->
             <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="icon-logout" title="Cerrar sesión">
-                <img
-                    src="<?php echo APP_URL; ?>img/icons/logout.svg"
-                    alt="Cerrar sesión"
-                    width="24"
-                    height="24"
-                >
+                <img src="<?php echo APP_URL; ?>img/icons/logout.svg" alt="Cerrar sesión" width="24" height="24">
             </a>
         <?php endif; ?>
     </div>
 
-    <!-- Menú hamburguesa (solo móvil) -->
     <?php if ($usuarioActualId): ?>
-    <div class="hamburger" id="hamburger-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
+        <div class="hamburger" id="hamburger-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     <?php endif; ?>
 </nav>
 
-<!-- Menú móvil desplegable -->
 <?php if ($usuarioActualId): ?>
 <div class="mobile-menu" id="mobile-menu">
     <a href="<?php echo APP_URL; ?>usuarios/perfil.php">
@@ -93,17 +72,13 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
     </a>
     <a href="<?php echo APP_URL; ?>chats/index.php">
         <img src="<?php echo APP_URL; ?>img/icons/chat.svg" alt="Chats" width="22" height="22"> Chats
+        <span id="contador-mensajes-movil" class="notif-count"></span>
     </a>
     <a href="<?php echo APP_URL; ?>usuarios/logout.php">
         <img src="<?php echo APP_URL; ?>img/icons/logout.svg" alt="Cerrar sesión" width="22" height="22"> Cerrar sesión
     </a>
     <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones-movil" title="Notificaciones">
-        <img
-            src="<?php echo APP_URL; ?>img/icons/notificacion.svg"
-            alt="Notificaciones"
-            width="22"
-            height="22"
-        >
+        <img src="<?php echo APP_URL; ?>img/icons/notificacion.svg" alt="Notificaciones" width="22" height="22">
         <span id="contador-notificaciones-movil" class="notif-count"></span>
         <span class="texto-notificaciones">Notificaciones</span>
     </a>
@@ -124,26 +99,44 @@ if (hamburger) {
     });
 }
 
+// =========================
+// ACTUALIZAR ICONO Y CONTADOR DE MENSAJES
+// =========================
 async function actualizarIconoMensajes() {
     try {
-        const res = await fetch(`${APP_URL}includes/mensajes_ajax.php?check_no_leidos=1`);
-        if (!res.ok) return;
-        const data = await res.json();
-        const img = document.getElementById('img-mensajes');
+        const respuesta = await fetch(`${APP_URL}includes/mensajes_ajax.php?check_no_leidos=1`);
+        if (!respuesta.ok) return;
+        const datos = await respuesta.json();
 
-        if (img) {
-            img.src = data.no_leidos > 0
-                ? `${APP_URL}img/icons/chat-sin-leer.svg`
-                : `${APP_URL}img/icons/chat.svg`;
-        }
-    } catch (e) {
-        console.error('Error al actualizar icono de mensajes:', e);
+        const contador = document.getElementById('contador-mensajes');
+        const contadorMovil = document.getElementById('contador-mensajes-movil');
+
+        // Mostrar el contador igual que las notificaciones
+        const mostrarContador = (elemento, cantidad) => {
+            if (!elemento) return;
+            if (cantidad > 0) {
+                elemento.textContent = cantidad > 9 ? '9+' : cantidad;
+                elemento.style.display = 'inline-block';
+            } else {
+                elemento.textContent = '';
+                elemento.style.display = 'none';
+            }
+        };
+
+        mostrarContador(contador, datos.no_leidos);
+        mostrarContador(contadorMovil, datos.no_leidos);
+
+    } catch (error) {
+        console.error('Error al actualizar icono de mensajes:', error);
     }
 }
 
 actualizarIconoMensajes();
 setInterval(actualizarIconoMensajes, 3000);
 
+// =========================
+// GENERAR URL PARA NOTIFICACIÓN
+// =========================
 function generarURL(notificacion) {
     let destino = "#";
     if (notificacion.tipo === "seguimiento") {
@@ -154,11 +147,35 @@ function generarURL(notificacion) {
     return `${APP_URL}includes/marcar_notificacion_individual.php?id=${notificacion.id}&url=${encodeURIComponent(destino)}`;
 }
 
+// =========================
+// SEGUIR / DEJAR DE SEGUIR DESDE NOTIFICACIÓN
+// =========================
+async function toggleFollow(usuarioId, boton) {
+    const accion = boton.dataset.siguiendo === "1" ? "dejar" : "seguir";
+    try {
+        const respuesta = await fetch(`${APP_URL}usuarios/accion_follow.php`, {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: `usuario_id=${usuarioId}&accion=${accion}`
+        });
+        const datos = await respuesta.json();
+        if (datos.success) {
+            boton.textContent = accion === "seguir" ? "Dejar de seguir" : "Seguir";
+            boton.dataset.siguiendo = accion === "seguir" ? "1" : "0";
+        }
+    } catch (error) {
+        console.error("Error al cambiar estado de seguimiento:", error);
+    }
+}
+
+// =========================
+// CARGAR NOTIFICACIONES
+// =========================
 async function cargarNotificaciones() {
     try {
-        const res = await fetch(`${APP_URL}includes/notificaciones_ajax.php`);
-        if (!res.ok) return;
-        const data = await res.json();
+        const respuesta = await fetch(`${APP_URL}includes/notificaciones_ajax.php`);
+        if (!respuesta.ok) return;
+        const datos = await respuesta.json();
 
         const lista = document.getElementById('lista-notificaciones');
         const contador = document.getElementById('contador-notificaciones');
@@ -166,38 +183,45 @@ async function cargarNotificaciones() {
         lista.innerHTML = '';
         let noLeidas = 0;
 
-        data.forEach(n => {
+        datos.forEach(n => {
             if (n.leido == 0) noLeidas++;
-
-            const item = document.createElement('a');
+            const item = document.createElement('div');
             item.classList.add('notificacion-item');
-            item.href = generarURL(n);
-            item.textContent = n.tipo === 'seguimiento'
-                ? `${n.origen_nombre} te ha seguido`
-                : `${n.origen_nombre} comentó en tu película`;
+
+            if (n.tipo === 'seguimiento') {
+                item.innerHTML = `
+                    <span>${n.origen_nombre} te ha seguido</span>
+                    <button class="follow-btn" data-usuario="${n.origen_id}" data-siguiendo="0">Seguir</button>
+                `;
+                const boton = item.querySelector('.follow-btn');
+                boton.addEventListener('click', () => toggleFollow(n.origen_id, boton));
+            } else {
+                item.innerHTML = `<a href="${generarURL(n)}">${n.origen_nombre} comentó en tu película</a>`;
+            }
 
             lista.appendChild(item);
         });
 
-        const mostrarContador = (element, cantidad) => {
-            if (element) {
-                if (cantidad > 0) {
-                    element.textContent = cantidad > 9 ? "9+" : cantidad;
-                    element.style.display = "inline-block";
-                } else {
-                    element.textContent = "";
-                    element.style.display = "none";
-                }
+        const mostrarContador = (elemento, cantidad) => {
+            if (!elemento) return;
+            if (cantidad > 0) {
+                elemento.textContent = cantidad > 9 ? "9+" : cantidad;
+                elemento.style.display = "inline-block";
+            } else {
+                elemento.textContent = "";
+                elemento.style.display = "none";
             }
         };
 
         mostrarContador(contador, noLeidas);
         mostrarContador(contadorMovil, noLeidas);
-    } catch (e) {
-        console.error('Error al cargar notificaciones:', e);
+
+    } catch (error) {
+        console.error('Error al cargar notificaciones:', error);
     }
 }
 
+// Toggle dropdown notificaciones
 const iconoNotificaciones = document.getElementById('icono-notificaciones');
 const iconoNotificacionesMovil = document.getElementById('icono-notificaciones-movil');
 
@@ -213,6 +237,7 @@ if (iconoNotificacionesMovil) {
     });
 }
 
+// Cargar notificaciones al inicio y cada 30 segundos
 cargarNotificaciones();
 setInterval(cargarNotificaciones, 30000);
 </script>
