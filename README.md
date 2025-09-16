@@ -4,8 +4,6 @@
 
 cineva/
 │
-├── scripts/
-│ └── chat.js
 |
 ├── chats/
 │ └── cargar_mensajes.php
@@ -42,6 +40,7 @@ cineva/
 │ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
 │ ├── marcar_notificacion_individual.php
 │ ├── marcar_notificaciones.php
+│ ├── marcar_todas_notificaciones.php
 │ ├── mensajes_ajax.php
 │ ├── mensajes.php
 │ ├── notificaciones_ajax.php
