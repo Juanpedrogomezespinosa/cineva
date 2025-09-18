@@ -82,9 +82,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 - Configura la conexión en includes/db.php
 - Inicia XAMPP (Apache + MySQL) y abre el navegador: http://localhost/proyectos/cineva/
 
-### Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
-
-### Cualquier persona pueda levantar la app sin tener que preguntarnos nada extra.
+### Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que Cualquier persona pueda levantar la app sin tener que preguntarnos nada extra.
 
 ---
 
@@ -165,7 +163,7 @@ cineva/
 
 ### Documentar la estructura del proyecto con un árbol comentado ayuda a entender qué hace cada carpeta y archivo. Esto es oro para alguien que abre el repositorio por primera vez.
 
-## 8. Uso de la aplicación.
+## 8. Uso de la aplicación.
 
 ### Uso
 
