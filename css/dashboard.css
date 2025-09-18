@@ -92,9 +92,28 @@
 }
 
 .valoracion {
-  text-align: center;
-  font-size: 0.95rem;
-  color: #f4bf2c;
+  display: flex;
+  justify-content: center; /* centra horizontalmente */
+  align-items: center; /* alinea verticalmente con el texto */
+  gap: 2px; /* espacio entre iconos */
+  margin: 5px 0;
+}
+
+.valoracion img.icono-valoracion {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.icono-vacio {
+  opacity: 0.2;
+}
+
+.valor-num {
+  margin-left: 5px;
+  font-size: 0.85rem;
+  color: #aaa;
+  vertical-align: middle;
 }
 
 .usuario-publico {

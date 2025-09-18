@@ -81,20 +81,58 @@ include __DIR__ . '/../templates/header.php';
         <?php endif; ?>
     </div>
 
-    <div class="datos-pelicula">
-        <p><strong>Género:</strong> <?= htmlspecialchars($pelicula['genero']); ?></p>
-        <p><strong>Plataforma:</strong> <?= htmlspecialchars($pelicula['plataforma']); ?></p>
-        <p><strong>Visto:</strong> <?= $pelicula['visto'] ? 'Sí' : 'No'; ?></p>
-        <p><strong>Favorito:</strong> <?= $pelicula['favorito'] ? 'Sí' : 'No'; ?></p>
-        <p><strong>Valoración:</strong> <?= (int)$pelicula['valoracion']; ?> / 5</p>
-        <p><strong>Reseña:</strong> <?= nl2br(htmlspecialchars($pelicula['resena'])); ?></p>
-        <p><strong>Agregada por:</strong>
-            <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $pelicula['usuario_id']; ?>">
-                <?= htmlspecialchars($pelicula['usuario_nombre']); ?>
-            </a>
-        </p>
-        <p><strong>Fecha de agregado:</strong> <?= $pelicula['fecha_agregado']; ?></p>
+<div class="datos-pelicula-tarjeta">
+    <!-- Título grande -->
+
+
+    <!-- Valoración con estrellas -->
+<div class="valoracion">
+    <?php
+    $valor = (float)$pelicula['valoracion']; // valor puede ser decimal
+    $maxEstrellas = 5;
+
+    for ($i = 1; $i <= $maxEstrellas; $i++) {
+        if ($valor >= $i) {
+            // Estrella completa
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" alt="Estrella" class="icono-valoracion">';
+        } elseif ($valor >= $i - 0.5) {
+            // Media estrella
+            echo '<img src="' . APP_URL . 'img/icons/media-estrella.svg" alt="Media estrella" class="icono-valoracion">';
+        } else {
+            // Estrella vacía: usamos la misma estrella pero con opacidad reducida
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" alt="" class="icono-valoracion icono-vacio">';
+        }
+    }
+    ?>
+    <span class="valor-num">(<?= htmlspecialchars($pelicula['valoracion']); ?>/5)</span>
+</div>
+
+
+    <!-- Reseña destacada -->
+    <?php if (!empty($pelicula['resena'])): ?>
+        <blockquote class="reseña">
+            “<?= nl2br(htmlspecialchars($pelicula['resena'])); ?>”
+        </blockquote>
+    <?php endif; ?>
+
+    <!-- Información adicional en filas con emojis -->
+    <div class="info-adicional">
+        <p>🎭 <strong>Género:</strong> <?= htmlspecialchars($pelicula['genero']); ?></p>
+        <p>💻 <strong>Plataforma:</strong> <?= htmlspecialchars($pelicula['plataforma']); ?></p>
+        <p>👁️ <strong>Visto:</strong> <?= $pelicula['visto'] ? 'Sí' : 'No'; ?></p>
+        <p>❤️ <strong>Favorito:</strong> <?= $pelicula['favorito'] ? 'Sí' : 'No'; ?></p>
     </div>
+
+    <!-- Autor y fecha -->
+    <div class="autor-fecha">
+        📝 Agregada por: 
+        <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $pelicula['usuario_id']; ?>">
+            <?= htmlspecialchars($pelicula['usuario_nombre']); ?>
+        </a>
+        | 📅 <?= $pelicula['fecha_agregado']; ?>
+    </div>
+</div>
+
 
     <section class="comentarios">
         <h2>Comentarios</h2>
@@ -141,7 +179,10 @@ include __DIR__ . '/../templates/header.php';
         </div>
     </section>
 
-    <a class="volver-dashboard" href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+   <div class="volver-dashboard">
+    <a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
+</div>
+
 </section>
 
 <script>

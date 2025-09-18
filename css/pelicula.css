@@ -39,16 +39,13 @@
   word-wrap: break-word;
 }
 
-.datos-pelicula p {
-  margin: 5px 0;
-}
-
 .comentarios {
   margin-top: 40px;
 }
 
 .comentarios h2 {
   color: #f4bf2c;
+  margin-bottom: 1rem;
 }
 
 .form-comentario textarea {
@@ -98,7 +95,7 @@
   color: #aaa;
 }
 
-.datos-pelicula a,
+/* .datos-pelicula a,
 .pelicula-detalle a {
   color: #f4bf2c;
   text-decoration: none;
@@ -109,35 +106,122 @@
   text-decoration: underline;
 }
 
+.datos-pelicula p {
+  margin: 5px 0;
+} */
+
+.datos-pelicula-tarjeta {
+  /* background-color: #1d2125; */
+  padding: 20px;
+  border-radius: 12px;
+  /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4); */
+  color: #fcfceb;
+  max-width: 100%;
+  margin: 20px auto;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.titulo-pelicula {
+  font-size: 2.5rem;
+  color: #f4bf2c;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.valoracion {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.icono-valoracion {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 2px;
+}
+
+.icono-vacio {
+  opacity: 0.2; /* hace que la estrella se vea “vacía” */
+}
+
+.valor-num {
+  font-weight: normal;
+  margin-left: 5px;
+  color: #aaa;
+}
+
+.reseña {
+  font-style: italic;
+  background-color: #2a2f33;
+  padding: 10px 15px;
+  border-left: 4px solid #f4bf2c;
+  margin: 15px 0;
+  border-radius: 6px;
+}
+
+.info-adicional p {
+  margin: 5px 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.autor-fecha {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #aaa;
+  text-align: center;
+}
+
+.autor-fecha a {
+  color: #f4bf2c;
+  text-decoration: none;
+}
+
+.autor-fecha a:hover {
+  text-decoration: underline;
+}
+
 /* Contenedor de comentario con acciones a la derecha */
+/* Contenedor de comentario */
 .comentario {
   max-width: 100%;
   width: 100%;
-  overflow-x: hidden; /* nunca barra horizontal */
+  overflow-x: hidden;
+  margin-bottom: 10px;
 }
 
+/* Contenido del comentario: texto a la izquierda, acciones a la derecha */
 .comentario-contenido {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex-wrap: wrap; /* 👈 permite que el contenido baje si no cabe */
-  max-width: 100%; /* 👈 nunca exceder el ancho del contenedor */
+  gap: 10px;
 }
 
+/* Contenedor del texto del comentario */
+.comentario-contenido > div:first-child {
+  flex: 1; /* ocupa todo el espacio disponible */
+  min-width: 0; /* importante para que los hijos no salgan del contenedor */
+}
+
+/* Párrafo de comentario */
 .comentario-contenido p {
-  flex: 1;
-  margin: 0.3rem;
-  white-space: pre-wrap; /* respeta saltos de línea */
-  word-break: break-word; /* rompe palabras largas */
-  overflow-wrap: anywhere; /* fuerza romper en cualquier punto */
-  max-width: 100%; /* nunca exceder el ancho */
-  box-sizing: border-box; /* cuenta padding/border en el ancho */
+  margin: 0.3rem 0 0 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* Contenedor de acciones (iconos) */
 .acciones-comentario {
   display: flex;
   gap: 10px;
-  margin-left: 15px;
+  flex-shrink: 0; /* no se encoge */
 }
 
 .icono-accion {
@@ -192,4 +276,18 @@
 .btn-cancelar:hover {
   background-color: #f4bf2c;
   color: #121518;
+}
+
+.volver-dashboard {
+  text-align: center;
+  /* margin: 20px 0; */
+}
+
+.volver-dashboard a {
+  color: #f4bf2c;
+  text-decoration: none;
+}
+
+.volver-dashboard a:hover {
+  text-decoration: underline;
 }
