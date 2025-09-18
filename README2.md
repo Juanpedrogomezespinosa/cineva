@@ -175,7 +175,7 @@ cineva/
 
 ### Aquí contamos lo que el usuario puede hacer dentro de la aplicación.
 
-## 9. Contribución
+## 9. Contribución
 
 1. Haz un fork del proyecto.
 2. Crea una rama nueva (`git checkout -b feature-nueva`).
