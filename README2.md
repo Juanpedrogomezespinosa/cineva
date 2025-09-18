@@ -58,12 +58,15 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ## Tecnologías
 
-- PHP 8+
-- MySQL / phpMyAdmin
-- XAMPP
-- HTML, CSS, JavaScript
-- VS Code
-- Git
+### - PHP 8+
+
+### - MySQL / phpMyAdmin
+### - XAMPP
+### - HTML, CSS, JavaScript
+
+### - VS Code
+
+### - Git
 
 ## Es importante listar las herramientas y lenguajes que se usaron. Esto ayuda a que otros sepan qué necesitan instalar para trabajar con el proyecto.
 
