@@ -88,7 +88,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ---
 
-## 4. Estructura de carpetas 📁
+## 7. Estructura de carpetas 📁
 
 ```markdown
 cineva/
@@ -157,10 +157,15 @@ cineva/
 ├── dashboard.php # Feed general con películas/series añadidas
 ├── index.php # Página de inicio
 └── README.md # Documentación del proyecto
+```
+
+```
+
+```
 
 # Documentar la estructura del proyecto con un árbol comentado ayuda a entender qué hace cada carpeta y archivo. Esto es oro para alguien que abre el repositorio por primera vez.
 
-# 5. Uso de la aplicación.
+# 8. Uso de la aplicación.
 
 ## Uso
 
@@ -172,7 +177,7 @@ cineva/
 
 # Aquí contamos lo que el usuario puede hacer dentro de la aplicación.
 
-# 6. ## Contribución
+# 9. Contribución
 
 1. Haz un fork del proyecto.
 2. Crea una rama nueva (`git checkout -b feature-nueva`).
@@ -182,14 +187,14 @@ cineva/
 
 # Si queremos que otros desarrolladores participen, les damos un proceso estándar de colaboración.
 
-# 7. ## Licencia
+# 10. Licencia
 
 Este proyecto se distribuye bajo la licencia MIT.
 Puedes usarlo, modificarlo y compartirlo libremente.
 
 # Indicar la licencia es importante para que quede claro qué puede y qué no puede hacer la gente con el proyecto.
 
-# Conclusión:
+# 11. Conclusión:
 
 Un README.md bien hecho ahorra tiempo y hace que tu proyecto sea más profesional.
 
@@ -198,8 +203,3 @@ La clave es mantenerlo claro, ordenado y actualizado.
 Ahora pueden aplicar esta misma estructura a sus propios proyectos.
 
 # ¿Quieres que ahora también te prepare la **versión sin explicaciones (solo README final de Cineva)** para que la uses como demo visual en GitHub y mostrar la diferencia entre taller y resultado final?
-```
-
-```
-
-```
