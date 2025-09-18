@@ -114,23 +114,27 @@ include __DIR__ . '/../templates/header.php';
             <?php else: ?>
                 <?php foreach ($comentarios as $com): ?>
                     <div class="comentario" id="comentario_<?= $com['id']; ?>">
-                        <div class="usuario-comentario">
-                            <img src="<?= APP_URL ?>img/avatars/<?= htmlspecialchars($com['avatar']); ?>" alt="<?= htmlspecialchars($com['usuario_nombre']); ?>" class="avatar">
-                            <strong>
-                                <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $com['usuario_id']; ?>" class="link-social">
-                                    <?= htmlspecialchars($com['usuario_nombre']); ?>
-                                </a>
-                            </strong>
-                            <span class="fecha"><?= $com['fecha_comentario']; ?></span>
-                        </div>
-                        <p id="texto_<?= $com['id']; ?>"><?= nl2br(htmlspecialchars($com['comentario'])); ?></p>
-
-                        <?php if ($usuario_id && $usuario_id == $com['usuario_id']): ?>
-                            <div class="acciones-comentario">
-                                <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="<?= $com['id']; ?>">
-                                <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="<?= $com['id']; ?>">
+                        <div class="comentario-contenido">
+                            <div>
+                                <div class="usuario-comentario">
+                                    <img src="<?= APP_URL ?>img/avatars/<?= htmlspecialchars($com['avatar']); ?>" alt="<?= htmlspecialchars($com['usuario_nombre']); ?>" class="avatar">
+                                    <strong>
+                                        <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $com['usuario_id']; ?>" class="link-social">
+                                            <?= htmlspecialchars($com['usuario_nombre']); ?>
+                                        </a>
+                                    </strong>
+                                    <span class="fecha"><?= $com['fecha_comentario']; ?></span>
+                                </div>
+                                <p id="texto_<?= $com['id']; ?>"><?= nl2br(htmlspecialchars($com['comentario'])); ?></p>
                             </div>
-                        <?php endif; ?>
+
+                            <?php if ($usuario_id && $usuario_id == $com['usuario_id']): ?>
+                                <div class="acciones-comentario">
+                                    <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="<?= $com['id']; ?>">
+                                    <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="<?= $com['id']; ?>">
+                                </div>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -164,15 +168,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 div.classList.add('comentario');
                 div.id = 'comentario_' + com.id;
                 div.innerHTML = `
-                    <div class="usuario-comentario">
-                        <img src="<?= APP_URL ?>img/avatars/${com.avatar}" alt="${com.usuario_nombre}" class="avatar">
-                        <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${com.usuario_id}" class="link-social">${com.usuario_nombre}</a></strong>
-                        <span class="fecha">${com.fecha_comentario}</span>
-                    </div>
-                    <p id="texto_${com.id}">${com.comentario.replace(/\n/g, '<br>')}</p>
-                    <div class="acciones-comentario">
-                        <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="${com.id}">
-                        <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="${com.id}">
+                    <div class="comentario-contenido">
+                        <div>
+                            <div class="usuario-comentario">
+                                <img src="<?= APP_URL ?>img/avatars/${com.avatar}" alt="${com.usuario_nombre}" class="avatar">
+                                <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${com.usuario_id}" class="link-social">${com.usuario_nombre}</a></strong>
+                                <span class="fecha">${com.fecha_comentario}</span>
+                            </div>
+                            <p id="texto_${com.id}">${com.comentario.replace(/\n/g, '<br>')}</p>
+                        </div>
+                        <div class="acciones-comentario">
+                            <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="${com.id}">
+                            <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="${com.id}">
+                        </div>
                     </div>
                 `;
                 document.getElementById('lista-comentarios').appendChild(div);
@@ -190,8 +198,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const p = document.getElementById('texto_' + id);
             const textoActual = p.innerText;
 
-            const nuevoTexto = prompt("Editar comentario:", textoActual);
-            if (nuevoTexto && nuevoTexto.trim() !== "") {
+            const textarea = document.createElement('textarea');
+            textarea.value = textoActual;
+            textarea.classList.add('textarea-editar');
+
+            const btnGuardar = document.createElement('button');
+            btnGuardar.textContent = 'Guardar';
+            btnGuardar.classList.add('btn-guardar');
+
+            const btnCancelar = document.createElement('button');
+            btnCancelar.textContent = 'Cancelar';
+            btnCancelar.classList.add('btn-cancelar');
+
+            p.replaceWith(textarea);
+            textarea.insertAdjacentElement('afterend', btnGuardar);
+            btnGuardar.insertAdjacentElement('afterend', btnCancelar);
+
+            btnGuardar.addEventListener('click', function() {
+                const nuevoTexto = textarea.value.trim();
+                if (nuevoTexto === "") return;
+
                 const data = new FormData();
                 data.append('id', id);
                 data.append('comentario', nuevoTexto);
@@ -203,18 +229,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(r => r.json())
                 .then(res => {
                     if (res.success) {
-                        p.innerHTML = res.comentario;
+                        const nuevoP = document.createElement('p');
+                        nuevoP.id = 'texto_' + id;
+                        nuevoP.innerHTML = res.comentario;
+                        textarea.replaceWith(nuevoP);
+                        btnGuardar.remove();
+                        btnCancelar.remove();
                     } else {
                         alert("No se pudo editar.");
                     }
                 });
-            }
+            });
+
+            btnCancelar.addEventListener('click', function() {
+                textarea.replaceWith(p);
+                btnGuardar.remove();
+                btnCancelar.remove();
+            });
         }
 
-        // Eliminar
+        // Eliminar (sin confirm nativo, con botones internos)
         if (e.target.classList.contains('btn-eliminar')) {
             const id = e.target.dataset.id;
-            if (confirm("¿Seguro que quieres eliminar este comentario?")) {
+            const comentarioDiv = document.getElementById('comentario_' + id);
+            
+            // Mostrar botones confirmar / cancelar
+            const btnConfirmar = document.createElement('button');
+            btnConfirmar.textContent = 'Confirmar eliminación';
+            btnConfirmar.classList.add('btn-confirmar');
+
+            const btnCancelar = document.createElement('button');
+            btnCancelar.textContent = 'Cancelar';
+            btnCancelar.classList.add('btn-cancelar');
+
+            e.target.style.display = 'none';
+            comentarioDiv.querySelector('.acciones-comentario').appendChild(btnConfirmar);
+            comentarioDiv.querySelector('.acciones-comentario').appendChild(btnCancelar);
+
+            btnConfirmar.addEventListener('click', function() {
                 const data = new FormData();
                 data.append('id', id);
 
@@ -225,12 +277,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(r => r.json())
                 .then(res => {
                     if (res.success) {
-                        document.getElementById('comentario_' + id).remove();
+                        comentarioDiv.remove();
                     } else {
                         alert("No se pudo eliminar.");
                     }
                 });
-            }
+            });
+
+            btnCancelar.addEventListener('click', function() {
+                btnConfirmar.remove();
+                btnCancelar.remove();
+                e.target.style.display = 'inline';
+            });
         }
     });
 });

@@ -108,3 +108,70 @@
 .pelicula-detalle a:hover {
   text-decoration: underline;
 }
+
+/* Contenedor de comentario con acciones a la derecha */
+.comentario-contenido {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.acciones-comentario {
+  display: flex;
+  gap: 10px;
+  margin-left: 15px;
+}
+
+.icono-accion {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icono-accion:hover {
+  transform: scale(1.2);
+}
+
+/* Estilo para el textarea de edición */
+.textarea-editar {
+  width: 100%;
+  min-height: 60px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #555;
+  background: #1d2125;
+  color: #fcfceb;
+  margin-bottom: 5px;
+}
+
+/* Botones de guardar/cancelar */
+.btn-guardar,
+.btn-cancelar {
+  margin-right: 5px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-cancelar {
+  background: #f44336;
+  color: white;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  background-color: #555;
+}
+
+.btn-guardar:hover,
+.btn-cancelar:hover {
+  background-color: #f4bf2c;
+  color: #121518;
+}
