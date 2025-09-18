@@ -47,23 +47,21 @@ include __DIR__ . '/templates/header.php';
                         </h3>
 <div class="valoracion">
     <?php
-    $valor = (float)$pelicula['valoracion'];
-    $maxEstrellas = 5;
-
-    for ($i = 1; $i <= $maxEstrellas; $i++) {
+    $valor = (float)$pelicula['valoracion']; // puede ser decimal
+    for ($i = 1; $i <= 5; $i++) {
         if ($valor >= $i) {
-            // Estrella completa
-            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" alt="Estrella" class="icono-valoracion">';
-        } elseif ($valor >= $i - 0.5) {
-            // Media estrella
-            echo '<img src="' . APP_URL . 'img/icons/media-estrella.svg" alt="Media estrella" class="icono-valoracion">';
+            // estrella completa
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" class="icono-valoracion" alt="Estrella">';
+        } elseif ($valor > $i - 1) {
+            // media estrella
+            echo '<img src="' . APP_URL . 'img/icons/media-estrella.svg" class="icono-valoracion" alt="Media estrella">';
         } else {
-            // Estrella vacía con opacidad
-            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" alt="" class="icono-valoracion icono-vacio">';
+            // estrella vacía
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" class="icono-valoracion icono-vacio" alt="Estrella vacía">';
         }
     }
     ?>
-    <span class="valor-num">(<?= htmlspecialchars($pelicula['valoracion']); ?>/5)</span>
+  <span class="valor-num">(<?= floor($valor); ?>/5)</span>
 </div>
 
                         <div class="usuario-publico">

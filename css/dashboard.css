@@ -90,30 +90,31 @@
   font-size: 1.1rem;
   text-align: center;
 }
-
 .valoracion {
   display: flex;
-  justify-content: center; /* centra horizontalmente */
-  align-items: center; /* alinea verticalmente con el texto */
-  gap: 2px; /* espacio entre iconos */
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
   margin: 5px 0;
+  flex-wrap: nowrap;
 }
 
 .valoracion img.icono-valoracion {
   width: 20px;
   height: 20px;
   object-fit: contain;
+  display: inline-block;
 }
 
 .icono-vacio {
-  opacity: 0.2;
+  filter: grayscale(100%);
+  opacity: 0.3;
 }
 
 .valor-num {
-  margin-left: 5px;
-  font-size: 0.85rem;
+  margin-left: 8px;
+  font-size: 0.95rem;
   color: #aaa;
-  vertical-align: middle;
 }
 
 .usuario-publico {
