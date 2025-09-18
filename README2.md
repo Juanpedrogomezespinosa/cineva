@@ -61,7 +61,9 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 ## - PHP 8+
 
 ## - MySQL / phpMyAdmin
+
 ## - XAMPP
+
 ## - HTML, CSS, JavaScript
 
 ## - VS Code
