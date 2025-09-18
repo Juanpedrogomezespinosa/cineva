@@ -67,7 +67,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ## Es importante listar las herramientas y lenguajes que se usaron. Esto ayuda a que otros sepan qué necesitan instalar para trabajar con el proyecto.
 
-# 6. Instalación y configuración.
+## 6. Instalación y configuración.
 
 ## Instalación
 
@@ -82,9 +82,9 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 - Configura la conexión en includes/db.php
 - Inicia XAMPP (Apache + MySQL) y abre el navegador: http://localhost/proyectos/cineva/
 
-# Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
+### Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
 
-## Cualquier persona pueda levantar la app sin tener que preguntarnos nada extra.
+### Cualquier persona pueda levantar la app sin tener que preguntarnos nada extra.
 
 ---
 
@@ -163,11 +163,11 @@ cineva/
 
 ```
 
-# Documentar la estructura del proyecto con un árbol comentado ayuda a entender qué hace cada carpeta y archivo. Esto es oro para alguien que abre el repositorio por primera vez.
+### Documentar la estructura del proyecto con un árbol comentado ayuda a entender qué hace cada carpeta y archivo. Esto es oro para alguien que abre el repositorio por primera vez.
 
-# 8. Uso de la aplicación.
+## 8. Uso de la aplicación.
 
-## Uso
+### Uso
 
 - Registro de usuario y login.
 - Creación, edición y eliminación de películas.
@@ -175,9 +175,9 @@ cineva/
 - Chat privado en tiempo real.
 - Notificaciones de actividad.
 
-# Aquí contamos lo que el usuario puede hacer dentro de la aplicación.
+### Aquí contamos lo que el usuario puede hacer dentro de la aplicación.
 
-# 9. Contribución
+## 9. Contribución
 
 1. Haz un fork del proyecto.
 2. Crea una rama nueva (`git checkout -b feature-nueva`).
@@ -185,21 +185,19 @@ cineva/
 4. Haz push a tu rama (`git push origin feature-nueva`).
 5. Abre un Pull Request.
 
-# Si queremos que otros desarrolladores participen, les damos un proceso estándar de colaboración.
+### Si queremos que otros desarrolladores participen, les damos un proceso estándar de colaboración.
 
-# 10. Licencia
+## 10. Licencia
 
 Este proyecto se distribuye bajo la licencia MIT.
 Puedes usarlo, modificarlo y compartirlo libremente.
 
-# Indicar la licencia es importante para que quede claro qué puede y qué no puede hacer la gente con el proyecto.
+## Indicar la licencia es importante para que quede claro qué puede y qué no puede hacer la gente con el proyecto.
 
-# 11. Conclusión:
+## 11. Conclusión:
 
 Un README.md bien hecho ahorra tiempo y hace que tu proyecto sea más profesional.
 
 La clave es mantenerlo claro, ordenado y actualizado.
 
 Ahora pueden aplicar esta misma estructura a sus propios proyectos.
-
-# ¿Quieres que ahora también te prepare la **versión sin explicaciones (solo README final de Cineva)** para que la uses como demo visual en GitHub y mostrar la diferencia entre taller y resultado final?
