@@ -82,7 +82,8 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 - Configura la conexión en includes/db.php
 - Inicia XAMPP (Apache + MySQL) y abre el navegador:
 
-`http://localhost/proyectos/cineva/`
+````markdown
+http://localhost/proyectos/cineva/```
 
 # Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
 
@@ -201,3 +202,4 @@ Ahora pueden aplicar esta misma estructura a sus propios proyectos.
 
 # ¿Quieres que ahora también te prepare la **versión sin explicaciones (solo README final de Cineva)** para que la uses como demo visual en GitHub y mostrar la diferencia entre taller y resultado final?
 ```
+````
