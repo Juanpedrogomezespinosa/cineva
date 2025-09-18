@@ -110,10 +110,28 @@
 }
 
 /* Contenedor de comentario con acciones a la derecha */
+.comentario {
+  max-width: 100%;
+  width: 100%;
+  overflow-x: hidden; /* nunca barra horizontal */
+}
+
 .comentario-contenido {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap; /* 👈 permite que el contenido baje si no cabe */
+  max-width: 100%; /* 👈 nunca exceder el ancho del contenedor */
+}
+
+.comentario-contenido p {
+  flex: 1;
+  margin: 0.3rem;
+  white-space: pre-wrap; /* respeta saltos de línea */
+  word-break: break-word; /* rompe palabras largas */
+  overflow-wrap: anywhere; /* fuerza romper en cualquier punto */
+  max-width: 100%; /* nunca exceder el ancho */
+  box-sizing: border-box; /* cuenta padding/border en el ancho */
 }
 
 .acciones-comentario {
