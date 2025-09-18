@@ -50,11 +50,11 @@ Existen secciones habituales que no deberían faltar:
 
 Aplicación web en PHP y MySQL para gestionar y compartir películas y series con otros usuarios.
 Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas.
+```
 
 ## Aquí siempre debemos poner el nombre del proyecto y una descripción breve pero clara.
 
-## 2.Paso 2. Tecnologías utilizadas.
-```
+## 5. Tecnologías utilizadas.
 
 ## Tecnologías
 
@@ -67,7 +67,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ## Es importante listar las herramientas y lenguajes que se usaron. Esto ayuda a que otros sepan qué necesitan instalar para trabajar con el proyecto.
 
-## 3. Instalación y configuración.
+# 6. Instalación y configuración.
 
 ## Instalación
 
@@ -76,14 +76,11 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
    git clone https://github.com/Juanpedrogomezespinosa/cineva.git
    ```
 
-# 3.1 Mueve la carpeta al directorio XAMPP
-# 3.2 Crea una base de datos en PhpMyAdmin llamada cineva
-
-# 3.3 Importa el archivo cineva.sql
-
-# 3.4 Configura la conexión en includes/db.php
-
-# 3.5 Inicia XAMPP (Apache + MySQL) y abre el navegador:
+- Mueve la carpeta al directorio XAMPP
+- Crea una base de datos en PhpMyAdmin llamada cineva
+- Importa el archivo cineva.sql
+- Configura la conexión en includes/db.php
+- Inicia XAMPP (Apache + MySQL) y abre el navegador:
 
 `http://localhost/proyectos/cineva/`
 
