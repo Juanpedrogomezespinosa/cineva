@@ -149,10 +149,24 @@ include __DIR__ . '/../templates/header.php';
                                 <?php echo htmlspecialchars($pelicula['titulo'], ENT_QUOTES, 'UTF-8'); ?>
                             </a>
                         </h3>
-                        <div class="valoracion">
-                            <?php echo str_repeat('⭐', (int)$pelicula['valoracion']); ?>
-                            <?php echo str_repeat('☆', 5 - (int)$pelicula['valoracion']); ?>
-                        </div>
+<div class="valoracion">
+    <?php
+    $valor = (float)$pelicula['valoracion']; // puede ser decimal
+    for ($i = 1; $i <= 5; $i++) {
+        if ($valor >= $i) {
+            // estrella completa
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" class="icono-valoracion" alt="Estrella">';
+        } elseif ($valor > $i - 1) {
+            // media estrella
+            echo '<img src="' . APP_URL . 'img/icons/media-estrella.svg" class="icono-valoracion" alt="Media estrella">';
+        } else {
+            // estrella vacía
+            echo '<img src="' . APP_URL . 'img/icons/estrella.svg" class="icono-valoracion icono-vacio" alt="Estrella vacía">';
+        }
+    }
+    ?>
+  <span class="valor-num">(<?= floor($valor); ?>/5)</span>
+</div>
                         <div class="usuario-publico">
                             Agregada por: 
                             <a href="<?php echo APP_URL; ?>usuarios/perfil.php?id=<?php echo $pelicula['usuario_id']; ?>" style="color: #f4bf2c; font-weight: bold; text-decoration: none;">
