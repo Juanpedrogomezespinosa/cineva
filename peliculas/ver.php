@@ -123,7 +123,14 @@ include __DIR__ . '/../templates/header.php';
                             </strong>
                             <span class="fecha"><?= $com['fecha_comentario']; ?></span>
                         </div>
-                        <p><?= nl2br(htmlspecialchars($com['comentario'])); ?></p>
+                        <p id="texto_<?= $com['id']; ?>"><?= nl2br(htmlspecialchars($com['comentario'])); ?></p>
+
+                        <?php if ($usuario_id && $usuario_id == $com['usuario_id']): ?>
+                            <div class="acciones-comentario">
+                                <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="<?= $com['id']; ?>">
+                                <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="<?= $com['id']; ?>">
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -162,7 +169,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${com.usuario_id}" class="link-social">${com.usuario_nombre}</a></strong>
                         <span class="fecha">${com.fecha_comentario}</span>
                     </div>
-                    <p>${com.comentario.replace(/\n/g, '<br>')}</p>
+                    <p id="texto_${com.id}">${com.comentario.replace(/\n/g, '<br>')}</p>
+                    <div class="acciones-comentario">
+                        <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="${com.id}">
+                        <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="${com.id}">
+                    </div>
                 `;
                 document.getElementById('lista-comentarios').appendChild(div);
                 textarea.value = '';
@@ -170,6 +181,58 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error(error));
         });
     }
+
+    // Eventos para editar y eliminar
+    document.addEventListener('click', function(e) {
+        // Editar
+        if (e.target.classList.contains('btn-editar')) {
+            const id = e.target.dataset.id;
+            const p = document.getElementById('texto_' + id);
+            const textoActual = p.innerText;
+
+            const nuevoTexto = prompt("Editar comentario:", textoActual);
+            if (nuevoTexto && nuevoTexto.trim() !== "") {
+                const data = new FormData();
+                data.append('id', id);
+                data.append('comentario', nuevoTexto);
+
+                fetch('editar_comentario.php', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        p.innerHTML = res.comentario;
+                    } else {
+                        alert("No se pudo editar.");
+                    }
+                });
+            }
+        }
+
+        // Eliminar
+        if (e.target.classList.contains('btn-eliminar')) {
+            const id = e.target.dataset.id;
+            if (confirm("¿Seguro que quieres eliminar este comentario?")) {
+                const data = new FormData();
+                data.append('id', id);
+
+                fetch('eliminar_comentario.php', {
+                    method: 'POST',
+                    body: data
+                })
+                .then(r => r.json())
+                .then(res => {
+                    if (res.success) {
+                        document.getElementById('comentario_' + id).remove();
+                    } else {
+                        alert("No se pudo eliminar.");
+                    }
+                });
+            }
+        }
+    });
 });
 </script>
 
