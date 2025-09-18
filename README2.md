@@ -82,8 +82,8 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 - Configura la conexión en includes/db.php
 - Inicia XAMPP (Apache + MySQL) y abre el navegador:
 
-````markdown
-http://localhost/proyectos/cineva/```
+`````
+http://localhost/proyectos/cineva/````
 
 # Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
 
@@ -187,7 +187,7 @@ cineva/
 
 # 7. ## Licencia
 
-Este proyecto se distribuye bajo la licencia MIT.  
+Este proyecto se distribuye bajo la licencia MIT.
 Puedes usarlo, modificarlo y compartirlo libremente.
 
 # Indicar la licencia es importante para que quede claro qué puede y qué no puede hacer la gente con el proyecto.
@@ -202,4 +202,4 @@ Ahora pueden aplicar esta misma estructura a sus propios proyectos.
 
 # ¿Quieres que ahora también te prepare la **versión sin explicaciones (solo README final de Cineva)** para que la uses como demo visual en GitHub y mostrar la diferencia entre taller y resultado final?
 ```
-````
+`````
