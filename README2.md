@@ -80,11 +80,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 - Crea una base de datos en PhpMyAdmin llamada cineva
 - Importa el archivo cineva.sql
 - Configura la conexión en includes/db.php
-- Inicia XAMPP (Apache + MySQL) y abre el navegador:
-
-```bash
-http://localhost/proyectos/cineva/
-```
+- Inicia XAMPP (Apache + MySQL) y abre el navegador: http://localhost/proyectos/cineva/
 
 # Este apartado explica cómo instalar y ejecutar el proyecto desde cero. La idea es que
 
@@ -92,7 +88,7 @@ http://localhost/proyectos/cineva/
 
 ---
 
-### 📂 Paso 4. Estructura de carpetas
+## 4. Estructura de carpetas 📁
 
 ```markdown
 cineva/
