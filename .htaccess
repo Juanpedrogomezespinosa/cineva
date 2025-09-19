@@ -1,0 +1,28 @@
+# Evitar mostrar errores en producción
+php_flag display_errors Off
+
+# Evitar acceso directo a carpetas sensibles
+<FilesMatch "\.(db|sql|bak|config|ini|log|sh)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Forzar codificación UTF-8 por defecto
+AddDefaultCharset UTF-8
+
+# URLs limpias (opcional, solo si usas mod_rewrite)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Si la URL no corresponde a un archivo existente...
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    # ...y no corresponde a un directorio existente
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Reescribir URLs del tipo /pelicula/123 a pelicula.php?id=$1
+    RewriteRule ^pelicula/([0-9]+)/?$ pelicula.php?id=$1 [L]
+</IfModule>
+
+# Página personalizada de error 404
+ErrorDocument 404 /proyectos/cineva/404.php
