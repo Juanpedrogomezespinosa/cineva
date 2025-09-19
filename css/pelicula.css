@@ -262,14 +262,22 @@
   color: white;
 }
 
-.btn-cancelar {
-  background: #f44336;
-  color: white;
+.btn-confirmar {
+  background-color: #555;
+  border-radius: 6px;
+  padding: 4px 10px;
+  color: #fcfceb;
+}
+
+.btn-confirmar:hover {
+  background-color: #f4bf2c;
+  color: #121518;
 }
 
 .btn-guardar,
 .btn-cancelar {
   background-color: #555;
+  color: #fcfceb;
 }
 
 .btn-guardar:hover,
