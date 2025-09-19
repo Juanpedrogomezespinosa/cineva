@@ -69,9 +69,7 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ---
 
-## 6. Instalación y configuración.
-
-## Instalación
+## 6. Instalación
 
 1. Clona el repositorio:
    ```bash
