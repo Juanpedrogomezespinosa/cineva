@@ -30,6 +30,14 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
 
     <div class="nav-right">
         <?php if ($usuarioActualId): ?>
+
+            <!-- 🔍 Icono e input de búsqueda -->
+            <div class="navbar-search">
+                <img src="<?php echo APP_URL; ?>img/icons/buscar.svg" alt="Buscar" id="search-icon" class="icon">
+                <input type="text" id="search-input" placeholder="Buscar usuarios o publicaciones..." autocomplete="off">
+                <div id="search-results"></div>
+            </div>
+
             <span class="welcome">
                 Bienvenido,
                 <a href="<?php echo APP_URL; ?>usuarios/perfil.php" class="usuario-link">
@@ -293,4 +301,7 @@ if (iconoNotificacionesMovil) {
 cargarNotificaciones();
 setInterval(cargarNotificaciones, 30000);
 </script>
+
+<!-- Script de búsqueda -->
+<script src="<?php echo APP_URL; ?>scripts/buscar.js"></script>
 <?php endif; ?>

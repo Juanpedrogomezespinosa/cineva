@@ -34,6 +34,7 @@ cineva/
 ├── includes/
 │ ├── amistad.php # Función eliminada.
 │ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
+│ ├── buscar_ajax.php
 │ ├── config.php # Configuración general (paths, constantes, etc.)
 │ ├── db.php # Conexión a la base de datos
 │ ├── follows.php
@@ -50,11 +51,14 @@ cineva/
 │
 ├── peliculas/
 │ ├── agregar.php # Formulario para añadir película/serie
+│ ├── editar_comentario.php # Editar comentario
 │ ├── editar.php # Editar película/serie existente
+│ ├── eliminar_comentario.php # Eliminar comentario.
 │ ├── eliminar.php # Eliminar película/serie
 │ └── ver.php # Detalle de película/serie
 |
 ├── scripts/
+│ ├── buscar.js
 │ ├── chat.js
 │ └── notificaciones.js
 |

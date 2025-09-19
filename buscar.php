@@ -1,42 +1,49 @@
 <?php
-require_once "includes/db.php";
-require_once "includes/funciones.php";
-require_once "templates/header.php";
-require_once "templates/navbar.php";
+declare(strict_types=1);
 
-// Obtener término de búsqueda
+require_once __DIR__ . "/includes/config.php";
+require_once __DIR__ . "/includes/db.php";
+require_once __DIR__ . "/includes/funciones.php";
+
+// Esto es un endpoint AJAX, devolvemos JSON
+header('Content-Type: application/json; charset=utf-8');
+
 $termino = isset($_GET['q']) ? limpiarCadena($_GET['q']) : "";
-
 $resultados = [];
+
 if (!empty($termino)) {
-    $stmt = $conn->prepare("SELECT * FROM peliculas WHERE titulo LIKE ? ORDER BY fecha_agregado DESC");
     $like = "%" . $termino . "%";
+
+    // Buscar películas
+    $stmt = $conn->prepare("SELECT id, titulo FROM peliculas WHERE titulo LIKE ? ORDER BY fecha_agregado DESC");
     $stmt->bind_param("s", $like);
     $stmt->execute();
-    $resultados = $stmt->get_result();
+    $resPeliculas = $stmt->get_result();
+    while ($fila = $resPeliculas->fetch_assoc()) {
+        $resultados[] = [
+            'tipo' => 'pelicula',
+            'id' => $fila['id'],
+            'nombre' => $fila['titulo'],
+            'url' => APP_URL . "peliculas/ver.php?id=" . $fila['id']
+        ];
+    }
+    $stmt->close();
+
+    // Buscar usuarios
+    $stmt2 = $conn->prepare("SELECT id, nombre FROM usuarios WHERE nombre LIKE ? ORDER BY nombre ASC");
+    $stmt2->bind_param("s", $like);
+    $stmt2->execute();
+    $resUsuarios = $stmt2->get_result();
+    while ($fila = $resUsuarios->fetch_assoc()) {
+        $resultados[] = [
+            'tipo' => 'usuario',
+            'id' => $fila['id'],
+            'nombre' => $fila['nombre'],
+            'url' => APP_URL . "usuarios/perfil.php?id=" . $fila['id']
+        ];
+    }
+    $stmt2->close();
 }
-?>
 
-<main class="container">
-    <h2>Resultados de búsqueda</h2>
-    <?php if (!empty($termino)): ?>
-        <p>Mostrando resultados para: <strong><?= $termino ?></strong></p>
-        <?php if ($resultados->num_rows > 0): ?>
-            <ul>
-                <?php while ($row = $resultados->fetch_assoc()): ?>
-                    <li>
-                        <a href="pelicula.php?id=<?= $row['id'] ?>">
-                            <?= htmlspecialchars($row['titulo']) ?>
-                        </a>
-                    </li>
-                <?php endwhile; ?>
-            </ul>
-        <?php else: ?>
-            <p>No se encontraron resultados.</p>
-        <?php endif; ?>
-    <?php else: ?>
-        <p>Introduce un término de búsqueda.</p>
-    <?php endif; ?>
-</main>
-
-<?php require_once "templates/footer.php"; ?>
+// Devolver resultados en JSON
+echo json_encode($resultados);

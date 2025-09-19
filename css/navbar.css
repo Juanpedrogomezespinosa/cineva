@@ -104,6 +104,90 @@
 }
 
 /* ============================
+   BUSCADOR NAVBAR
+============================ */
+.nav-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Icono de lupa */
+#search-icon {
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  fill: #f4bf2c; /* amarillo */
+  flex-shrink: 0;
+}
+
+#search-icon:hover {
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+/* Input de búsqueda posicionado encima del navbar */
+#search-input {
+  position: absolute;
+  right: 0; /* alinear a la derecha del icono */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background-color: #121518;
+  color: #fcfceb;
+  transition: width 0.3s ease, padding 0.3s ease;
+  z-index: 1000;
+}
+
+/* Input activo */
+#search-input.active {
+  width: 200px;
+  padding: 6px 10px;
+}
+
+/* Resultados desplegables */
+#search-results {
+  position: absolute;
+  top: 40px; /* justo debajo del input */
+  right: 0;
+  width: 200px; /* igual que el input */
+  background-color: #121518;
+  border: 1px solid #333;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: #fcfceb;
+  display: none;
+  flex-direction: column;
+  z-index: 2000;
+  overflow: hidden;
+}
+
+#search-results a.search-item {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #fcfceb;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease;
+}
+
+#search-results a.search-item:hover {
+  background-color: #1c1f23;
+}
+
+#search-results p {
+  margin: 0;
+  padding: 10px;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+/* ============================
    MENÚ HAMBURGUESA
 ============================ */
 .hamburger {
