@@ -71,10 +71,11 @@ Incluye sistema de usuarios, perfiles, chat, notificaciones y CRUD de películas
 
 ## 6. Instalación
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/Juanpedrogomezespinosa/cineva.git
-   ```
+- Clona el repositorio:
+
+  ```bash
+  git clone https://github.com/Juanpedrogomezespinosa/cineva.git
+  ```
 
 - Mueve la carpeta al directorio XAMPP
 - Crea una base de datos en PhpMyAdmin llamada cineva
