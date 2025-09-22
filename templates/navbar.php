@@ -91,6 +91,19 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
         <span class="texto-notificaciones">Notificaciones</span>
     </a>
 </div>
+<!-- Modal de notificaciones (solo móvil) -->
+<div id="modal-notificaciones" class="modal-notificaciones" aria-hidden="true" role="dialog" aria-labelledby="titulo-modal-notificaciones" style="display: none;">
+  <div class="modal-notificaciones-contenido">
+    <div class="modal-notificaciones-header">
+      <h3 id="titulo-modal-notificaciones">Notificaciones</h3>
+      <button id="btn-cerrar-modal-notificaciones" class="cerrar-modal" aria-label="Cerrar">×</button>
+    </div>
+    <div id="lista-notificaciones-movil" class="lista-notificaciones-movil">
+      <!-- Aquí se inyectan las notificaciones (móvil) -->
+    </div>
+  </div>
+</div>
+
 <?php endif; ?>
 
 <?php if ($usuarioActualId): ?>
@@ -270,32 +283,95 @@ if (iconoNotificaciones) {
 }
 
 if (iconoNotificacionesMovil) {
-    iconoNotificacionesMovil.addEventListener('click', async () => {
-        const lista = document.getElementById('lista-notificaciones');
-        const opening = !lista.classList.contains('show');
-        lista.classList.toggle('show');
+    // Elementos del modal (deben existir en el DOM — por eso insertamos el HTML antes del script)
+    const modalNotificaciones = document.getElementById('modal-notificaciones');
+    const botonCerrarModalNotificaciones = document.getElementById('btn-cerrar-modal-notificaciones');
+    const listaNotificacionesMovil = document.getElementById('lista-notificaciones-movil');
 
-        if (opening) {
+    // Función que abre el modal y carga notificaciones (y marca todas como leídas)
+    async function abrirModalNotificacionesMovil() {
+        if (!modalNotificaciones || !listaNotificacionesMovil) return;
+
+        // Mostrar modal
+        modalNotificaciones.style.display = 'flex';
+        modalNotificaciones.setAttribute('aria-hidden', 'false');
+
+        // Cargar notificaciones y mostrarlas dentro del modal móvil
+        try {
+            const respuesta = await fetch(`${APP_URL}includes/notificaciones_ajax.php`);
+            if (!respuesta.ok) return;
+            const datos = await respuesta.json();
+
+            listaNotificacionesMovil.innerHTML = '';
+            datos.forEach(n => {
+                const item = document.createElement('div');
+                item.classList.add('notificacion-item');
+
+                if (n.tipo === 'seguimiento') {
+                    const yaSigues = Number(n.ya_sigues) === 1;
+                    item.innerHTML = `
+                        <div class="notificacion-texto">${n.origen_nombre} te ha seguido</div>
+                        <button class="follow-btn" data-usuario="${n.origen_id}" data-siguiendo="${yaSigues ? 1 : 0}">
+                            ${yaSigues ? 'Siguiendo' : 'Seguir'}
+                        </button>
+                    `;
+                    const boton = item.querySelector('.follow-btn');
+                    boton.disabled = yaSigues;
+                    boton.addEventListener('click', () => toggleFollow(n.origen_id, boton));
+                } else {
+                    // Link igual que en la versión desktop, usando generarURL
+                    const enlace = generarURL(n);
+                    item.innerHTML = `<a href="${enlace}" class="notificacion-link">${n.origen_nombre} comentó en tu película</a>`;
+                }
+
+                listaNotificacionesMovil.appendChild(item);
+            });
+
+            // Marcar todas como leídas (igual que antes)
             try {
                 const res = await fetch(`${APP_URL}includes/marcar_todas_notificaciones.php`, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: { 'Accept': 'application/json' }
                 });
-                const datos = await res.json();
-                if (datos.success) {
-                    document.getElementById('contador-notificaciones').textContent = '';
-                    document.getElementById('contador-notificaciones').style.display = 'none';
-                    document.getElementById('contador-notificaciones-movil').textContent = '';
-                    document.getElementById('contador-notificaciones-movil').style.display = 'none';
+                const resdatos = await res.json();
+                if (resdatos.success) {
+                    const contadorDesktop = document.getElementById('contador-notificaciones');
+                    const contadorMovil = document.getElementById('contador-notificaciones-movil');
+                    if (contadorDesktop) { contadorDesktop.textContent = ''; contadorDesktop.style.display = 'none'; }
+                    if (contadorMovil) { contadorMovil.textContent = ''; contadorMovil.style.display = 'none'; }
                     cargarNotificaciones();
                 }
             } catch (e) {
-                console.error("Error al marcar todas las notificaciones:", e);
+                console.error("Error al marcar todas las notificaciones (móvil):", e);
             }
+        } catch (error) {
+            console.error("Error al cargar notificaciones para móvil:", error);
         }
-    });
+    }
+
+    // Abrir modal al pulsar el icono de notificaciones en móvil
+    iconoNotificacionesMovil.addEventListener('click', abrirModalNotificacionesMovil);
+
+    // Cerrar modal con el botón de cerrar
+    if (botonCerrarModalNotificaciones) {
+        botonCerrarModalNotificaciones.addEventListener('click', () => {
+            modalNotificaciones.style.display = 'none';
+            modalNotificaciones.setAttribute('aria-hidden', 'true');
+        });
+    }
+
+    // Cerrar modal si el usuario pulsa fuera del contenido
+    if (modalNotificaciones) {
+        modalNotificaciones.addEventListener('click', (evento) => {
+            if (evento.target === modalNotificaciones) {
+                modalNotificaciones.style.display = 'none';
+                modalNotificaciones.setAttribute('aria-hidden', 'true');
+            }
+        });
+    }
 }
+
 
 // Cargar notificaciones al inicio y cada 30 segundos
 cargarNotificaciones();

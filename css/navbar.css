@@ -335,6 +335,87 @@
   display: block;
 }
 
+/* -------------------------
+   MODAL NOTIFICACIONES (MÓVIL)
+   ------------------------- */
+.modal-notificaciones {
+  display: none; /* se abre desde JS */
+  position: fixed;
+  z-index: 3000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 21, 24, 0.85);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Contenido del modal */
+.modal-notificaciones-contenido {
+  background: #121518;
+  color: #fcfceb;
+  width: 92%;
+  max-width: 420px;
+  max-height: 85%;
+  overflow-y: auto;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid #333;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+/* Cabecera */
+.modal-notificaciones-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 8px;
+}
+.modal-notificaciones-header h3 {
+  margin: 0;
+  color: #f4bf2c;
+  font-size: 1.05rem;
+}
+.cerrar-modal {
+  background: none;
+  border: none;
+  color: #f4bf2c;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Lista dentro del modal móvil */
+.lista-notificaciones-movil .notificacion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 6px;
+  border-bottom: 1px solid #232426;
+  color: #fcfceb;
+}
+.lista-notificaciones-movil .notificacion-item .notificacion-link {
+  color: #fcfceb;
+  text-decoration: none;
+}
+.lista-notificaciones-movil .notificacion-item .notificacion-link:hover {
+  color: #f4bf2c;
+}
+
+/* Botón follow en móvil */
+.lista-notificaciones-movil .follow-btn {
+  background-color: #f4bf2c;
+  color: #121518;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .notificacion-item {
   display: flex;
   justify-content: space-between;
