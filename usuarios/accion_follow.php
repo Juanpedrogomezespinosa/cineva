@@ -58,18 +58,32 @@ try {
 
             if ($existe === 0) {
                 $stmt = $pdo->prepare("
-                    INSERT INTO notificaciones (usuario_id, tipo, origen_id, relacion_id, creado_en, leido) 
-                    VALUES (?, 'seguimiento', ?, NULL, NOW(), 0)
+                    INSERT INTO notificaciones 
+                        (usuario_id, tipo, origen_id, relacion_id, creado_en, leido) 
+                    VALUES 
+                        (?, 'seguimiento', ?, NULL, NOW(), 0)
                 ");
                 $stmt->execute([$usuario_objetivo, $usuario_actual]);
             }
-        }
 
-        echo json_encode(['success' => $ok]);
+            echo json_encode([
+                'success' => true,
+                'message' => 'Ahora sigues al usuario y se ha creado la notificación'
+            ]);
+        } else {
+            // Ya seguía o fallo
+            echo json_encode([
+                'success' => true,
+                'message' => 'Ya estabas siguiendo a este usuario'
+            ]);
+        }
 
     } elseif ($accion === 'dejar') {
         $ok = $follows->dejarDeSeguirUsuario($usuario_actual, $usuario_objetivo);
-        echo json_encode(['success' => $ok]);
+        echo json_encode([
+            'success' => $ok,
+            'message' => $ok ? 'Has dejado de seguir al usuario' : 'No estabas siguiendo a este usuario'
+        ]);
 
     } else {
         echo json_encode([
