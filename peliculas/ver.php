@@ -154,6 +154,8 @@ include __DIR__ . '/../templates/header.php';
         }
         ?>
 
+        
+
 <?php $mediaRedondeada = round($media); ?>
 <div id="estrellas-votacion" class="estrellas-votacion" data-pelicula="<?= $pelicula['id']; ?>" data-voto="<?= $usuarioVoto ?? 0; ?>">
     <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -226,49 +228,51 @@ include __DIR__ . '/../templates/header.php';
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const usuarioId = <?= $usuario_id ? $usuario_id : 'null'; ?>;
+    let comentarioAEliminar = null;
+    let comentarioIdAEliminar = null;
 
     // -------------------
     // Comentarios
     // -------------------
-    const form = document.getElementById('form-comentario');
-    if (form) {
-        form.addEventListener('submit', function(evento) {
+    const formularioComentario = document.getElementById('form-comentario');
+    if (formularioComentario) {
+        formularioComentario.addEventListener('submit', function(evento) {
             evento.preventDefault();
-            const textarea = form.querySelector('textarea[name="comentario"]');
-            const comentario = textarea.value.trim();
-            if (!comentario) return;
+            const campoTexto = formularioComentario.querySelector('textarea[name="comentario"]');
+            const textoComentario = campoTexto.value.trim();
+            if (!textoComentario) return;
 
-            const data = new FormData();
-            data.append('comentario', comentario);
-            data.append('ajax', 1);
+            const datos = new FormData();
+            datos.append('comentario', textoComentario);
+            datos.append('ajax', 1);
 
             fetch('ver.php?id=<?= $pelicula['id']; ?>', {
                 method: 'POST',
-                body: data
+                body: datos
             })
             .then(respuesta => respuesta.json())
-            .then(com => {
-                const div = document.createElement('div');
-                div.classList.add('comentario');
-                div.id = 'comentario_' + com.id;
-                div.innerHTML = `
+            .then(comentario => {
+                const nuevoDiv = document.createElement('div');
+                nuevoDiv.classList.add('comentario');
+                nuevoDiv.id = 'comentario_' + comentario.id;
+                nuevoDiv.innerHTML = `
                     <div class="comentario-contenido">
                         <div>
                             <div class="usuario-comentario">
-                                <img src="<?= APP_URL ?>img/avatars/${com.avatar}" alt="${com.usuario_nombre}" class="avatar">
-                                <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${com.usuario_id}" class="link-social">${com.usuario_nombre}</a></strong>
-                                <span class="fecha">${com.fecha_comentario}</span>
+                                <img src="<?= APP_URL ?>img/avatars/${comentario.avatar}" alt="${comentario.usuario_nombre}" class="avatar">
+                                <strong><a href="<?= APP_URL ?>usuarios/perfil.php?id=${comentario.usuario_id}" class="link-social">${comentario.usuario_nombre}</a></strong>
+                                <span class="fecha">${comentario.fecha_comentario}</span>
                             </div>
-                            <p id="texto_${com.id}">${com.comentario.replace(/\n/g, '<br>')}</p>
+                            <p id="texto_${comentario.id}">${comentario.comentario.replace(/\n/g, '<br>')}</p>
                         </div>
                         <div class="acciones-comentario">
-                            <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="${com.id}">
-                            <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="${com.id}">
+                            <img src="<?= APP_URL ?>img/icons/editar.svg" alt="Editar" class="icono-accion btn-editar" data-id="${comentario.id}">
+                            <img src="<?= APP_URL ?>img/icons/delete.svg" alt="Eliminar" class="icono-accion btn-eliminar" data-id="${comentario.id}">
                         </div>
                     </div>
                 `;
-                document.getElementById('lista-comentarios').appendChild(div);
-                textarea.value = '';
+                document.getElementById('lista-comentarios').appendChild(nuevoDiv);
+                campoTexto.value = '';
             })
             .catch(error => console.error(error));
         });
@@ -277,131 +281,161 @@ document.addEventListener('DOMContentLoaded', function() {
     // -------------------
     // Editar y eliminar comentarios
     // -------------------
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function(evento) {
         // Editar comentario
-        if (e.target.classList.contains('btn-editar')) {
-            const id = e.target.dataset.id;
-            const p = document.getElementById('texto_' + id);
-            const textoActual = p.innerText;
+        if (evento.target.classList.contains('btn-editar')) {
+            const id = evento.target.dataset.id;
+            const parrafo = document.getElementById('texto_' + id);
+            const textoOriginal = parrafo.innerText;
 
-            const textarea = document.createElement('textarea');
-            textarea.value = textoActual;
-            textarea.classList.add('textarea-editar');
+            const campoEdicion = document.createElement('textarea');
+            campoEdicion.value = textoOriginal;
+            campoEdicion.classList.add('textarea-editar');
 
-            const btnGuardar = document.createElement('button');
-            btnGuardar.textContent = 'Guardar';
-            btnGuardar.classList.add('btn-guardar');
+            const botonGuardar = document.createElement('button');
+            botonGuardar.textContent = 'Guardar';
+            botonGuardar.classList.add('btn-guardar');
 
-            const btnCancelar = document.createElement('button');
-            btnCancelar.textContent = 'Cancelar';
-            btnCancelar.classList.add('btn-cancelar');
+            const botonCancelar = document.createElement('button');
+            botonCancelar.textContent = 'Cancelar';
+            botonCancelar.classList.add('btn-cancelar');
 
-            p.replaceWith(textarea);
-            textarea.insertAdjacentElement('afterend', btnGuardar);
-            btnGuardar.insertAdjacentElement('afterend', btnCancelar);
+            parrafo.replaceWith(campoEdicion);
+            campoEdicion.insertAdjacentElement('afterend', botonGuardar);
+            botonGuardar.insertAdjacentElement('afterend', botonCancelar);
 
-            btnGuardar.addEventListener('click', function() {
-                const nuevoTexto = textarea.value.trim();
+            botonGuardar.addEventListener('click', function() {
+                const nuevoTexto = campoEdicion.value.trim();
                 if (nuevoTexto === "") return;
 
-                const data = new FormData();
-                data.append('id', id);
-                data.append('comentario', nuevoTexto);
+                const datos = new FormData();
+                datos.append('id', id);
+                datos.append('comentario', nuevoTexto);
 
                 fetch('editar_comentario.php', {
                     method: 'POST',
-                    body: data
+                    body: datos
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        const nuevoP = document.createElement('p');
-                        nuevoP.id = 'texto_' + id;
-                        nuevoP.innerHTML = res.comentario;
-                        textarea.replaceWith(nuevoP);
-                        btnGuardar.remove();
-                        btnCancelar.remove();
+                .then(respuesta => respuesta.json())
+                .then(respuesta => {
+                    if (respuesta.success) {
+                        const nuevoParrafo = document.createElement('p');
+                        nuevoParrafo.id = 'texto_' + id;
+                        nuevoParrafo.innerHTML = respuesta.comentario;
+                        campoEdicion.replaceWith(nuevoParrafo);
+                        botonGuardar.remove();
+                        botonCancelar.remove();
                     } else {
                         alert("No se pudo editar.");
                     }
                 });
             });
 
-            btnCancelar.addEventListener('click', function() {
-                textarea.replaceWith(p);
-                btnGuardar.remove();
-                btnCancelar.remove();
+            botonCancelar.addEventListener('click', function() {
+                campoEdicion.replaceWith(parrafo);
+                botonGuardar.remove();
+                botonCancelar.remove();
             });
         }
 
         // Eliminar comentario
-        if (e.target.classList.contains('btn-eliminar')) {
-            const id = e.target.dataset.id;
+        if (evento.target.classList.contains('btn-eliminar')) {
+            const id = evento.target.dataset.id;
             const comentarioDiv = document.getElementById('comentario_' + id);
 
-            const btnConfirmar = document.createElement('button');
-            btnConfirmar.textContent = 'Confirmar eliminación';
-            btnConfirmar.classList.add('btn-confirmar');
+            if (window.innerWidth <= 600) {
+                comentarioAEliminar = comentarioDiv;
+                comentarioIdAEliminar = id;
+                document.getElementById('modal-eliminar').style.display = 'flex';
+            } else {
+                const botonConfirmar = document.createElement('button');
+                botonConfirmar.textContent = 'Confirmar eliminación';
+                botonConfirmar.classList.add('btn-confirmar');
 
-            const btnCancelar = document.createElement('button');
-            btnCancelar.textContent = 'Cancelar';
-            btnCancelar.classList.add('btn-cancelar');
+                const botonCancelar = document.createElement('button');
+                botonCancelar.textContent = 'Cancelar';
+                botonCancelar.classList.add('btn-cancelar');
 
-            e.target.style.display = 'none';
-            comentarioDiv.querySelector('.acciones-comentario').appendChild(btnConfirmar);
-            comentarioDiv.querySelector('.acciones-comentario').appendChild(btnCancelar);
+                evento.target.style.display = 'none';
+                comentarioDiv.querySelector('.acciones-comentario').appendChild(botonConfirmar);
+                comentarioDiv.querySelector('.acciones-comentario').appendChild(botonCancelar);
 
-            btnConfirmar.addEventListener('click', function() {
-                const data = new FormData();
-                data.append('id', id);
+                botonConfirmar.addEventListener('click', function() {
+                    const datos = new FormData();
+                    datos.append('id', id);
 
-                fetch('eliminar_comentario.php', {
-                    method: 'POST',
-                    body: data
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        comentarioDiv.remove();
-                    } else {
-                        alert("No se pudo eliminar.");
-                    }
+                    fetch('eliminar_comentario.php', {
+                        method: 'POST',
+                        body: datos
+                    })
+                    .then(respuesta => respuesta.json())
+                    .then(respuesta => {
+                        if (respuesta.success) {
+                            comentarioDiv.remove();
+                        } else {
+                            alert("No se pudo eliminar.");
+                        }
+                    });
                 });
-            });
 
-            btnCancelar.addEventListener('click', function() {
-                btnConfirmar.remove();
-                btnCancelar.remove();
-                e.target.style.display = 'inline';
-            });
+                botonCancelar.addEventListener('click', function() {
+                    botonConfirmar.remove();
+                    botonCancelar.remove();
+                    evento.target.style.display = 'inline';
+                });
+            }
         }
     });
+
+    // Confirmar desde el modal
+    const botonModalConfirmar = document.getElementById('btn-confirmar-modal');
+    const botonModalCancelar = document.getElementById('btn-cancelar-modal');
+
+    if (botonModalConfirmar && botonModalCancelar) {
+        botonModalConfirmar.addEventListener('click', function() {
+            const datos = new FormData();
+            datos.append('id', comentarioIdAEliminar);
+
+            fetch('eliminar_comentario.php', {
+                method: 'POST',
+                body: datos
+            })
+            .then(respuesta => respuesta.json())
+            .then(respuesta => {
+                if (respuesta.success && comentarioAEliminar) {
+                    comentarioAEliminar.remove();
+                } else {
+                    alert("No se pudo eliminar.");
+                }
+                document.getElementById('modal-eliminar').style.display = 'none';
+            });
+        });
+
+        botonModalCancelar.addEventListener('click', function() {
+            document.getElementById('modal-eliminar').style.display = 'none';
+        });
+    }
 
     // -------------------
     // Votación con estrellas
     // -------------------
-    const estrellasCont = document.getElementById('estrellas-votacion');
-    if (estrellasCont) {
-        const estrellas = estrellasCont.querySelectorAll('.estrella');
-        const peliculaId = parseInt(estrellasCont.dataset.pelicula);
-        let votoUsuario = parseInt(estrellasCont.dataset.voto);
+    const contenedorEstrellas = document.getElementById('estrellas-votacion');
+    if (contenedorEstrellas) {
+        const estrellas = contenedorEstrellas.querySelectorAll('.estrella');
+        const peliculaId = parseInt(contenedorEstrellas.dataset.pelicula);
+        let votoUsuario = parseInt(contenedorEstrellas.dataset.voto);
 
         function pintarEstrellas(valor) {
-            estrellas.forEach((estrella, idx) => {
-                estrella.classList.toggle('activa', idx < valor);
+            estrellas.forEach((estrella, indice) => {
+                estrella.classList.toggle('activa', indice < valor);
             });
         }
 
-        // Hover
-        estrellas.forEach((estrella, idx) => {
-            estrella.addEventListener('mouseenter', () => pintarEstrellas(idx + 1));
+        estrellas.forEach((estrella, indice) => {
+            estrella.addEventListener('mouseenter', () => pintarEstrellas(indice + 1));
             estrella.addEventListener('mouseleave', () => pintarEstrellas(votoUsuario));
-        });
-
-        // Click
-        estrellas.forEach((estrella, idx) => {
             estrella.addEventListener('click', () => {
-                const valor = idx + 1;
+                const valor = indice + 1;
 
                 fetch('../includes/votos_ajax.php', {
                     method: 'POST',
@@ -410,44 +444,46 @@ document.addEventListener('DOMContentLoaded', function() {
                         estrellas: valor
                     })
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
+                .then(respuesta => respuesta.json())
+                .then(respuesta => {
+                    if (respuesta.success) {
                         votoUsuario = valor;
-
-                        // Mostrar primero el voto del usuario
                         pintarEstrellas(valor);
-                        if (usuarioId) {
-                            const tuVotoSpan = document.getElementById('tu-voto');
-                            if (tuVotoSpan) {
-                                tuVotoSpan.innerText = `Tu voto: ${valor}/5`;
-                            }
+
+                        const tuVoto = document.getElementById('tu-voto');
+                        if (tuVoto) {
+                            tuVoto.innerText = `Tu voto: ${valor}/5`;
                         }
 
-                        // Actualizar la media en texto
-                        const mediaSpan = document.getElementById('media-comunidad');
-                        if (mediaSpan) {
-                            mediaSpan.innerHTML = `Media: <strong>${res.media}</strong>/5 (${res.total} votos)`;
+                        const mediaComunidad = document.getElementById('media-comunidad');
+                        if (mediaComunidad) {
+                            mediaComunidad.innerHTML = `Media: <strong>${respuesta.media}</strong>/5 (${respuesta.total} votos)`;
                         }
 
-                        // Pasados 2 segundos, volver a pintar la media redondeada
                         setTimeout(() => {
-                            pintarEstrellas(Math.round(res.media));
+                            pintarEstrellas(Math.round(respuesta.media));
                         }, 2000);
-
                     } else {
-                        alert(res.error || 'Error al votar');
+                        alert(respuesta.error || 'Error al votar');
                     }
                 });
             });
         });
 
-        // Inicial → pintar la media redondeada
         pintarEstrellas(Math.round(<?= $media; ?>));
     }
-
 });
 </script>
+<div id="modal-eliminar" class="modal">
+  <div class="modal-contenido">
+    <p>¿Estás seguro de que quieres eliminar el comentario?</p>
+    <div class="modal-botones">
+      <button id="btn-confirmar-modal" class="btn-confirmar">Confirmar</button>
+      <button id="btn-cancelar-modal" class="btn-cancelar">Cancelar</button>
+    </div>
+  </div>
+</div>
+
 
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
