@@ -29,7 +29,7 @@
 }
 
 .imagen-error-404 {
-  maximum-width: 500px;
+  max-width: 500px;
   width: 100%;
   height: auto;
 }
