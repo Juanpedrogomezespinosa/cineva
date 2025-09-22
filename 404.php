@@ -1,18 +1,22 @@
 <?php
-// 404.php
+// Archivo 404.php
 // Enviar cabecera HTTP 404 para que los navegadores y buscadores lo detecten correctamente
 http_response_code(404);
 
 include 'templates/header.php';
-
 ?>
 
-<main class="error-404">
-    <div class="container">
-        <img src="img/assets/404.png" alt="Error 404" class="img-404">
-        <h1>¡Ups! Página no encontrada</h1>
-        <p>La página que buscas no existe o fue movida.</p>
-        <a href="index.php" class="btn-volver">Volver al inicio</a>
+<main class="seccion-error-404">
+    <div class="contenedor-error-404">
+        <div class="contenedor-gif">
+            <img src="img/assets/404.gif" alt="Error 404" class="imagen-error-404">
+        </div>
+        <div class="contenedor-texto-404">
+            <h1 class="titulo-error">404</h1>
+            <h2 class="subtitulo-error">Page not found</h2>
+            <p class="mensaje-error-404">La página que buscas no existe o fue movida.</p>
+            <a href="index.php" class="boton-volver">Volver al inicio</a>
+        </div>
     </div>
 </main>
 
