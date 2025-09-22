@@ -82,15 +82,17 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
         <img src="<?php echo APP_URL; ?>img/icons/chat.svg" alt="Chats" width="22" height="22"> Chats
         <span id="contador-mensajes-movil" class="notif-count"></span>
     </a>
-    <a href="<?php echo APP_URL; ?>usuarios/logout.php">
-        <img src="<?php echo APP_URL; ?>img/icons/logout.svg" alt="Cerrar sesión" width="22" height="22"> Cerrar sesión
-    </a>
     <a href="javascript:void(0);" class="icon-notificaciones" id="icono-notificaciones-movil" title="Notificaciones">
         <img src="<?php echo APP_URL; ?>img/icons/notificacion.svg" alt="Notificaciones" width="22" height="22">
         <span id="contador-notificaciones-movil" class="notif-count"></span>
         <span class="texto-notificaciones">Notificaciones</span>
     </a>
+    <!-- Cerrar sesión siempre al final -->
+    <a href="<?php echo APP_URL; ?>usuarios/logout.php" class="cerrar-sesion-movil">
+        <img src="<?php echo APP_URL; ?>img/icons/logout.svg" alt="Cerrar sesión" width="22" height="22"> Cerrar sesión
+    </a>
 </div>
+
 <!-- Modal de notificaciones (solo móvil) -->
 <div id="modal-notificaciones" class="modal-notificaciones" aria-hidden="true" role="dialog" aria-labelledby="titulo-modal-notificaciones" style="display: none;">
   <div class="modal-notificaciones-contenido">
@@ -354,12 +356,17 @@ if (iconoNotificacionesMovil) {
     iconoNotificacionesMovil.addEventListener('click', abrirModalNotificacionesMovil);
 
     // Cerrar modal con el botón de cerrar
-    if (botonCerrarModalNotificaciones) {
-        botonCerrarModalNotificaciones.addEventListener('click', () => {
-            modalNotificaciones.style.display = 'none';
-            modalNotificaciones.setAttribute('aria-hidden', 'true');
-        });
-    }
+if (botonCerrarModalNotificaciones) {
+    botonCerrarModalNotificaciones.addEventListener('click', () => {
+        modalNotificaciones.style.display = 'none';
+        modalNotificaciones.setAttribute('aria-hidden', 'true');
+        
+        // 🔑 Mover el foco de vuelta al icono de notificaciones
+        const icono = document.getElementById('icono-notificaciones-movil');
+        if (icono) icono.focus();
+    });
+}
+
 
     // Cerrar modal si el usuario pulsa fuera del contenido
     if (modalNotificaciones) {
