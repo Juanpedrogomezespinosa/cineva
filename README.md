@@ -122,6 +122,7 @@ cineva/
 │ ├── mensajes*.php # Archivos relacionados con mensajes
 │ ├── notificaciones*.php # Archivos para gestión de notificaciones
 │ └── follows.php # Seguimiento entre usuarios
+│ └── votos_ajax.php
 │
 ├── peliculas/ # CRUD de películas
 │ ├── agregar.php

@@ -133,6 +133,45 @@ include __DIR__ . '/../templates/header.php';
     </div>
 </div>
 
+    <!-- Nota de la comunidad -->
+    <section class="nota-comunidad">
+        <h3>⭐ Nota de la comunidad</h3>
+
+        <?php
+        // Obtener nota actual de la comunidad
+        $stmtMedia = $pdo->prepare("SELECT AVG(estrellas) AS media, COUNT(*) AS total FROM votos WHERE pelicula_id = ?");
+        $stmtMedia->execute([$pelicula['id']]);
+        $stats = $stmtMedia->fetch(PDO::FETCH_ASSOC);
+        $media = $stats['media'] ? round($stats['media'], 2) : 0;
+        $totalVotos = (int)$stats['total'];
+
+        // Saber si este usuario ya votó
+        $usuarioVoto = null;
+        if ($usuario_id) {
+            $stmtVoto = $pdo->prepare("SELECT estrellas FROM votos WHERE pelicula_id = ? AND usuario_id = ?");
+            $stmtVoto->execute([$pelicula['id'], $usuario_id]);
+            $usuarioVoto = $stmtVoto->fetchColumn();
+        }
+        ?>
+
+<?php $mediaRedondeada = round($media); ?>
+<div id="estrellas-votacion" class="estrellas-votacion" data-pelicula="<?= $pelicula['id']; ?>" data-voto="<?= $usuarioVoto ?? 0; ?>">
+    <?php for ($i = 1; $i <= 5; $i++): ?>
+        <span class="estrella <?= ($i <= $mediaRedondeada) ? 'activa' : ''; ?>" data-valor="<?= $i; ?>">★</span>
+    <?php endfor; ?>
+</div>
+<p id="media-comunidad">
+    Media: <strong><?= $media; ?></strong>/5 (<?= $totalVotos; ?> votos)
+</p>
+<?php if ($usuario_id): ?>
+    <p id="tu-voto">
+        <?= $usuarioVoto ? "Tu voto: {$usuarioVoto}/5" : "Aún no has votado"; ?>
+    </p>
+<?php endif; ?>
+
+    </section>
+
+
 
     <section class="comentarios">
         <h2>Comentarios</h2>
@@ -184,9 +223,13 @@ include __DIR__ . '/../templates/header.php';
 </div>
 
 </section>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const usuarioId = <?= $usuario_id ? $usuario_id : 'null'; ?>;
+
+    // -------------------
+    // Comentarios
+    // -------------------
     const form = document.getElementById('form-comentario');
     if (form) {
         form.addEventListener('submit', function(evento) {
@@ -231,9 +274,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Eventos para editar y eliminar
+    // -------------------
+    // Editar y eliminar comentarios
+    // -------------------
     document.addEventListener('click', function(e) {
-        // Editar
+        // Editar comentario
         if (e.target.classList.contains('btn-editar')) {
             const id = e.target.dataset.id;
             const p = document.getElementById('texto_' + id);
@@ -267,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     body: data
                 })
-                .then(r => r.json())
+                .then(res => res.json())
                 .then(res => {
                     if (res.success) {
                         const nuevoP = document.createElement('p');
@@ -289,12 +334,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Eliminar (sin confirm nativo, con botones internos)
+        // Eliminar comentario
         if (e.target.classList.contains('btn-eliminar')) {
             const id = e.target.dataset.id;
             const comentarioDiv = document.getElementById('comentario_' + id);
-            
-            // Mostrar botones confirmar / cancelar
+
             const btnConfirmar = document.createElement('button');
             btnConfirmar.textContent = 'Confirmar eliminación';
             btnConfirmar.classList.add('btn-confirmar');
@@ -315,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'POST',
                     body: data
                 })
-                .then(r => r.json())
+                .then(res => res.json())
                 .then(res => {
                     if (res.success) {
                         comentarioDiv.remove();
@@ -332,7 +376,78 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
+
+    // -------------------
+    // Votación con estrellas
+    // -------------------
+    const estrellasCont = document.getElementById('estrellas-votacion');
+    if (estrellasCont) {
+        const estrellas = estrellasCont.querySelectorAll('.estrella');
+        const peliculaId = parseInt(estrellasCont.dataset.pelicula);
+        let votoUsuario = parseInt(estrellasCont.dataset.voto);
+
+        function pintarEstrellas(valor) {
+            estrellas.forEach((estrella, idx) => {
+                estrella.classList.toggle('activa', idx < valor);
+            });
+        }
+
+        // Hover
+        estrellas.forEach((estrella, idx) => {
+            estrella.addEventListener('mouseenter', () => pintarEstrellas(idx + 1));
+            estrella.addEventListener('mouseleave', () => pintarEstrellas(votoUsuario));
+        });
+
+        // Click
+        estrellas.forEach((estrella, idx) => {
+            estrella.addEventListener('click', () => {
+                const valor = idx + 1;
+
+                fetch('../includes/votos_ajax.php', {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        pelicula_id: peliculaId,
+                        estrellas: valor
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        votoUsuario = valor;
+
+                        // Mostrar primero el voto del usuario
+                        pintarEstrellas(valor);
+                        if (usuarioId) {
+                            const tuVotoSpan = document.getElementById('tu-voto');
+                            if (tuVotoSpan) {
+                                tuVotoSpan.innerText = `Tu voto: ${valor}/5`;
+                            }
+                        }
+
+                        // Actualizar la media en texto
+                        const mediaSpan = document.getElementById('media-comunidad');
+                        if (mediaSpan) {
+                            mediaSpan.innerHTML = `Media: <strong>${res.media}</strong>/5 (${res.total} votos)`;
+                        }
+
+                        // Pasados 2 segundos, volver a pintar la media redondeada
+                        setTimeout(() => {
+                            pintarEstrellas(Math.round(res.media));
+                        }, 2000);
+
+                    } else {
+                        alert(res.error || 'Error al votar');
+                    }
+                });
+            });
+        });
+
+        // Inicial → pintar la media redondeada
+        pintarEstrellas(Math.round(<?= $media; ?>));
+    }
+
 });
 </script>
+
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
