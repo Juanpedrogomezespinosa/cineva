@@ -18,32 +18,35 @@ include __DIR__ . '/../templates/header.php';
 ?>
 
 <section class="seguidores">
+    
     <h1>Seguidores</h1>
     <?php if (count($listaSeguidores) === 0): ?>
         <p>Este usuario no tiene seguidores todavía.</p>
-    <?php else: ?>
-        <ul>
-            <?php foreach ($listaSeguidores as $seguidor): ?>
-                <li data-usuario="<?php echo $seguidor['id']; ?>">
-                    <a href="<?php echo APP_URL; ?>usuarios/perfil.php?id=<?php echo $seguidor['id']; ?>">
-                        <img src="<?php echo APP_URL . 'img/avatars/' . htmlspecialchars($seguidor['avatar'], ENT_QUOTES, 'UTF-8'); ?>" 
-                             alt="Avatar de <?php echo htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8'); ?>" 
-                             width="40" style="border-radius:50%;">
-                        <?php echo htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8'); ?>
-                    </a>
-
-                    <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_id'] !== $seguidor['id']): ?>
-                        <button class="<?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'btn-unfollow' : 'btn-follow'; ?>" 
-                                data-accion="<?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'dejar' : 'seguir'; ?>">
-                            <?php echo $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'Dejar de seguir' : 'Seguir'; ?>
+        <?php else: ?>
+            <ul>
+                <?php foreach ($listaSeguidores as $seguidor): ?>
+                    <li data-usuario="<?= $seguidor['id'] ?>">
+                        <div class="user-info">
+                            <img src="<?= APP_URL ?>img/avatars/<?= htmlspecialchars($seguidor['avatar'], ENT_QUOTES, 'UTF-8') ?>" 
+                            alt="Avatar de <?= htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8') ?>">
+                            <a href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $seguidor['id'] ?>">
+                                <?= htmlspecialchars($seguidor['nombre'], ENT_QUOTES, 'UTF-8') ?>
+                            </a>
+                        </div>
+                        
+                        <?php if (isset($_SESSION['usuario_id']) && $_SESSION['usuario_id'] !== $seguidor['id']): ?>
+                            <button class="<?= $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'btn-unfollow' : 'btn-follow'; ?>" 
+                            data-accion="<?= $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'dejar' : 'seguir'; ?>">
+                            <?= $follows->esSeguidor($_SESSION['usuario_id'], $seguidor['id']) ? 'Dejar de seguir' : 'Seguir'; ?>
                         </button>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-    <?php endif; ?>
-</section>
-
+                        <?php endif; ?>
+                    </li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+            </section>
+            <a class="volver-perfil" href="<?= APP_URL ?>usuarios/perfil.php?id=<?= $id ?>">Volver al perfil</a>
+            
 <script>
 document.querySelectorAll('.seguidores button').forEach(button => {
     button.addEventListener('click', () => {
@@ -51,7 +54,7 @@ document.querySelectorAll('.seguidores button').forEach(button => {
         const usuario_id = li.dataset.usuario;
         const accion = button.dataset.accion;
 
-        fetch('<?php echo APP_URL; ?>usuarios/accion_follow.php', {
+        fetch('<?= APP_URL ?>usuarios/accion_follow.php', {
             method: 'POST',
             headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             body: `usuario_id=${usuario_id}&accion=${accion}`

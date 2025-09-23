@@ -2,7 +2,6 @@
 .seguidores,
 .seguidos {
   max-width: 100%;
-  height: auto;
   margin: 2rem auto;
   padding: 2rem;
   border-radius: 12px;
@@ -35,7 +34,7 @@
 .seguidos li {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between; /* Avatar+nombre a la izq, botón a la der */
   padding: 0.8rem 1rem;
   background: #2a2a2a;
   border-radius: 8px;
@@ -47,20 +46,24 @@
   background: #333;
 }
 
+/* Avatar + nombre juntos */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
 /* Avatar */
-.seguidores li img,
-.seguidos li img {
+.user-info img {
   width: 50px;
   height: 50px;
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid #f4bf2c;
-  flex-shrink: 0;
 }
 
 /* Nombre de usuario */
-.seguidores li a,
-.seguidos li a {
+.user-info a {
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
@@ -68,52 +71,48 @@
   transition: color 0.2s ease;
 }
 
-.seguidores li a:hover,
-.seguidos li a:hover {
+.user-info a:hover {
   color: #f4bf2c;
 }
 
 /* Botones de seguir/dejar de seguir */
-.follow-form {
+.follow-form,
+.seguidores li button,
+.seguidos li button {
   margin-left: auto;
 }
 
-.follow-form button {
+.follow-form button,
+.seguidores li button,
+.seguidos li button {
   padding: 0.4rem 0.8rem;
   border: none;
   border-radius: 6px;
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 /* Botón Seguir */
 .btn-follow {
   background-color: #f4bf2c;
-  border-radius: 5px;
-  padding: 0.2rem;
   color: #121518;
 }
 
 .btn-follow:hover {
-  background-color: #555;
-  color: #fcfceb;
-  font-weight: bold;
+  background-color: #e0ab15;
+  color: #121518;
 }
 
 /* Botón Dejar de seguir */
 .btn-unfollow {
-  border-radius: 5px;
-  padding: 0.2rem;
-  background-color: #f4bf2c;
-  color: #121518;
+  background-color: #555;
+  color: #fcfceb;
 }
 
 .btn-unfollow:hover {
-  background-color: #555;
-  color: #fcfceb;
-  font-weight: bold;
+  background-color: #f4bf2c;
+  color: #121518;
 }
 
 /* Mensaje cuando no hay seguidores/seguidos */
@@ -125,6 +124,23 @@
   margin-top: 1rem;
 }
 
+/* volver al perfil */
+.volver-perfil {
+  display: flex;
+  text-decoration: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: #f4bf2c;
+  font-weight: bold;
+}
+
+.volver-perfil:hover {
+  text-decoration: underline;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
   .seguidores,
@@ -132,14 +148,24 @@
     padding: 1rem;
   }
 
-  .seguidores li img,
-  .seguidos li img {
+  .user-info img {
     width: 40px;
     height: 40px;
   }
 
-  .seguidores li a,
-  .seguidos li a {
+  .user-info a {
     font-size: 0.9rem;
+  }
+
+  .seguidores li,
+  .seguidos li {
+    padding: 0.6rem;
+  }
+
+  /* Que el botón no se descoloque en móvil */
+  .seguidores li button,
+  .seguidos li button {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
   }
 }
