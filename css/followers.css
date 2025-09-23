@@ -90,24 +90,30 @@
 
 /* Botón Seguir */
 .btn-follow {
-  background: #f4bf2c;
-  color: #06080e;
+  background-color: #f4bf2c;
+  border-radius: 5px;
+  padding: 0.2rem;
+  color: #121518;
 }
 
 .btn-follow:hover {
-  background: #e0ac1f;
-  transform: translateY(-2px);
+  background-color: #555;
+  color: #fcfceb;
+  font-weight: bold;
 }
 
 /* Botón Dejar de seguir */
 .btn-unfollow {
-  background: #444;
-  color: #fcfceb;
+  border-radius: 5px;
+  padding: 0.2rem;
+  background-color: #f4bf2c;
+  color: #121518;
 }
 
 .btn-unfollow:hover {
-  background: #666;
-  transform: translateY(-2px);
+  background-color: #555;
+  color: #fcfceb;
+  font-weight: bold;
 }
 
 /* Mensaje cuando no hay seguidores/seguidos */
