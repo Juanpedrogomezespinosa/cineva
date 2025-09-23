@@ -86,3 +86,34 @@
   background-color: #e74c3c;
   color: #fff;
 }
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 44px; /* espacio para el botón */
+  box-sizing: border-box;
+}
+
+.password-wrapper button {
+  position: absolute;
+  inset: 0 10px 0 auto;
+  display: flex;
+  width: auto;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  background: none !important;
+  margin-bottom: 0.6rem;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.password-wrapper button img {
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+}

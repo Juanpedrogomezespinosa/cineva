@@ -76,7 +76,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="email" id="email" name="email" autocomplete="email" required />
 
         <label for="password">Contraseña</label>
-        <input type="password" id="password" name="password" autocomplete="current-password" required />
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" autocomplete="current-password" required />
+            <button type="button" id="togglePassword" aria-label="Mostrar u ocultar contraseña" aria-pressed="false">
+
+                <img src="<?= APP_URL ?>img/icons/ver.svg" alt="Mostrar contraseña" id="toggleIcon">
+            </button>
+        </div>
 
         <button type="submit">Entrar</button>
     </form>
@@ -86,5 +92,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <a href="<?php echo APP_URL; ?>usuarios/register.php">Regístrate aquí</a>
     </p>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const togglePassword = document.getElementById('togglePassword');
+  const passwordInput = document.getElementById('password');
+  const toggleIcon = document.getElementById('toggleIcon');
+
+  if (!togglePassword || !passwordInput || !toggleIcon) return;
+
+  const ICON_SHOW = "<?= APP_URL ?>img/icons/ver.svg";
+  const ICON_HIDE = "<?= APP_URL ?>img/icons/bloquear-ver.svg";
+
+togglePassword.addEventListener('click', () => {
+  const isPassword = passwordInput.type === 'password';
+  passwordInput.type = isPassword ? 'text' : 'password';
+
+  toggleIcon.src = isPassword ? ICON_HIDE : ICON_SHOW;
+  toggleIcon.alt = isPassword ? "Ocultar contraseña" : "Mostrar contraseña";
+  togglePassword.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+});
+
+});
+</script>
 
 <?php include __DIR__ . '/../templates/footer.php'; ?>
