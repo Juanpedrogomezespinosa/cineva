@@ -9,6 +9,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use Dotenv\Dotenv;
+
+// Cargar variables de entorno desde el archivo .env
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
 
 // Verificar si se envió el formulario
 if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['email'])) {
@@ -48,14 +53,20 @@ $mail = new PHPMailer(true);
 
 try {
     $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';
+    $mail->Host       = $_ENV['SMTP_HOST'];             // smtp.gmail.com
     $mail->SMTPAuth   = true;
-    $mail->Username   = 'cinevapp@gmail.com';
-    $mail->Password   = 'dhto jxml abwv gyqt';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = 587;
+    $mail->Username   = $_ENV['SMTP_USER'];             // cinevapp@gmail.com
+    $mail->Password   = $_ENV['SMTP_PASS'];             // contraseña de aplicación
+    $mail->SMTPSecure = $_ENV['SMTP_SECURE'] === 'tls' 
+                        ? PHPMailer::ENCRYPTION_STARTTLS 
+                        : PHPMailer::ENCRYPTION_SMTPS;
+    $mail->Port       = (int) $_ENV['SMTP_PORT'];       // 587
 
-    $mail->setFrom('cinevapp@gmail.com', 'Cineva - Recuperación');
+    // Depuración SMTP (opcional, quitar en producción)
+    // $mail->SMTPDebug = 2;
+    // $mail->Debugoutput = 'html';
+
+    $mail->setFrom($_ENV['SMTP_USER'], 'Cineva - Recuperación');
     $mail->addAddress($usuario['email']);
 
     $mail->isHTML(true);
