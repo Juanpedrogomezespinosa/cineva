@@ -36,7 +36,9 @@
   align-items: center;
   justify-content: space-between; /* Avatar+nombre a la izq, botón a la der */
   padding: 0.8rem 1rem;
-  background: #2a2a2a;
+  border: 0.2px solid #040404;
+  box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.3);
+
   border-radius: 8px;
   transition: transform 0.2s ease, background 0.2s ease;
 }
@@ -44,6 +46,7 @@
 .seguidores li:hover,
 .seguidos li:hover {
   background: #333;
+  border: 1px solid #f4bf2c;
 }
 
 /* Avatar + nombre juntos */
