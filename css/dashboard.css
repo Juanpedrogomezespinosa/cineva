@@ -53,6 +53,8 @@
 }
 
 .card-pelicula:hover {
+  border: 1px solid #f4bf2c;
+
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 

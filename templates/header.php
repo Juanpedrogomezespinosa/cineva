@@ -24,6 +24,7 @@ require_once __DIR__ . '/../includes/config.php';
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/editar-perfil.css" />
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/lista-chats.css" />
   <link rel="stylesheet" href="<?php echo APP_URL; ?>css/error.css" />
+  <link rel="stylesheet" href="<?php echo APP_URL; ?>css/editar.css" />
 </head>
 <body>
   <header class="main-header">
