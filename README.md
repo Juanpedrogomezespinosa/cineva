@@ -146,10 +146,14 @@ cineva/
 │ ├── perfil.php # Perfil con stats, películas, filtros
 │ ├── editar-perfil.php
 │ ├── procesar-editar-perfil.php
+│ ├── procesar-recuperar.php
+│ ├── procesar-restablecer.php
 │ ├── accion_follow.php
 │ ├── seguidores.php
 │ ├── seguidos.php
 │ └── seguidores_ajax.php
+│ └── recuperar.php
+│ └── restablecer.php
 │
 ├── .gitignore
 ├── .htaccess

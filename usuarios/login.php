@@ -86,6 +86,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <button type="submit">Entrar</button>
     </form>
+    <p class="registro-link">
+    ¿Olvidaste tu contraseña?
+    <a href="<?php echo APP_URL; ?>usuarios/recuperar.php">Recupérala aquí</a>
+</p>
+
 
     <p class="registro-link">
         ¿No tienes cuenta?

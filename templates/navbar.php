@@ -22,11 +22,12 @@ $usuarioActualNombre = $_SESSION['usuario_nombre'] ?? '';
         <?php endif; ?>
     </div>
 
-    <div class="nav-center">
-        <a href="<?php echo APP_URL; ?>dashboard.php" class="site-title">
-            🎬 <?php echo APP_NAME; ?>
-        </a>
-    </div>
+<div class="nav-center">
+    <a href="<?php echo $usuarioActualId ? APP_URL . 'dashboard.php' : APP_URL . 'usuarios/login.php'; ?>" class="site-title">
+        🎬 <?php echo APP_NAME; ?>
+    </a>
+</div>
+
 
     <div class="nav-right">
         <?php if ($usuarioActualId): ?>
