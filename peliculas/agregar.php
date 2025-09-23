@@ -4,8 +4,8 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 
 $mensaje = '';
-$database = new Database();
-$conexion = $database->getConnection();
+$baseDeDatos = new Database();
+$conexion = $baseDeDatos->getConnection();
 
 $usuarioId = $_SESSION['usuario_id'] ?? null;
 
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($archivo['error'] === UPLOAD_ERR_OK) {
                 if (in_array($extension, $formatosPermitidos) && $archivo['size'] <= 2 * 1024 * 1024) {
-                    $nuevoNombre = uniqid('portada_') . '.' . $extension;
+                    $nombreNuevo = uniqid('portada_') . '.' . $extension;
                     $carpetaPortadas = __DIR__ . '/../img/portadas';
 
                     if (!is_dir($carpetaPortadas)) {
@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     if (is_writable($carpetaPortadas)) {
-                        $rutaDestino = $carpetaPortadas . '/' . $nuevoNombre;
+                        $rutaDestino = $carpetaPortadas . '/' . $nombreNuevo;
                         if (move_uploaded_file($archivo['tmp_name'], $rutaDestino)) {
-                            $portada = $nuevoNombre;
+                            $portada = $nombreNuevo;
                         } else {
                             $mensaje = 'Error al mover el archivo subido.';
                         }
@@ -59,11 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!$mensaje) {
-            $sql = "INSERT INTO peliculas 
+            $consulta = "INSERT INTO peliculas 
                 (usuario_id, titulo, genero, plataforma, visto, favorito, portada, valoracion, resena, fecha_agregado)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())";
 
-            $sentencia = $conexion->prepare($sql);
+            $sentencia = $conexion->prepare($consulta);
             $resultado = $sentencia->execute([
                 $usuarioId,
                 $titulo,
@@ -128,13 +128,30 @@ include __DIR__ . '/../templates/header.php';
                         </div>
 
                         <div class="container-checkbox">
-                            <label><input type="checkbox" name="visto" /> Visto</label>
-                            <label><input type="checkbox" name="favorito" /> Favorito</label>
+                            <label class="switch">
+                                <input type="checkbox" name="visto" />
+                                <span class="slider"></span>
+                                <span class="label-text">Visto</span>
+                            </label>
+
+                            <label class="switch">
+                                <input type="checkbox" name="favorito" />
+                                <span class="slider"></span>
+                                <span class="label-text">Favorito</span>
+                            </label>
                         </div>
 
                         <div class="form-group">
-                            <label for="valoracion">Valoración (1-5)</label>
-                            <input type="number" id="valoracion" name="valoracion" min="1" max="5" />
+                            <p class="label-titulo">Valoración</p>
+                            <div class="estrellas" id="estrellas">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <img src="<?= APP_URL ?>img/icons/estrella.svg" 
+                                         data-value="<?= $i ?>" 
+                                         alt="estrella <?= $i ?>" 
+                                         class="estrella" />
+                                <?php endfor; ?>
+                            </div>
+                            <input type="hidden" id="valoracion" name="valoracion" value="0" />
                         </div>
                     </div>
 
@@ -161,6 +178,28 @@ include __DIR__ . '/../templates/header.php';
         </div>
         <a class="url" href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const estrellas = document.querySelectorAll('#estrellas .estrella');
+        const campoValoracion = document.getElementById('valoracion');
+
+        estrellas.forEach((estrella, indice) => {
+            estrella.addEventListener('click', () => {
+                const valorSeleccionado = indice + 1;
+                campoValoracion.value = valorSeleccionado;
+
+                estrellas.forEach((estrellaInterna, i) => {
+                    if (i < valorSeleccionado) {
+                        estrellaInterna.classList.add('activo');
+                    } else {
+                        estrellaInterna.classList.remove('activo');
+                    }
+                });
+            });
+        });
+    });
+    </script>
 
     <?php include __DIR__ . '/../templates/footer.php'; ?>
 </body>

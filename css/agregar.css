@@ -167,3 +167,109 @@ textarea {
 .url:hover {
   text-decoration: underline;
 }
+
+/* Contenedor de switches */
+.container-checkbox {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 1rem 0;
+}
+
+/* Cada switch */
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #fcfceb;
+}
+
+/* Checkbox oculto */
+.switch input {
+  display: none;
+}
+
+/* Slider del switch */
+.switch .slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background-color: #2a2f33;
+  border: 2px solid #f4bf2c;
+  border-radius: 20px;
+  transition: background 0.3s, border 0.3s;
+}
+
+.switch .slider::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  background-color: #f4bf2c;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* Cuando está marcado */
+.switch input:checked + .slider {
+  background-color: #f4bf2c;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+  background-color: #06080e;
+}
+
+/* Texto */
+.switch .label-text {
+  font-weight: bold;
+  color: #f4bf2c;
+}
+
+.estrellas {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.estrella {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+/* Al hacer hover sobre una estrella */
+.estrella:hover,
+.estrella:hover ~ .estrella {
+  opacity: 0.3;
+}
+
+/* Las anteriores a la estrella en hover se iluminan */
+.estrella:hover ~ .estrella:not(.activo) {
+  opacity: 0.3;
+}
+
+.estrella:hover,
+.estrella:hover ~ .estrella {
+  opacity: 0.3;
+}
+
+.estrella:hover ~ .estrella {
+  opacity: 0.3;
+}
+
+.estrella:hover {
+  opacity: 1;
+}
+
+/* Las activas (seleccionadas) se mantienen iluminadas */
+.estrella.activo {
+  opacity: 1;
+}
