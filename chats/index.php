@@ -10,33 +10,33 @@ require_once '../includes/auth.php';
 require_once '../includes/db.php';
 require_once '../includes/mensajes.php';
 
-// Usuario actual
-$usuarioActual = $_SESSION['usuario_id'] ?? null;
-if (!$usuarioActual) {
+// Verificar si hay un usuario en sesión
+$usuarioActualId = $_SESSION['usuario_id'] ?? null;
+if (!$usuarioActualId) {
     header('Location: ../usuarios/login.php');
     exit;
 }
 
-// Conexión a la base de datos
+// Conectar a la base de datos
 try {
-    $database = new Database();
-    $db = $database->getConnection();
-} catch (Throwable $e) {
+    $baseDeDatos = new Database();
+    $conexion = $baseDeDatos->getConnection();
+} catch (Throwable $excepcion) {
     echo "<h2>Error de conexión a la base de datos</h2>";
-    echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
+    echo "<pre>" . htmlspecialchars($excepcion->getMessage()) . "</pre>";
     exit;
 }
 
 // Obtener todos los chats del usuario actual
 try {
-    $chats = obtenerChats($db, $usuarioActual);
-} catch (Throwable $e) {
+    $chats = obtenerChats($conexion, $usuarioActualId);
+} catch (Throwable $excepcion) {
     echo "<h2>Error al obtener las conversaciones</h2>";
-    echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
+    echo "<pre>" . htmlspecialchars($excepcion->getMessage()) . "</pre>";
     exit;
 }
 
-// Incluir templates
+// Incluir cabecera
 include '../templates/header.php';
 ?>
 
@@ -49,19 +49,20 @@ include '../templates/header.php';
         <ul class="lista-chats">
             <?php foreach ($chats as $chat): ?>
                 <li class="item-chat">
-                    <a href="chat.php?usuario=<?php echo (int)$chat['id']; ?>">
+                    <a href="chat.php?usuario=<?php echo (int) $chat['id']; ?>">
                         <img 
                             src="../img/avatars/<?php echo htmlspecialchars($chat['avatar'], ENT_QUOTES); ?>" 
                             alt="Avatar de <?php echo htmlspecialchars($chat['nombre'], ENT_QUOTES); ?>" 
-                            width="40"
-                            height="40"
+                            width="50"
+                            height="50"
+                            loading="lazy"
                         >
                         <div class="info-chat">
-                            <strong><?php echo htmlspecialchars($chat['nombre'], ENT_QUOTES); ?></strong><br>
+                            <strong><?php echo htmlspecialchars($chat['nombre'], ENT_QUOTES); ?></strong>
                             <small><?php echo htmlspecialchars($chat['ultimo_mensaje'], ENT_QUOTES); ?></small>
                         </div>
-                        <?php if ((int)$chat['no_leidos'] > 0): ?>
-                            <span class="badge"><?php echo (int)$chat['no_leidos']; ?></span>
+                        <?php if ((int) $chat['no_leidos'] > 0): ?>
+                            <span class="badge"><?php echo (int) $chat['no_leidos']; ?></span>
                         <?php endif; ?>
                     </a>
                 </li>
