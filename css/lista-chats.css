@@ -1,0 +1,108 @@
+/* Contenedor principal */
+.contenedor-chats {
+  max-width: 100%;
+
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #fcfceb;
+}
+
+.contenedor-chats h2 {
+  text-align: center;
+  color: #f4bf2c;
+  margin-bottom: 1.5rem;
+}
+
+/* Lista de chats */
+.lista-chats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item-chat {
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  background-color: #1d2125;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.item-chat a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.75rem 1rem;
+  position: relative;
+}
+
+.item-chat:hover {
+  background-color: #2a2f33;
+  transform: translateY(-2px);
+}
+
+/* Avatar */
+.item-chat img {
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Información del chat */
+.info-chat {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.info-chat strong {
+  display: block;
+  font-size: 1rem;
+  color: #f4bf2c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-chat small {
+  display: block;
+  font-size: 0.85rem;
+  color: #cfcfcf;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badge de mensajes no leídos */
+.badge {
+  background-color: #f4bf2c;
+  color: #121518;
+  border-radius: 50%;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .item-chat a {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-chat {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .badge {
+    top: auto;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    transform: none;
+  }
+}

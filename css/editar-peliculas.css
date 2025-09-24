@@ -1,0 +1,170 @@
+/* Estilos container principal */
+body {
+  background-color: #121518;
+  color: #fcfceb;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container-principal { /* Corregí el nombre de la clase a "container" */
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra horizontalmente el contenido */
+  justify-content: center; /* Centra verticalmente el contenido */
+  min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+  padding: 0.5rem; /* Mantengo el padding por si el contenido es más grande que la pantalla */
+}
+
+/* Estilos del formulario */
+.container-agregar {
+  border: 1.5px solid #f4bf2c;
+  border-radius: 6px;
+  max-width: 800px;
+  width: 100%;
+  padding: 1rem;
+  background-color: #090d10;
+}
+
+.container-agregar h1 {
+  color: #f4bf2c;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+/* Grid para dos columnas */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive: en móviles 1 columna */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+/* Grupos de inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.6rem;
+}
+
+.form-group label {
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  color: #f4bf2c;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #f4bf2c;
+  padding: 0.4rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  background-color: #2a2f33;
+  color: #fcfceb;
+}
+
+/* Contenedor portada */
+.container-portada {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.container-portada img {
+  max-width: 120px;
+}
+
+/* Checkboxes en paralelo */
+.container-checkbox {
+  display: flex;
+  gap: 0.8rem;
+  margin: 0.6rem 0;
+}
+
+.container-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.85rem;
+  color: #fcfceb;
+}
+
+/* Input archivo */
+input[type="file"] {
+  border: 1px dashed #f4bf2c;
+  background-color: #2a2f33;
+  padding: 0.4rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #fcfceb;
+}
+
+input[type="file"]::-webkit-file-upload-button,
+input[type="file"]::file-selector-button {
+  background: #f4bf2c;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #06080e;
+  font-size: 0.85rem;
+}
+
+/* Textarea reseña */
+textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+/* Botón */
+.form-actions {
+  text-align: center;
+}
+
+.form-actions button {
+  width: 50%;
+  min-height: 2.2rem;
+  border-radius: 6px;
+  background-color: #f4bf2c;
+  font-size: 0.95rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease-in-out;
+  color: #06080e;
+}
+
+.form-actions button:hover {
+  box-shadow: 0px 4px 10px rgba(244, 191, 44, 0.5);
+}
+
+/* Enlaces */
+.url {
+  margin-top: 0.6rem;
+  margin-bottom: 2rem;
+  text-decoration: none;
+  color: #f4bf2c;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+.url:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,41 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* General */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background-color: #121518;
+  color: #fcfceb;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header y Footer */
+header,
+footer {
+  background-color: #090d10;
+  padding: 15px 30px;
+  color: #f4bf2c;
+}
+
+/* Header sin text-align para que navbar funcione con flex */
+header.main-header {
+  text-align: left;
+}
+
+/* Main */
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Footer */
+
+footer {
+  text-align: center;
+}

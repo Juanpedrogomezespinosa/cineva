@@ -1,0 +1,139 @@
+/* Contenedor general */
+.seguidores,
+.seguidos {
+  max-width: 100%;
+  height: auto;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  color: #fff;
+}
+
+/* Títulos */
+.seguidores h1,
+.seguidos h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #f4bf2c;
+  border-bottom: 2px solid #333;
+  padding-bottom: 0.5rem;
+}
+
+/* Lista de usuarios */
+.seguidores ul,
+.seguidos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+/* Elementos de la lista */
+.seguidores li,
+.seguidos li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  background: #2a2a2a;
+  border-radius: 8px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.seguidores li:hover,
+.seguidos li:hover {
+  background: #333;
+}
+
+/* Avatar */
+.seguidores li img,
+.seguidos li img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #f4bf2c;
+  flex-shrink: 0;
+}
+
+/* Nombre de usuario */
+.seguidores li a,
+.seguidos li a {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.seguidores li a:hover,
+.seguidos li a:hover {
+  color: #f4bf2c;
+}
+
+/* Botones de seguir/dejar de seguir */
+.follow-form {
+  margin-left: auto;
+}
+
+.follow-form button {
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+/* Botón Seguir */
+.btn-follow {
+  background: #f4bf2c;
+  color: #06080e;
+}
+
+.btn-follow:hover {
+  background: #e0ac1f;
+  transform: translateY(-2px);
+}
+
+/* Botón Dejar de seguir */
+.btn-unfollow {
+  background: #444;
+  color: #fcfceb;
+}
+
+.btn-unfollow:hover {
+  background: #666;
+  transform: translateY(-2px);
+}
+
+/* Mensaje cuando no hay seguidores/seguidos */
+.seguidores p,
+.seguidos p {
+  text-align: center;
+  font-size: 1rem;
+  color: #aaa;
+  margin-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .seguidores,
+  .seguidos {
+    padding: 1rem;
+  }
+
+  .seguidores li img,
+  .seguidos li img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .seguidores li a,
+  .seguidos li a {
+    font-size: 0.9rem;
+  }
+}

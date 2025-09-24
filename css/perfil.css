@@ -1,0 +1,288 @@
+/* Contenedor principal del perfil */
+.perfil {
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #fcfceb;
+  padding: 20px;
+}
+
+/* Títulos */
+.perfil h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #f4bf2c;
+  text-align: center;
+}
+
+.perfil h2 {
+  font-size: 1.5rem;
+  margin: 15px 0;
+  color: #f4bf2c;
+  border-bottom: 1px solid #333;
+  padding-bottom: 5px;
+}
+
+/* Información estilo Twitter */
+.perfil-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+/* Avatar */
+.avatar-perfil img {
+  border-radius: 50%;
+  border: 2px solid #f4bf2c;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+/* Detalles del perfil */
+.perfil-detalles {
+  flex: 1;
+}
+
+.perfil-nombre {
+  font-size: 1.6rem;
+  margin: 0;
+  color: #f4bf2c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.perfil-biografia {
+  font-size: 1rem;
+  margin: 10px 0;
+  color: #fcfceb;
+  line-height: 1.4;
+}
+
+/* Seguidores, seguidos y publicaciones */
+.perfil-social {
+  margin-top: 10px;
+}
+
+.perfil-social p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #fcfceb;
+}
+
+.link-social {
+  text-decoration: none;
+  color: #f4bf2c;
+}
+
+.link-social:hover {
+  text-decoration: underline;
+}
+
+/* Acciones: seguir y mensaje horizontal */
+.perfil-acciones-botones {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+/* Botón seguir/dejar de seguir */
+.btn-seguir {
+  padding: 6px 14px;
+  background-color: #f4bf2c;
+  color: #121518;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.btn-seguir:hover {
+  background-color: #e0a900;
+}
+
+/* Icono de mensaje */
+.btn-mensaje img {
+  display: block;
+}
+
+/* Editar perfil */
+.editar-perfil img {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.editar-perfil img:hover {
+  transform: scale(1.1);
+}
+
+/* Botón de agregar película */
+.btn-agregar {
+  display: inline-block;
+  margin: 15px 0 25px;
+  padding: 10px 16px;
+  background-color: #f4bf2c;
+  color: #121518;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.btn-agregar:hover {
+  background-color: #e0a900;
+}
+
+/* Contenedor de tarjetas */
+.cards-container {
+  display: grid;
+  gap: 20px;
+  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Tarjeta individual */
+.card-pelicula {
+  background-color: #1d2125;
+  border: 1px solid #333;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-pelicula:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Portada de la película */
+.card-pelicula img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.sin-portada {
+  width: 100%;
+  height: 180px;
+  background-color: #333;
+  color: #f4bf2c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* Contenido de la tarjeta */
+.card-contenido {
+  padding: 10px;
+  color: #fcfceb;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-contenido h3 {
+  margin: 0;
+  color: #f4bf2c;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.valoracion {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #f4bf2c;
+}
+
+.usuario-publico {
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+/* Acciones: editar/eliminar */
+.acciones-card {
+  margin-top: 8px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+}
+
+.acciones-card a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: transform 0.2s;
+}
+
+.acciones-card a:hover {
+  background: none;
+  color: inherit;
+  transform: scale(1.1);
+}
+
+.acciones-card a img {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s;
+}
+
+.acciones-card a:hover img {
+  transform: scale(1.1);
+}
+
+/* Responsive máximo 5 columnas */
+@media (min-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1199px) {
+  .cards-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .perfil-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatar-perfil img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .perfil-detalles {
+    margin-top: 10px;
+  }
+
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-container {
+    grid-template-columns: 1fr;
+  }
+}

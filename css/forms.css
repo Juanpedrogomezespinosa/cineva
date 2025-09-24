@@ -1,0 +1,88 @@
+/* Formulario general */
+.form-container {
+  max-width: 400px;
+  margin: 40px auto;
+  background-color: #1d2125;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  text-align: center;
+  color: #f4bf2c;
+}
+
+.form-container label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.form-container input,
+.form-container select,
+.form-container textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #121518;
+  color: #fcfceb;
+}
+
+.form-container input::placeholder,
+.form-container textarea::placeholder {
+  color: #ccc;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #f4bf2c;
+  color: #121518;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.form-container button:hover {
+  background-color: #e0a900;
+}
+
+.registro-link {
+  margin-top: 15px;
+  text-align: center;
+  text-decoration: none;
+  color: #fcfceb;
+}
+
+.registro-link a {
+  text-decoration: none;
+  color: #f4bf2c;
+}
+
+.registro-link a:hover {
+  text-decoration: underline;
+  color: #f4bf2c;
+}
+
+/* Mensajes */
+.mensaje {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.mensaje-exito {
+  background-color: #2ecc71;
+  color: #fff;
+}
+
+.mensaje-error {
+  background-color: #e74c3c;
+  color: #fff;
+}

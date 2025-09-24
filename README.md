@@ -1,34 +1,87 @@
 # 🎬 Proyecto PHP: Lista de Películas por Ver
 
-#### Arquitectura:
+#### estructura de carpetas:
 
-next-film/
+cineva/
 │
+|
+├── chats/
+│ └── cargar_mensajes.php
+│ └── chat.php
+│ └── enviar_mensaje.php
+│ └── index.php
+|
+|
 ├── css/
-│ └── styles.css
+│ └── agregar.css
+│ └── chat.css
+│ └── dashboard.css # Estilos específicos de dashboard (tablas, resúmenes)
+│ └── editar-perfil.css
+│ └── followers.css
+│ └── forms.css # Estilos de login, register, agregar/editar películas
+│ └── lista-chats.css
+│ └── main.css # Estilos generales: reset, body, headers, footer, layout
+│ └── navbar.css # Solo estilos del navbar
+│ └── pelicula.css
+│ └── perfil.css
+│ └── styles.css # importación de todos los anteriores
 │
 ├── img/
-│ └── portadas/ # Aquí se guardarán las portadas subidas por los usuarios
+│ ├── avatars/ # avatar de usuario
+│ |── icons/ # iconos usados en la app
+│ └── portadas/ # Portadas de películas/series
 │
 ├── includes/
-│ ├── db.php # Conexión a la base de datos
+│ ├── amistad.php # Función eliminada.
 │ ├── auth.php # Lógica de autenticación (login/logout, sesiones)
-│ └── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
+│ ├── config.php # Configuración general (paths, constantes, etc.)
+│ ├── db.php # Conexión a la base de datos
+│ ├── follows.php
+│ ├── funciones.php # Funciones auxiliares (limpieza, validaciones, filtros)
+│ ├── marcar_notificacion_individual.php
+│ ├── marcar_notificaciones.php
+│ ├── marcar_todas_notificaciones.php
+│ ├── mensajes_ajax.php
+│ ├── mensajes.php
+│ ├── notificaciones_ajax.php
+│ ├── peliculas.php # Funciones específicas para CRUD de películas
+│ |── scraper.php # (opcional) scraping de plataformas de streaming sin usar actualmente, esta será una implementación futura.
+│ └── usuarios.php # Funciones específicas para CRUD de usuarios
 │
+├── peliculas/
+│ ├── agregar.php # Formulario para añadir película/serie
+│ ├── editar.php # Editar película/serie existente
+│ ├── eliminar.php # Eliminar película/serie
+│ └── ver.php # Detalle de película/serie
+|
+├── scripts/
+│ ├── chat.js
+│ └── notificaciones.js
+|
 ├── templates/
 │ ├── header.php
-│ └── footer.php
+│ ├── footer.php
+│ └── navbar.php # Menú superior con búsqueda, login/logout, etc.
 │
-├── index.php # Página de inicio con opción de login o registro
-├── register.php # Registro de nuevos usuarios
-├── logout.php # Cierre de sesión
-├── dashboard.php # Panel principal del usuario
-├── agregar.php # Formulario para añadir película
-├── editar.php # Editar película existente
-├── eliminar.php # Confirmación y acción de eliminar película
-├── ver.php # Detalles individuales de una película
-└── .htaccess # Opcional para seguridad básica (evitar acceso a includes)
-└── .gitignore
+│
+├── usuarios/
+│ ├── accion_follow.php
+│ ├── editar-perfil.php
+│ ├── login.php
+│ ├── logout.php
+│ ├── perfil.php # Página de usuario con sus películas, filtros, stats
+│ ├── procesar-editar-perfil.php
+│ ├── register.php # Registro de nuevos usuarios
+│ └── seguidores_ajax.php
+│ └── seguidores.php
+│ └── seguidos.php
+│
+├──.gitignore
+├──.htaccess
+├── buscar.php # Resultados de búsqueda
+├── dashboard.php # Feed general con todas las películas/series añadidas
+├── index.php # Página de inicio (landing o feed público si no logueado)
+└── README.md # Documentación del proyecto
 
 #### Paleta de colores:
 
@@ -123,3 +176,133 @@ Para los más experimentados del grupo o quien quiera asumir un reto.
 | 🟢 **Básicas**     | 8          | Maquetación, formularios, frontend simple             |
 | 🟡 **Intermedias** | 8          | Backend básico: sesiones, conexión BD, login/registro |
 | 🔴 **Avanzadas**   | 8          | Lógica compleja, seguridad, filtros, valoración       |
+
+🚨Próximas implementaciones:🚨
+
+- Nueva sección con filtros: género, plataforma, visto (si o no) favoritos, etc.
+- Barra de búsqueda. añadir una búsqueda
+
+- Hacer un diseño más profesional, en vez de ser un listado, quiero que sea una lista de cartas.
+
+- Hacer que todas las películas añadidas por los usuarios aparezcan en el dashboard,
+- En el perfil de cada usuario deben salir sus películas y series
+
+- La página de usuario tendrá sección de filtros también para filtrar tus propias películas.
+
+- Cuando en la página de película, aparezca, "agregada por" y un nombre, que ese nombre sea un enlace hacia el perfil de usuario.
+
+- añadir sistema de seguir usuarios
+
+- en el perfil de usuario debe aparecer el número de publicaciones, las personas que sigue y las que lo siguen.
+
+## Próximas implementaciones 🚀
+
+### 1️⃣ Dashboard (dashboard.php)
+
+- Mostrar **todas las películas de todos los usuarios**.
+- Añadir **sección de filtros** por:
+  - Género
+  - Plataforma
+  - Visto (Sí/No)
+  - Favorito (Sí/No)
+- Implementar **barra de búsqueda** por título de película.
+- Cambiar diseño de listado a **cartas (cards)**.
+- Cada card debe mostrar:
+  - Título
+  - Género
+  - Plataforma
+  - Visto
+  - Favorito
+  - “Agregada por” con enlace al perfil del usuario.
+
+### 2️⃣ Perfil de usuario (usuarios/perfil.php)
+
+- Mostrar **todas las películas del usuario** en formato cards.
+- Añadir **filtros** para sus propias películas.
+- Mostrar **estadísticas del usuario**:
+  - Número de publicaciones
+  - Personas que sigue
+  - Personas que lo siguen
+- Implementar **botón seguir / dejar de seguir** usuarios.
+- Mantener enlace “Agregada por” en cada card.
+
+### 3️⃣ Películas (peliculas/)
+
+- Modificar `ver.php` para mostrar:
+  - “Agregada por” con enlace al perfil del usuario.
+- Mantener funcionalidad CRUD (agregar, editar, eliminar) asociada al `usuario_id`.
+
+### 4️⃣ Sistema de seguidores (includes/usuarios.php o nuevo includes/seguidores.php)
+
+- Funciones para:
+  - Seguir a un usuario
+  - Dejar de seguir a un usuario
+  - Consultar lista de seguidores
+  - Consultar lista de seguidos
+- Integrar con perfil y dashboard.
+
+### 5️⃣ Filtros y búsqueda (includes/funciones.php o includes/peliculas.php)
+
+- Crear funciones reutilizables para:
+  - Aplicar filtros dinámicos (género, plataforma, visto, favorito)
+  - Aplicar búsqueda por título
+  - Combinar filtros y búsqueda
+- Integrar en:
+  - Dashboard
+  - Perfil de usuario
+  - Página de búsqueda general (`buscar.php`)
+
+### 6️⃣ Frontend / CSS
+
+- Crear **cards CSS** para películas en `dashboard.css`.
+- Estilos de **barra de filtros** (inputs, selects, checkboxes).
+- Estilos para **botón seguir / dejar de seguir**.
+- Ajustes **responsive** para desktop y móvil.
+
+### 7️⃣ Integración general
+
+- Añadir enlaces de “perfil” en dashboard y página de película.
+- Revisar seguridad:
+  - Evitar mostrar botones de editar/eliminar a otros usuarios.
+  - Sanitizar variables de URL.
+- Probar todas las consultas con filtros combinados.
+
+nueva idea: que te aparezca una notificación cada vez que alguien comente tu publicación y cada vez que te siga alguien.
+
+cuando entres en el perfil de alguien que te sigue, debe poner "te sigue"
+
+|---------------------------------------------------|
+| Nombre usuario |
+|---------------------------------------------------|
+| |mensaje entrante| |
+| |
+| |mensaje saliente| |
+| |
+| |
+| |
+| |
+| |
+| |
+|---------------------------------------------------|
+| |boton enviar| |
+|---------------------------------------------------|
+
+estructura del mensaje:
+
+|-------------------------|
+|texto mensaje |
+| |
+| hora |
+|-------------------------|
+La hora debe ser en formato 24 horas, por ejemplo 21:09
+
+próximas implementaciones:
+
+- Sistema de notificaciones para nuevos seguidores, nuevos comentarios en la publicación. (añadir icono campana)
+- Hacer que en el icono de chats aparezca un número cada vez que te hablen.
+- hacer que los comentarios dentro de la publicación puedan editarse y eliminarse.
+- añadir posibilidad de enviar publicación a otro usuario, es decir, añadir opción de compartir.
+- Añadir sección para ti y sección seguidores (dividir el contenido entre usuarios que sigues (seguidores) y lo que te recomienda la app (para ti)) en el front se dará la opción de elegir pestaña.
+- hacer todas las pantallas responsive tamaño tablet y móvil.
+
+mandar proyecto a: IFCD0210mainjobs@gmail.com
