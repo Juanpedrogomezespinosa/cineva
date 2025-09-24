@@ -138,7 +138,7 @@ textarea {
   justify-content: space-between;
   gap: 2rem;
   margin-bottom: 1.5rem;
-  flex-wrap: wrap; /* Para que no se rompa en pantallas pequeñas */
+  flex-wrap: wrap;
 }
 
 .form-horizontal .columna {
@@ -177,4 +177,53 @@ textarea {
 .form-actions {
   text-align: center;
   width: 100%;
+}
+
+/* ============================
+   Media queries
+============================ */
+
+/* Pantallas pequeñas (móviles) */
+@media screen and (max-width: 768px) {
+  .container-agregar {
+    background-color: transparent;
+    border: none;
+    padding: 1rem;
+  }
+
+  .form-horizontal {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}
+
+/* Pantallas grandes (1920px o más) */
+@media screen and (min-width: 1920px) {
+  .containter-principal {
+    margin: 0;
+    min-height: 100vh;
+    justify-content: center;
+  }
+
+  .container-agregar {
+    max-width: 900px;
+    width: 90%;
+    max-height: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .form-horizontal {
+    gap: 3rem;
+  }
+
+  .form-actions button {
+    width: 40%;
+    font-size: 1.1rem;
+  }
 }
