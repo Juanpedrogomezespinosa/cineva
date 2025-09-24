@@ -297,3 +297,91 @@ textarea {
   display: block;
   box-shadow: 0 0 8px rgba(244, 191, 44, 0.3);
 }
+/* ==========================
+   Responsive: pantallas pequeñas
+   ========================== */
+@media (max-width: 768px) {
+  /* contenedor padre */
+  .containter-principal {
+    margin: 0.6rem;
+    max-width: 100%;
+  }
+
+  /* contenedor del formulario */
+  .container-agregar {
+    border: none !important;
+    background-color: #121518 !important; /* integrado con el fondo */
+    padding: 0.8rem; /* menos padding */
+    max-width: 100%;
+  }
+
+  /* grid a una sola columna */
+  .form-grid,
+  .formulario-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* botones ocupan todo el ancho */
+  .form-actions button,
+  .acciones-formulario button {
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 8px;
+  }
+
+  /* inputs y textarea legibles en móvil */
+  .form-group input,
+  .form-group textarea,
+  .formulario-grupo input,
+  .formulario-grupo textarea {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+}
+
+/* ==========================
+   Responsive: pantallas ≥ 1920px
+   ========================== */
+@media (min-width: 1920px) {
+  /* contenedor padre ocupa la pantalla y centra el contenido */
+  .containter-principal {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    margin: 0;
+    width: 100vw;
+    box-sizing: border-box;
+  }
+
+  /* formulario más ancho, con scroll interno si es muy alto */
+  .container-agregar {
+    min-width: 1000px;
+    width: calc(100% - 4rem);
+    min-height: 700px;
+    max-height: calc(100vh - 4rem);
+    overflow: auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  /* grid se mantiene en 2 columnas con espacio cómodo */
+  .form-grid,
+  .formulario-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  /* botón un poco más estrecho en escritorio amplio */
+  .form-actions button,
+  .acciones-formulario button {
+    width: 40%;
+    min-height: 3rem;
+    font-size: 1.1rem;
+  }
+}
