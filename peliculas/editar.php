@@ -191,8 +191,9 @@ include __DIR__ . '/../templates/header.php';
 
     </div>
 <div class="volver-dashboard">
-    <a href="dashboard.php">Volver al dashboard</a>
+    <a href="<?= APP_URL ?>dashboard.php">Volver al dashboard</a>
 </div>
+
 
 
 <script>
