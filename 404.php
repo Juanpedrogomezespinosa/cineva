@@ -1,6 +1,5 @@
 <?php
 // Archivo 404.php
-// Enviar cabecera HTTP 404 para que los navegadores y buscadores lo detecten correctamente
 http_response_code(404);
 
 require_once __DIR__ . '/includes/config.php';
