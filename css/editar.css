@@ -9,7 +9,7 @@ body {
   padding: 0;
 }
 
-/* Contenedor principal (igual estilo que agregar) */
+/* Contenedor principal */
 .editar-contenedor {
   border: 1.8px solid #f4bf2c;
   border-radius: 8px;
@@ -30,7 +30,7 @@ body {
 /* ====== Grid 3 columnas ====== */
 .editar-grid {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1fr; /* izquierda (portada) - centro (campos) - derecha (portada+reseña) */
+  grid-template-columns: 1fr 1.2fr 1fr; /* izquierda - centro - derecha */
   gap: 1.5rem;
   align-items: start;
   margin-bottom: 1rem;
@@ -128,7 +128,7 @@ body {
   box-sizing: border-box;
 }
 
-/* ====== Switch / slider (robusto) ====== */
+/* ====== Switch ====== */
 .editar-contenedor .switch {
   display: inline-flex;
   align-items: center;
@@ -140,7 +140,6 @@ body {
   color: #f4bf2c;
 }
 
-/* ocultar visualmente input pero mantener accesible */
 .editar-contenedor .switch input {
   position: absolute;
   width: 1px;
@@ -154,7 +153,6 @@ body {
   opacity: 0;
 }
 
-/* la "caja" */
 .editar-contenedor .switch .slider {
   display: inline-block;
   position: relative;
@@ -163,11 +161,9 @@ body {
   background-color: #2a2f33;
   border: 2px solid #f4bf2c;
   border-radius: 999px;
-  box-sizing: border-box;
   transition: background 0.22s ease, border-color 0.22s ease;
 }
 
-/* el círculo interior */
 .editar-contenedor .switch .slider::before {
   content: "";
   position: absolute;
@@ -178,10 +174,8 @@ body {
   background-color: #f4bf2c;
   border-radius: 50%;
   transition: transform 0.22s ease, background 0.22s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
-/* estado checked */
 .editar-contenedor .switch input:checked + .slider {
   background-color: #f4bf2c;
   border-color: #f4bf2c;
@@ -191,41 +185,24 @@ body {
   background-color: #06080e;
 }
 
-/* texto del switch */
 .editar-contenedor .switch .label-text {
   font-weight: bold;
   color: #f4bf2c;
 }
 
-/* contenedor visto/favorito */
-.visto-favorito {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin: 1rem 0;
-}
-
-.valoracion-editar {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centra en horizontal */
-  justify-content: center; /* Centra en vertical si hace falta */
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
+/* ====== Estrellas ====== */
 .valoracion-editar label {
-  margin-bottom: 8px;
-  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
   text-align: center;
+  font-weight: bold;
+  color: #f4bf2c;
 }
 
-/* ====== Estrellas (igual que en agregar) ====== */
 .estrellas-editar {
   display: flex;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  gap: 0.4rem;
 }
 
 .estrella-editar {
@@ -236,19 +213,14 @@ body {
   transition: opacity 0.2s;
 }
 
-.estrella-editar:hover {
-  opacity: 1;
-}
-
-/* las seleccionadas mantienen opacidad completa */
 .estrella-editar.activo {
   opacity: 1;
 }
 
-/* ====== Botón actualizar ====== */
+/* ====== Botón ====== */
 .form-actions {
   text-align: center;
-  margin-top: 0.8rem;
+  margin-top: 1rem;
 }
 
 .form-actions button {
@@ -260,23 +232,23 @@ body {
   font-weight: bold;
   border: none;
   cursor: pointer;
-  transition: box-shadow 0.2s ease-in-out;
   color: #06080e;
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .form-actions button:hover {
   box-shadow: 0px 5px 12px rgba(244, 191, 44, 0.5);
 }
 
-/* enlace volver */
+/* ====== Enlace volver ====== */
 .volver-dashboard {
   text-align: center;
-  margin-top: 20px;
+  margin: 1.5rem 0;
 }
 
 .volver-dashboard a {
-  color: #f4bf2c;
   text-decoration: none;
+  color: #f4bf2c;
   font-weight: bold;
 }
 
@@ -284,18 +256,63 @@ body {
   text-decoration: underline;
 }
 
-/* ====== Responsive ====== */
-@media (max-width: 900px) {
+/* ==========================
+   Responsive: pantallas pequeñas
+   ========================== */
+@media (max-width: 768px) {
+  .editar-contenedor {
+    border: none !important;
+    background-color: #121518 !important;
+    padding: 0.8rem;
+    max-width: 100%;
+    margin: 0.5rem;
+  }
+
   .editar-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .portada-actual img {
+    max-width: 140px;
   }
 
   .form-actions button {
-    width: 90%;
+    width: 100%;
+    min-height: 2.75rem;
   }
 
-  .visto-favorito {
-    flex-direction: row;
-    gap: 1rem;
+  .campo-formulario input,
+  .campo-formulario textarea,
+  .columna-derecha textarea {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+}
+
+/* ==========================
+   Responsive: pantallas ≥ 1920px
+   ========================== */
+@media (min-width: 1920px) {
+  .editar-contenedor {
+    min-width: 1000px;
+    width: calc(100% - 4rem);
+    min-height: 700px;
+    max-height: calc(100vh - 4rem);
+    overflow: auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+  }
+
+  .editar-grid {
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 2rem;
+  }
+
+  .form-actions button {
+    width: 40%;
+    min-height: 3rem;
+    font-size: 1.1rem;
   }
 }
