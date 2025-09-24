@@ -32,21 +32,29 @@ marcarMensajesComoLeidos($db, $usuarioReceptor['id'], $usuarioActual);
 include '../templates/header.php';
 ?>
 
-<div class="chat-container">
+<!-- chat-container ocupa desde debajo del navbar hasta el fondo -->
+<div class="chat-container" role="application" aria-label="Ventana de chat">
+  <!-- chat-shell crea el panel centrado / con borde en desktop y full-width en móvil -->
+  <div class="chat-shell">
 
     <!-- Header: nombre usuario -->
-    <header class="chat-header">
-        <h2><?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES); ?></h2>
-    </header>
+<header class="chat-header" role="banner">
+    <h2>
+        <a href="http://localhost/proyectos/cineva/usuarios/perfil.php?id=<?php echo (int)$usuarioReceptor['id']; ?>">
+            <?php echo htmlspecialchars($usuarioReceptor['nombre'], ENT_QUOTES); ?>
+        </a>
+    </h2>
+</header>
+
 
     <!-- Sección de mensajes -->
-    <section id="chat-box" class="chat-box">
+    <section id="chat-box" class="chat-box" role="log" aria-live="polite" aria-relevant="additions">
         <!-- Mensajes se cargarán vía AJAX -->
     </section>
 
-    <!-- Footer: input + botón -->
-    <footer class="chat-footer">
-        <form id="chat-form" class="formulario-chat">
+    <!-- Footer: input + botón (se coloca absoluto dentro del panel) -->
+    <footer class="chat-footer" role="contentinfo">
+        <form id="chat-form" class="formulario-chat" autocomplete="off">
             <input
                 type="hidden"
                 name="receptor_id"
@@ -59,12 +67,14 @@ include '../templates/header.php';
                 placeholder="Escribe tu mensaje..."
                 required
                 autocomplete="off"
+                aria-label="Escribe tu mensaje"
             >
-            <button type="submit">Enviar</button>
+            <button type="submit" aria-label="Enviar mensaje">Enviar</button>
         </form>
     </footer>
 
-</div>
+  </div><!-- .chat-shell -->
+</div><!-- .chat-container -->
 
 <link rel="stylesheet" href="<?php echo APP_URL; ?>css/chat.css?v=<?php echo filemtime(__DIR__ . '/../css/chat.css'); ?>">
 
