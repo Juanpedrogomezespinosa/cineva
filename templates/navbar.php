@@ -384,6 +384,25 @@ if (botonCerrarModalNotificaciones) {
 // Cargar notificaciones al inicio y cada 30 segundos
 cargarNotificaciones();
 setInterval(cargarNotificaciones, 30000);
+
+// =========================
+// CERRAR DROPDOWN AL CLICAR FUERA
+// =========================
+document.addEventListener('click', function(evento) {
+    const lista = document.getElementById('lista-notificaciones');
+    const icono = document.getElementById('icono-notificaciones');
+
+    if (!lista || !icono) return;
+
+    const clicDentroDropdown = lista.contains(evento.target);
+    const clicEnIcono = icono.contains(evento.target);
+
+    // Si el clic NO es ni dentro del dropdown ni en el icono → cerrar
+    if (!clicDentroDropdown && !clicEnIcono) {
+        lista.classList.remove('show');
+    }
+});
+
 </script>
 
 <!-- Script de búsqueda -->
