@@ -138,7 +138,7 @@
 .password-wrapper button {
   position: absolute;
   right: 10px;
-  top: 50%;
+  top: 40%;
   transform: translateY(-50%);
   background: none !important;
   border: none;
