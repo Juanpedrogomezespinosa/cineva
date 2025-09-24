@@ -1,5 +1,7 @@
 .dashboard {
-  max-width: 1000px;
+  /* max-width: 1000px; */
+  margin-left: 4rem;
+  margin-right: 4rem;
   margin: 0 auto;
   color: #fcfceb;
 }
@@ -50,6 +52,7 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  max-height: 600px;
 }
 
 .card-pelicula:hover {
