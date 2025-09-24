@@ -527,3 +527,30 @@
     color: #f4bf2c;
   }
 }
+
+/* ============================
+   NOTIFICACIONES EN MENÚ MÓVIL
+============================ */
+
+/* Aseguramos que el enlace entero de notificaciones responda al hover */
+.mobile-menu a.icon-notificaciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fcfceb;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+/* Igual que los demás enlaces */
+.mobile-menu a.icon-notificaciones:hover {
+  color: #f4bf2c;
+}
+
+/* El texto también hereda el hover */
+.mobile-menu a.icon-notificaciones .texto-notificaciones {
+  font-size: 1rem;
+  color: inherit; /* importante: hereda del enlace */
+  transition: color 0.3s ease;
+}
