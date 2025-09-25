@@ -15,6 +15,13 @@
 /* ============================
    SECCIÓN IZQUIERDA
 ============================ */
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* separación entre elementos */
+}
+
 .nav-left .btn {
   background-color: #f4bf2c;
   color: #121518;
@@ -47,6 +54,7 @@
   flex: 1;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .site-title {
@@ -101,6 +109,14 @@
 .mobile-menu img:hover {
   transform: scale(1.1);
   opacity: 0.8;
+}
+.navbar-search,
+.welcome,
+.icon-mensajes,
+.icon-notificaciones,
+.icon-logout {
+  display: inline-flex;
+  align-items: center;
 }
 
 /* ============================
